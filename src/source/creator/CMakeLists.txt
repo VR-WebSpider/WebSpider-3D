@@ -1,5 +1,5 @@
 # SPDX-FileCopyrightText: 2006 Blender Authors
-# SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+# SPDX-FileCopyrightText: 2026 WebSpider Studios
 #
 # SPDX-License-Identifier: GPL-2.0-or-later
 
@@ -169,8 +169,8 @@ set(SRC
   creator_startup.cc
   creator_auth.h
   creator_auth.cc
-  mixar_local_auth_server.h
-  mixar_local_auth_server.cc
+  webspider_local_auth_server.h
+  webspider_local_auth_server.cc
   creator_intern.h
 )
 
@@ -181,21 +181,21 @@ endif()
 
 # MSVC 2010 gives linking errors with the manifest.
 if(WIN32 AND NOT UNIX)
-  # Use Mixar version from environment (set by settings.bat) for exe properties
-  if(DEFINED ENV{MIXAR_VERSION})
-    string(REPLACE "." ";" _mixar_rc_parts "$ENV{MIXAR_VERSION}")
-    list(GET _mixar_rc_parts 0 _MIXAR_RC_MAJOR)
-    list(GET _mixar_rc_parts 1 _MIXAR_RC_MINOR)
-    list(LENGTH _mixar_rc_parts _mixar_rc_len)
-    if(_mixar_rc_len GREATER 2)
-      list(GET _mixar_rc_parts 2 _MIXAR_RC_PATCH)
+  # Use WebSpider 3D version from environment (set by settings.bat) for exe properties
+  if(DEFINED ENV{WEBSPIDER_VERSION})
+    string(REPLACE "." ";" _webspider_rc_parts "$ENV{WEBSPIDER_VERSION}")
+    list(GET _webspider_rc_parts 0 _WEBSPIDER_RC_MAJOR)
+    list(GET _webspider_rc_parts 1 _WEBSPIDER_RC_MINOR)
+    list(LENGTH _webspider_rc_parts _webspider_rc_len)
+    if(_webspider_rc_len GREATER 2)
+      list(GET _webspider_rc_parts 2 _WEBSPIDER_RC_PATCH)
     else()
-      set(_MIXAR_RC_PATCH 0)
+      set(_WEBSPIDER_RC_PATCH 0)
     endif()
-    set(_RC_STR "${_MIXAR_RC_MAJOR}.${_MIXAR_RC_MINOR}")
-    set(_RC_1 ${_MIXAR_RC_MAJOR})
-    set(_RC_2 ${_MIXAR_RC_MINOR})
-    set(_RC_3 ${_MIXAR_RC_PATCH})
+    set(_RC_STR "${_WEBSPIDER_RC_MAJOR}.${_WEBSPIDER_RC_MINOR}")
+    set(_RC_1 ${_WEBSPIDER_RC_MAJOR})
+    set(_RC_2 ${_WEBSPIDER_RC_MINOR})
+    set(_RC_3 ${_WEBSPIDER_RC_PATCH})
   else()
     set(_RC_STR "${BLENDER_VERSION}")
     set(_RC_1 ${BLENDER_VERSION_MAJOR})
@@ -211,12 +211,12 @@ if(WIN32 AND NOT UNIX)
   )
 
   list(APPEND SRC
-    ${CMAKE_SOURCE_DIR}/release/windows/icons/winmixar.rc
+    ${CMAKE_SOURCE_DIR}/release/windows/icons/winwebspider.rc
   )
 
   if(NOT WITH_WINDOWS_EXTERNAL_MANIFEST)
     list(APPEND SRC
-      ${CMAKE_BINARY_DIR}/mixar.exe.manifest
+      ${CMAKE_BINARY_DIR}/webspider.exe.manifest
     )
   endif()
 endif()
@@ -344,7 +344,7 @@ if(WITH_PYTHON_MODULE)
   # Creates `./bpy/__init__.so` which can be imported as a Python module.
   #
   # Note that 'SHARED' works on Linux and Windows, but not MACOS which _must_ be 'MODULE'.
-  add_library(mixar MODULE ${SRC})
+  add_library(webspider MODULE ${SRC})
 
 
   get_property(GENERATOR_IS_MULTI_CONFIG GLOBAL PROPERTY GENERATOR_IS_MULTI_CONFIG)
@@ -355,7 +355,7 @@ if(WITH_PYTHON_MODULE)
   endif()
 
   set_target_properties(
-    mixar
+    webspider
     PROPERTIES
       PREFIX ""
       OUTPUT_NAME __init__
@@ -365,63 +365,63 @@ if(WITH_PYTHON_MODULE)
   unset(BPY_OUTPUT_DIRECTORY)
 
   if(APPLE)
-    set_target_properties(mixar PROPERTIES MACOSX_BUNDLE TRUE)
+    set_target_properties(webspider PROPERTIES MACOSX_BUNDLE TRUE)
     if(WITH_BLENDER_THUMBNAILER)
-      set_target_properties(mixar-thumbnailer PROPERTIES MACOSX_BUNDLE TRUE)
+      set_target_properties(webspider-thumbnailer PROPERTIES MACOSX_BUNDLE TRUE)
     endif()
     # Add Security framework for macOS keychain access
-    target_link_libraries(mixar PRIVATE "-framework Security")
+    target_link_libraries(webspider PRIVATE "-framework Security")
   endif()
 
   # Link libsecret when available (Linux)
   if(UNIX AND NOT APPLE AND LIBSECRET_FOUND)
-    target_compile_definitions(mixar PRIVATE HAVE_LIBSECRET)
-    target_include_directories(mixar PRIVATE ${LIBSECRET_INCLUDE_DIRS})
-    target_link_libraries(mixar PRIVATE ${LIBSECRET_LIBRARIES})
+    target_compile_definitions(webspider PRIVATE HAVE_LIBSECRET)
+    target_include_directories(webspider PRIVATE ${LIBSECRET_INCLUDE_DIRS})
+    target_link_libraries(webspider PRIVATE ${LIBSECRET_LIBRARIES})
   endif()
 
   if(WIN32)
     # Python modules use this.
     set_target_properties(
-      mixar
+      webspider
       PROPERTIES
       SUFFIX ".pyd"
     )
   endif()
 
 else()
-  add_executable(mixar ${EXETYPE} ${SRC})
+  add_executable(webspider ${EXETYPE} ${SRC})
   if(WITH_CPU_CHECK)
     # blender_cpu_check *NEEDS* to be linked first, there can be no exceptions
     # to this, this is to ensure this will be the first code to run once the
     # blender binary has been loaded by the OS.
-    target_link_libraries(mixar PRIVATE blender_cpu_check)
+    target_link_libraries(webspider PRIVATE blender_cpu_check)
   endif()
   if(WIN32)
-    add_executable(mixar-launcher WIN32
+    add_executable(webspider-launcher WIN32
       blender_launcher_win32.c
-      ${CMAKE_SOURCE_DIR}/release/windows/icons/winmixar.rc
+      ${CMAKE_SOURCE_DIR}/release/windows/icons/winwebspider.rc
     )
     if(NOT WITH_WINDOWS_EXTERNAL_MANIFEST)
-      target_sources(mixar-launcher PRIVATE
-        ${CMAKE_BINARY_DIR}/mixar.exe.manifest
+      target_sources(webspider-launcher PRIVATE
+        ${CMAKE_BINARY_DIR}/webspider.exe.manifest
       )
     endif()
-    target_compile_definitions(mixar-launcher PRIVATE -D_UNICODE -DUNICODE)
-    target_link_libraries(mixar-launcher Pathcch.lib)
+    target_compile_definitions(webspider-launcher PRIVATE -D_UNICODE -DUNICODE)
+    target_link_libraries(webspider-launcher Pathcch.lib)
   endif()
 
   # Link libsecret when available (Linux)
   if(UNIX AND NOT APPLE AND LIBSECRET_FOUND)
-    target_compile_definitions(mixar PRIVATE HAVE_LIBSECRET)
-    target_include_directories(mixar PRIVATE ${LIBSECRET_INCLUDE_DIRS})
-    target_link_libraries(mixar PRIVATE ${LIBSECRET_LIBRARIES})
+    target_compile_definitions(webspider PRIVATE HAVE_LIBSECRET)
+    target_include_directories(webspider PRIVATE ${LIBSECRET_INCLUDE_DIRS})
+    target_link_libraries(webspider PRIVATE ${LIBSECRET_LIBRARIES})
   endif()
 endif()
 
 if(WITH_BUILDINFO)
   # Explicitly say that the executable depends on the `buildinfo`.
-  add_dependencies(mixar buildinfo)
+  add_dependencies(webspider buildinfo)
 endif()
 
 
@@ -458,8 +458,8 @@ if(UNIX AND NOT APPLE)
       set(TARGETDIR_TEXT ".")
       set(TARGETDIR_LIB "lib")
     else()
-      set(TARGETDIR_VER "share/mixar/${BLENDER_VERSION}")
-      set(TARGETDIR_TEXT "share/doc/mixar")
+      set(TARGETDIR_VER "share/webspider/${BLENDER_VERSION}")
+      set(TARGETDIR_TEXT "share/doc/webspider")
     endif()
   endif()
   set(TARGETDIR_SITE_PACKAGES "${TARGETDIR_VER}/python/lib/python${PYTHON_VERSION}/site-packages")
@@ -473,7 +473,7 @@ elseif(WIN32)
   else()
     set(TARGETDIR_VER "${BLENDER_VERSION}")
     set(TARGETDIR_TEXT ".")
-    set(TARGETDIR_LIB "mixar.shared")
+    set(TARGETDIR_LIB "webspider.shared")
     set(TARGETDIR_EXE ".")
   endif()
   set(TARGETDIR_SITE_PACKAGES "${TARGETDIR_VER}/python/lib/site-packages")
@@ -491,15 +491,15 @@ elseif(APPLE)
       set(TARGETDIR_LIB ${PYTHON_SITE_PACKAGES}/bpy/lib)
     endif()
   else()
-    set(TARGETDIR_VER "Mixar.app/Contents/Resources/${BLENDER_VERSION}")
-    set(TARGETDIR_LIB "Mixar.app/Contents/Resources/lib")
-    set(TARGETDIR_TEXT "Mixar.app/Contents/Resources/text")
+    set(TARGETDIR_VER "WebSpider 3D.app/Contents/Resources/${BLENDER_VERSION}")
+    set(TARGETDIR_LIB "WebSpider 3D.app/Contents/Resources/lib")
+    set(TARGETDIR_TEXT "WebSpider 3D.app/Contents/Resources/text")
   endif()
   set(TARGETDIR_SITE_PACKAGES "${TARGETDIR_VER}/python/lib/python${PYTHON_VERSION}/site-packages")
   # Skip re-linking on CPACK / install.
-  set_target_properties(mixar PROPERTIES BUILD_WITH_INSTALL_RPATH true)
+  set_target_properties(webspider PROPERTIES BUILD_WITH_INSTALL_RPATH true)
   if(WITH_BLENDER_THUMBNAILER)
-    set_target_properties(mixar-thumbnailer PROPERTIES BUILD_WITH_INSTALL_RPATH true)
+    set_target_properties(webspider-thumbnailer PROPERTIES BUILD_WITH_INSTALL_RPATH true)
   endif()
 endif()
 
@@ -559,7 +559,7 @@ if(WITH_PYTHON)
 
 endif()
 
-# Mixar configuration: mixar.json is generated at build time by scripts/generate_config.py
+# WebSpider 3D configuration: webspider.json is generated at build time by scripts/generate_config.py
 # (called from build.sh / build.bat) — no cmake install needed.
 
 # fonts
@@ -583,7 +583,7 @@ if(WITH_INTERNATIONAL)
     locales
     DEPENDS ${_all_mo_files}
   )
-  add_dependencies(mixar locales)
+  add_dependencies(webspider locales)
 
   # Generate INSTALL rules.
   install(
@@ -718,7 +718,7 @@ if(NOT ("${_install_cmd}" STREQUAL ""))
   # Message to display after building.
   get_filename_component(_install_dst ${TARGETDIR_VER} ABSOLUTE BASE_DIR ${CMAKE_INSTALL_PREFIX})
   add_custom_command(
-    TARGET mixar POST_BUILD
+    TARGET webspider POST_BUILD
     COMMAND
       ${CMAKE_COMMAND} -E echo
       "Run: \\\"${_install_cmd}\\\" to copy runtime files and scripts to: ${_install_dst}"
@@ -773,21 +773,21 @@ if(UNIX AND NOT APPLE)
   if(WITH_PYTHON_MODULE)
     if(WITH_INSTALL_PORTABLE)
       install(
-        TARGETS mixar
+        TARGETS webspider
         DESTINATION ${TARGETDIR_BPY}
       )
     else()
       install(
-        TARGETS mixar
+        TARGETS webspider
         LIBRARY DESTINATION ${TARGETDIR_BPY}
       )
     endif()
 
     # none of the other files are needed currently
   elseif(WITH_INSTALL_PORTABLE)
-    set(BLENDER_BIN "mixar")
+    set(BLENDER_BIN "webspider")
     install(
-      TARGETS mixar
+      TARGETS webspider
       DESTINATION "."
     )
 
@@ -800,15 +800,15 @@ if(UNIX AND NOT APPLE)
 
     install(
       FILES
-        ${CMAKE_SOURCE_DIR}/release/freedesktop/mixar.desktop
-        ${CMAKE_SOURCE_DIR}/release/freedesktop/icons/scalable/apps/mixar.svg
-        ${CMAKE_SOURCE_DIR}/release/freedesktop/icons/symbolic/apps/mixar-symbolic.svg
+        ${CMAKE_SOURCE_DIR}/release/freedesktop/webspider3d.desktop
+        ${CMAKE_SOURCE_DIR}/release/freedesktop/icons/scalable/apps/webspider.svg
+        ${CMAKE_SOURCE_DIR}/release/freedesktop/icons/symbolic/apps/webspider-symbolic.svg
       DESTINATION "."
     )
 
     if(WITH_BLENDER_THUMBNAILER)
       install(
-        TARGETS mixar-thumbnailer
+        TARGETS webspider-thumbnailer
         DESTINATION "."
       )
     endif()
@@ -825,8 +825,8 @@ if(UNIX AND NOT APPLE)
 
       install(
         PROGRAMS
-        ${CMAKE_SOURCE_DIR}/release/bin/mixar-launcher
-        ${CMAKE_SOURCE_DIR}/release/bin/mixar-softwaregl
+        ${CMAKE_SOURCE_DIR}/release/bin/webspider-launcher
+        ${CMAKE_SOURCE_DIR}/release/bin/webspider-softwaregl
         DESTINATION "."
       )
 
@@ -848,31 +848,31 @@ file(REMOVE ${CMAKE_BINARY_DIR}/bin/lib/libglapi.so.0.0.0)\n
     endif()
   else()
     # main blender binary
-    set(BLENDER_BIN "bin/mixar")
+    set(BLENDER_BIN "bin/webspider")
     install(
-      TARGETS mixar
+      TARGETS webspider
       DESTINATION "./bin"
     )
     # Misc files.
     install(
-      FILES ${CMAKE_SOURCE_DIR}/release/freedesktop/mixar.desktop
+      FILES ${CMAKE_SOURCE_DIR}/release/freedesktop/webspider3d.desktop
       DESTINATION "./share/applications"
     )
     install(
-      FILES ${CMAKE_SOURCE_DIR}/release/freedesktop/org.mixar.Mixar.metainfo.xml
+      FILES ${CMAKE_SOURCE_DIR}/release/freedesktop/org.webspider.WebSpider3D.metainfo.xml
       DESTINATION "./share/metainfo"
     )
     install(
-      FILES ${CMAKE_SOURCE_DIR}/release/freedesktop/icons/scalable/apps/mixar.svg
+      FILES ${CMAKE_SOURCE_DIR}/release/freedesktop/icons/scalable/apps/webspider.svg
       DESTINATION "./share/icons/hicolor/scalable/apps"
     )
     install(
-      FILES ${CMAKE_SOURCE_DIR}/release/freedesktop/icons/symbolic/apps/mixar-symbolic.svg
+      FILES ${CMAKE_SOURCE_DIR}/release/freedesktop/icons/symbolic/apps/webspider-symbolic.svg
       DESTINATION "./share/icons/hicolor/symbolic/apps"
     )
     if(WITH_BLENDER_THUMBNAILER)
       install(
-        TARGETS mixar-thumbnailer
+        TARGETS webspider-thumbnailer
         DESTINATION "./bin"
       )
     endif()
@@ -1071,13 +1071,13 @@ file(REMOVE ${CMAKE_BINARY_DIR}/bin/lib/libglapi.so.0.0.0)\n
 elseif(WIN32)
   if(WITH_WINDOWS_EXTERNAL_MANIFEST)
     install(
-      FILES ${CMAKE_BINARY_DIR}/mixar.exe.manifest
+      FILES ${CMAKE_BINARY_DIR}/webspider.exe.manifest
       DESTINATION "."
     )
     install(
-      FILES ${CMAKE_BINARY_DIR}/mixar.exe.manifest
+      FILES ${CMAKE_BINARY_DIR}/webspider.exe.manifest
       DESTINATION "."
-      RENAME mixar-launcher.exe.manifest
+      RENAME webspider-launcher.exe.manifest
     )
   endif()
   windows_install_shared_manifest(
@@ -1196,16 +1196,16 @@ elseif(WIN32)
       # `$<CONFIG>` will work in newer CMAKE but the version currently (3.12)
       # on the build-bot does not support this endeavor.
       install(
-        FILES ${CMAKE_CURRENT_BINARY_DIR}/\${CMAKE_INSTALL_CONFIG_NAME}/mixar_public.pdb
+        FILES ${CMAKE_CURRENT_BINARY_DIR}/\${CMAKE_INSTALL_CONFIG_NAME}/webspider_public.pdb
         DESTINATION "."
-        RENAME mixar.pdb
+        RENAME webspider.pdb
         CONFIGURATIONS Release
       )
     else()
       install(
-        FILES $<TARGET_PDB_FILE:mixar>
+        FILES $<TARGET_PDB_FILE:webspider>
         DESTINATION "."
-        RENAME mixar.pdb
+        RENAME webspider.pdb
         CONFIGURATIONS Release
       )
     endif()
@@ -1664,7 +1664,7 @@ elseif(WIN32)
 
   if(WITH_PYTHON_MODULE AND TARGETDIR_BPY)
     install(
-      TARGETS mixar
+      TARGETS webspider
       LIBRARY DESTINATION ${TARGETDIR_BPY}
     )
   endif()
@@ -1675,10 +1675,10 @@ elseif(WIN32)
 elseif(APPLE)
   if(NOT WITH_PYTHON_MODULE)
     # Uppercase name for app bundle.
-    set_target_properties(mixar PROPERTIES OUTPUT_NAME Mixar)
+    set_target_properties(webspider PROPERTIES OUTPUT_NAME WebSpider 3D)
   endif()
 
-  set(OSX_APP_SOURCEDIR ${CMAKE_SOURCE_DIR}/release/darwin/Mixar.app)
+  set(OSX_APP_SOURCEDIR ${CMAKE_SOURCE_DIR}/release/darwin/WebSpider 3D.app)
 
   # Setup `Info.plist`.
   execute_process(
@@ -1687,46 +1687,46 @@ elseif(APPLE)
     OUTPUT_STRIP_TRAILING_WHITESPACE
   )
 
-  # Use Mixar version for bundle version strings if available
-  if(DEFINED ENV{MIXAR_VERSION})
-    set(_BUNDLE_SHORT_VERSION "$ENV{MIXAR_VERSION}")
-    set(_BUNDLE_LONG_VERSION "$ENV{MIXAR_VERSION} ${BLENDER_DATE}")
+  # Use WebSpider 3D version for bundle version strings if available
+  if(DEFINED ENV{WEBSPIDER_VERSION})
+    set(_BUNDLE_SHORT_VERSION "$ENV{WEBSPIDER_VERSION}")
+    set(_BUNDLE_LONG_VERSION "$ENV{WEBSPIDER_VERSION} ${BLENDER_DATE}")
   else()
     set(_BUNDLE_SHORT_VERSION "${BLENDER_VERSION}.${BLENDER_VERSION_PATCH}")
     set(_BUNDLE_LONG_VERSION "${BLENDER_VERSION}.${BLENDER_VERSION_PATCH} ${BLENDER_DATE}")
   endif()
 
-  set_target_properties(mixar PROPERTIES
+  set_target_properties(webspider PROPERTIES
     MACOSX_BUNDLE_INFO_PLIST ${OSX_APP_SOURCEDIR}/Contents/Info.plist
     MACOSX_BUNDLE_SHORT_VERSION_STRING "${_BUNDLE_SHORT_VERSION}"
     MACOSX_BUNDLE_LONG_VERSION_STRING "${_BUNDLE_LONG_VERSION}"
   )
 
   # Set versioned bundle identifier and display name
-  if(DEFINED ENV{MIXAR_VERSION})
-    string(REPLACE "." ";" _mixar_ver "$ENV{MIXAR_VERSION}")
-    list(GET _mixar_ver 0 _MIXAR_MAJOR)
-    list(GET _mixar_ver 1 _MIXAR_MINOR)
-    set_target_properties(mixar PROPERTIES
-      MACOSX_BUNDLE_GUI_IDENTIFIER "com.mixar.mixar-${_MIXAR_MAJOR}-${_MIXAR_MINOR}"
-      MACOSX_BUNDLE_BUNDLE_NAME "Mixar ${_MIXAR_MAJOR}.${_MIXAR_MINOR}"
+  if(DEFINED ENV{WEBSPIDER_VERSION})
+    string(REPLACE "." ";" _webspider_ver "$ENV{WEBSPIDER_VERSION}")
+    list(GET _webspider_ver 0 _WEBSPIDER_MAJOR)
+    list(GET _webspider_ver 1 _WEBSPIDER_MINOR)
+    set_target_properties(webspider PROPERTIES
+      MACOSX_BUNDLE_GUI_IDENTIFIER "com.webspiderstudios.webspider3d-${_WEBSPIDER_MAJOR}-${_WEBSPIDER_MINOR}"
+      MACOSX_BUNDLE_BUNDLE_NAME "WebSpider 3D ${_WEBSPIDER_MAJOR}.${_WEBSPIDER_MINOR}"
     )
   else()
-    set_target_properties(mixar PROPERTIES
-      MACOSX_BUNDLE_GUI_IDENTIFIER "com.mixar.mixar"
-      MACOSX_BUNDLE_BUNDLE_NAME "Mixar"
+    set_target_properties(webspider PROPERTIES
+      MACOSX_BUNDLE_GUI_IDENTIFIER "com.webspiderstudios.webspider3d"
+      MACOSX_BUNDLE_BUNDLE_NAME "WebSpider 3D"
     )
   endif()
 
   # Xcode Archiving support for distributing the application (Testflight, App Store Connect, etc...)
-  set_target_properties(mixar PROPERTIES
+  set_target_properties(webspider PROPERTIES
     XCODE_ATTRIBUTE_SKIP_INSTALL "NO"
     XCODE_ATTRIBUTE_INSTALL_PATH "$(LOCAL_APPS_DIR)"
   )
 
   if(WITH_BLENDER_THUMBNAILER)
-    set(OSX_THUMBNAILER_SOURCEDIR ${OSX_APP_SOURCEDIR}/Contents/PlugIns/mixar-thumbnailer.appex)
-    set_target_properties(mixar-thumbnailer PROPERTIES
+    set(OSX_THUMBNAILER_SOURCEDIR ${OSX_APP_SOURCEDIR}/Contents/PlugIns/webspider-thumbnailer.appex)
+    set_target_properties(webspider-thumbnailer PROPERTIES
       BUNDLE_EXTENSION appex
       MACOSX_BUNDLE_INFO_PLIST ${OSX_THUMBNAILER_SOURCEDIR}/Contents/Info.plist
       MACOSX_BUNDLE_SHORT_VERSION_STRING "${BLENDER_VERSION}.${BLENDER_VERSION_PATCH}"
@@ -1744,33 +1744,33 @@ elseif(APPLE)
   # Give the bundle actual creation/modification date.
   #
   # Note that the directory might not yet exist, which happens when CMAKE is first run.
-  if(NOT EXISTS ${EXECUTABLE_OUTPUT_PATH}/Mixar.app)
-    file(MAKE_DIRECTORY ${EXECUTABLE_OUTPUT_PATH}/Mixar.app)
+  if(NOT EXISTS ${EXECUTABLE_OUTPUT_PATH}/WebSpider 3D.app)
+    file(MAKE_DIRECTORY ${EXECUTABLE_OUTPUT_PATH}/WebSpider 3D.app)
   endif()
   execute_process(
-    COMMAND SetFile -d ${SETFILE_DATE} -m ${SETFILE_DATE} ${EXECUTABLE_OUTPUT_PATH}/Mixar.app
+    COMMAND SetFile -d ${SETFILE_DATE} -m ${SETFILE_DATE} ${EXECUTABLE_OUTPUT_PATH}/WebSpider 3D.app
   )
 
-  set(BLENDER_BIN "bin/mixar")
+  set(BLENDER_BIN "bin/webspider")
   install(
-    TARGETS mixar
+    TARGETS webspider
     DESTINATION "."
   )
 
   install(
     FILES ${OSX_APP_SOURCEDIR}/Contents/PkgInfo
-    DESTINATION "Mixar.app/Contents"
+    DESTINATION "WebSpider 3D.app/Contents"
   )
 
   install_dir(
     ${OSX_APP_SOURCEDIR}/Contents/Resources
-    "Mixar.app/Contents"
+    "WebSpider 3D.app/Contents"
   )
 
   if(WITH_BLENDER_THUMBNAILER)
     install(
-      TARGETS mixar-thumbnailer
-      DESTINATION "./Mixar.app/Contents/PlugIns"
+      TARGETS webspider-thumbnailer
+      DESTINATION "./WebSpider 3D.app/Contents/PlugIns"
     )
   endif()
 
@@ -1814,7 +1814,7 @@ elseif(APPLE)
 
   if(WITH_PYTHON_MODULE AND TARGETDIR_BPY)
     install(
-      TARGETS mixar
+      TARGETS webspider
       LIBRARY DESTINATION ${TARGETDIR_BPY}
     )
   endif()
@@ -1835,7 +1835,7 @@ elseif(APPLE)
 
   # Add Security framework for macOS keychain access
   if(APPLE)
-    target_link_libraries(mixar PRIVATE "-framework Security")
+    target_link_libraries(webspider PRIVATE "-framework Security")
   endif()
 
 endif()
@@ -1950,7 +1950,7 @@ install(
 # Individual datafiles that need to be copied
 install(
   FILES 
-    ${CMAKE_SOURCE_DIR}/release/datafiles/startup.mixar
+    ${CMAKE_SOURCE_DIR}/release/datafiles/startup.webspider
   DESTINATION ${TARGETDIR_VER}/datafiles
 )
 
@@ -1971,18 +1971,18 @@ endif()
 # -----------------------------------------------------------------------------
 # Setup link libraries
 
-add_dependencies(mixar makesdna)
-target_link_libraries(mixar PRIVATE ${LIB})
+add_dependencies(webspider makesdna)
+target_link_libraries(webspider PRIVATE ${LIB})
 unset(LIB)
 
-setup_platform_linker_flags(mixar)
-setup_platform_linker_libs(mixar)
+setup_platform_linker_flags(webspider)
+setup_platform_linker_libs(webspider)
 
 if(DEFINED PLATFORM_SYMBOLS_MAP)
-  set_target_properties(mixar PROPERTIES LINK_DEPENDS ${PLATFORM_SYMBOLS_MAP})
+  set_target_properties(webspider PROPERTIES LINK_DEPENDS ${PLATFORM_SYMBOLS_MAP})
 endif()
 
-blender_target_include_dirs(mixar ${INC})
+blender_target_include_dirs(webspider ${INC})
 
 # -----------------------------------------------------------------------------
 # USD registry.
@@ -2015,7 +2015,7 @@ if((DEFINED LIBDIR) AND TARGETDIR_LIB)
         ${LIBDIR}/usd/plugin/usd/hdStorm
         ${LIBDIR}/usd/plugin/usd/usdShaders
         ${LIBDIR}/usd/plugin/usd/hioOiio
-        DESTINATION "mixar.shared/usd"
+        DESTINATION "webspider.shared/usd"
       )
     elseif(USD_PYTHON_SUPPORT)
       install(DIRECTORY
@@ -2112,9 +2112,9 @@ endif()
 # `vcpkg` substitutes our libraries with theirs, which will cause issues when you run
 # these builds on other systems due to missing DLL's. So we opt out the use of `vcpkg`.
 if(WIN32)
-  set_target_properties(mixar PROPERTIES VS_GLOBAL_VcpkgEnabled "false")
-  set_target_properties(mixar PROPERTIES
-    PDB_NAME "mixar_private"
+  set_target_properties(webspider PROPERTIES VS_GLOBAL_VcpkgEnabled "false")
+  set_target_properties(webspider PROPERTIES
+    PDB_NAME "webspider_private"
     PDB_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/$<CONFIG>"
   )
   # If compiling with clang-cl we skip PDBSTRIPPED.
@@ -2126,13 +2126,13 @@ if(WIN32)
     # generator expression in newer CMAKE (2.13+) but until that time this fill have suffice.
     if(CMAKE_BUILD_TYPE)
       set_property(
-        TARGET mixar APPEND_STRING PROPERTY LINK_FLAGS_RELEASE
-        " /PDBSTRIPPED:${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_BUILD_TYPE}/mixar_public.pdb"
+        TARGET webspider APPEND_STRING PROPERTY LINK_FLAGS_RELEASE
+        " /PDBSTRIPPED:${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_BUILD_TYPE}/webspider_public.pdb"
       )
     else()
       set_property(
-        TARGET mixar APPEND_STRING PROPERTY LINK_FLAGS_RELEASE
-        " /PDBSTRIPPED:${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}/mixar_public.pdb"
+        TARGET webspider APPEND_STRING PROPERTY LINK_FLAGS_RELEASE
+        " /PDBSTRIPPED:${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}/webspider_public.pdb"
       )
     endif()
   endif()
@@ -2142,23 +2142,23 @@ endif()
 # Setup launcher
 
 if(WIN32 AND NOT WITH_PYTHON_MODULE)
-  set(BLENDER_BIN "mixar.exe")
+  set(BLENDER_BIN "webspider.exe")
   install(
-    TARGETS mixar mixar-launcher
-    COMPONENT Mixar
+    TARGETS webspider webspider-launcher
+    COMPONENT WebSpider 3D
     DESTINATION "."
   )
   if(WITH_CPU_CHECK)
     install(
       TARGETS blender_cpu_check
-      COMPONENT Mixar
+      COMPONENT WebSpider 3D
       DESTINATION "."
     )
   endif()
   set_target_properties(
-    mixar
+    webspider
     PROPERTIES
-      VS_USER_PROPS "mixar.Cpp.user.props"
+      VS_USER_PROPS "webspider.Cpp.user.props"
   )
 endif()
 
@@ -2209,7 +2209,7 @@ detect_leaks=0\"\n\
   )\n\
 endif()\n\
 "
-        DEPENDS mixar
+        DEPENDS webspider
       )
 
       if(WITH_INSTALL_PORTABLE)

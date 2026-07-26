@@ -1,5 +1,5 @@
 /* SPDX-FileCopyrightText: 2023 Blender Authors
- * SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+ * SPDX-FileCopyrightText: 2026 WebSpider Studios
  *
  * SPDX-License-Identifier: GPL-2.0-or-later */
 
@@ -245,7 +245,7 @@ static bool gizmo2d_calc_bounds(const bContext *C, float *r_center, float *r_min
     const SpaceImage *sima = static_cast<const SpaceImage *>(area->spacedata.first);
     switch (sima->mode) {
       case SI_MODE_UV:
-      case SI_MODE_MIXAR_UV: {
+      case SI_MODE_WEBSPIDER_UV: {
         Scene *scene = CTX_data_scene(C);
         ViewLayer *view_layer = CTX_data_view_layer(C);
         Vector<Object *> objects =
@@ -395,7 +395,7 @@ static bool gizmo2d_calc_transform_pivot(const bContext *C, float r_pivot[2])
     ViewLayer *view_layer = CTX_data_view_layer(C);
     switch (sima->mode) {
       case SI_MODE_UV:
-      case SI_MODE_MIXAR_UV:
+      case SI_MODE_WEBSPIDER_UV:
         ED_uvedit_center_from_pivot_ex(
             sima, scene, view_layer, r_pivot, sima->around, &has_select);
         break;

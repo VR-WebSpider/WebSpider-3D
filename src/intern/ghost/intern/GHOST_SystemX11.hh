@@ -1,5 +1,5 @@
 /* SPDX-FileCopyrightText: 2001-2002 NaN Holding BV. All rights reserved.
- * SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+ * SPDX-FileCopyrightText: 2026 WebSpider Studios
  *
  * SPDX-License-Identifier: GPL-2.0-or-later */
 
@@ -28,8 +28,8 @@
 #endif
 
 #if defined(WITH_X11_XINPUT) && defined(X_HAVE_UTF8_STRING)
-#  define GHOST_X11_RES_NAME "Mixar"  /* res_name */
-#  define GHOST_X11_RES_CLASS "Mixar" /* res_class */
+#  define GHOST_X11_RES_NAME "WebSpider 3D"  /* res_name */
+#  define GHOST_X11_RES_CLASS "WebSpider 3D" /* res_class */
 #endif
 
 /* generic error handlers */

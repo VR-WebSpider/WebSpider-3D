@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited -->
+<!-- SPDX-FileCopyrightText: 2026 WebSpider Studios -->
 <!-- SPDX-License-Identifier: GPL-3.0-or-later -->
 
 <svg
@@ -11,9 +11,9 @@
   <defs>
     <!-- Same theme-integrated gradient as submit_arrow.svg: the
          blender_ stop ids are rewritten at draw time from
-         ThemeMixieChat.chat_send_icon_gradient_start/_end
+         ThemeWebSpider AIChat.chat_send_icon_gradient_start/_end
          (interface_icons.cc icon_source_edit_cb), so this icon always
-         matches the chat send button. Stop colors below are the Mixar
+         matches the chat send button. Stop colors below are the WebSpider 3D
          default theme values, kept as a sane fallback. -->
     <linearGradient
        id="sparkle_gradient"

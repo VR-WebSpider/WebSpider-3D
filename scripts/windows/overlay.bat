@@ -1,4 +1,4 @@
-REM SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+REM SPDX-FileCopyrightText: 2026 WebSpider Studios
 REM
 REM SPDX-License-Identifier: GPL-2.0-or-later
 
@@ -38,16 +38,16 @@ if %errorlevel% geq 8 (
     exit /b 1
 )
 
-echo Overlaying Mixar sources onto source...
-REM NO /XO here: Mixar src files must ALWAYS win over upstream, regardless of timestamps.
+echo Overlaying WebSpider 3D sources onto source...
+REM NO /XO here: WebSpider 3D src files must ALWAYS win over upstream, regardless of timestamps.
 REM After a git pull, upstream files get newer timestamps than src/ files,
-REM so /XO would wrongly skip the Mixar overlay, leaving the raw upstream version.
+REM so /XO would wrongly skip the WebSpider 3D overlay, leaving the raw upstream version.
 REM Without /XO, robocopy copies src files when timestamps differ (first run after pull),
 REM then skips on subsequent runs when timestamps stabilize (Ninja sees no change).
 robocopy "%SRC_DIR%" "%SOURCE_DIR%" /E /MT:%ROBOCOPY_THREADS% /R:3 /W:1 /NFL /NDL /NJH /NJS /nc /ns /np
 REM robocopy returns 0-7 for success
 if %errorlevel% geq 8 (
-    echo Error overlaying Mixar sources
+    echo Error overlaying WebSpider 3D sources
     exit /b 1
 )
 

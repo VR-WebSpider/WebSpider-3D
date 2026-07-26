@@ -1,5 +1,5 @@
 /* SPDX-FileCopyrightText: 2023 Blender Authors
- * SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+ * SPDX-FileCopyrightText: 2026 WebSpider Studios
  *
  * SPDX-License-Identifier: GPL-2.0-or-later */
 
@@ -1492,7 +1492,7 @@ PointerRNA uiLayout::op(wmOperatorType *ot,
   return ptr;
 }
 
-/* Mixar: helper exposed via UI_interface_layout.hh so rna_ui_api.cc
+/* WebSpider 3D: helper exposed via UI_interface_layout.hh so rna_ui_api.cc
  * (where uiBlock is opaque) can suppress tooltips on a button it
  * just emitted via the public PointerRNA-returning op() path. Used
  * by the new `no_tooltip` kwarg on bpy.types.UILayout.operator(). */

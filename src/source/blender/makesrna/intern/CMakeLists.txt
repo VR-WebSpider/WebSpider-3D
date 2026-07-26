@@ -1,5 +1,5 @@
 # SPDX-FileCopyrightText: 2006 Blender Authors
-# SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+# SPDX-FileCopyrightText: 2026 WebSpider Studios
 #
 # SPDX-License-Identifier: GPL-2.0-or-later
 
@@ -96,9 +96,9 @@ set(DEFSRC
   rna_vfont.cc
   rna_volume.cc
   rna_wm.cc
-  # Mixar: extends Window with global_areas collection so Python can
-  # access the topbar / statusbar areas (see rna_wm_mixar.cc).
-  rna_wm_mixar.cc
+  # WebSpider 3D: extends Window with global_areas collection so Python can
+  # access the topbar / statusbar areas (see rna_wm_webspider.cc).
+  rna_wm_webspider.cc
   rna_wm_gizmo.cc
   rna_workspace.cc
   rna_world.cc

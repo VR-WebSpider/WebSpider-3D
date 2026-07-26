@@ -1,5 +1,5 @@
-# SPDX-FileCopyrightText: 2026 Mixar Authors
-# SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+# SPDX-FileCopyrightText: 2026 WebSpider 3D Authors
+# SPDX-FileCopyrightText: 2026 WebSpider Studios
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -34,10 +34,10 @@ set(LIB
   PRIVATE bf::extern::fmtlib
   PRIVATE bf::windowmanager
   bf_editor_interface
-  # We reuse mixie chat's custom-drawn footer region for our composer
+  # We reuse webspider_ai chat's custom-drawn footer region for our composer
   # so the agent bubble's input/composer looks and behaves identically
   # (auto-grow on Shift+Enter, attachment thumbnails, send button, …).
-  bf_editor_space_mixie_chat
+  bf_editor_space_webspider_ai_chat
 )
 
 blender_add_lib(bf_editor_space_agent_bubble "${SRC}" "${INC}" "${INC_SYS}" "${LIB}")

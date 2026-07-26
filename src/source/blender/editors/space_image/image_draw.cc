@@ -1,5 +1,5 @@
 /* SPDX-FileCopyrightText: 2001-2002 NaN Holding BV. All rights reserved.
- * SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+ * SPDX-FileCopyrightText: 2026 WebSpider Studios
  *
  * SPDX-License-Identifier: GPL-2.0-or-later */
 
@@ -451,8 +451,8 @@ void draw_image_main_helpers(const bContext *C, ARegion *region)
     draw_render_info(C, sima->iuser.scene, ima, region, zoomx, zoomy);
   }
 
-  /* MIXAR: Check for both UV modes */
-  if (ELEM(sima->mode, SI_MODE_UV, SI_MODE_MIXAR_UV)) {
+  /* WEBSPIDER: Check for both UV modes */
+  if (ELEM(sima->mode, SI_MODE_UV, SI_MODE_WEBSPIDER_UV)) {
     const Scene *scene = CTX_data_scene(C);
     const ToolSettings *ts = scene->toolsettings;
     if (ts->uv_flag & UV_FLAG_CUSTOM_REGION) {

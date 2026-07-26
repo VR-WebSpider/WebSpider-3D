@@ -1,5 +1,5 @@
 /* SPDX-FileCopyrightText: 2010 Blender Authors
- * SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+ * SPDX-FileCopyrightText: 2026 WebSpider Studios
  *
  * SPDX-License-Identifier: GPL-2.0-or-later */
 
@@ -37,7 +37,7 @@ const char *GHOST_SystemPathsUnix::getSystemDir(int /*version*/, const char *ver
 {
   /* no prefix assumes a portable build which only uses bundled scripts */
   if (static_path) {
-    static string system_path = string(static_path) + "/mixar/" + versionstr;
+    static string system_path = string(static_path) + "/webspider3d/" + versionstr;
     return system_path.c_str();
   }
 
@@ -72,7 +72,7 @@ const char *GHOST_SystemPathsUnix::getUserDir(int version, const char *versionst
       last_version = version;
 
       if (home) {
-        user_path = string(home) + "/.mixar/" + versionstr;
+        user_path = string(home) + "/.webspider3d/" + versionstr;
       }
       else {
         return nullptr;
@@ -86,12 +86,12 @@ const char *GHOST_SystemPathsUnix::getUserDir(int version, const char *versionst
     last_version = version;
 
     if (home) {
-      user_path = string(home) + "/mixar/" + versionstr;
+      user_path = string(home) + "/webspider3d/" + versionstr;
     }
     else {
       home = home_dir_get();
       if (home) {
-        user_path = string(home) + "/.config/mixar/" + versionstr;
+        user_path = string(home) + "/.config/webspider3d/" + versionstr;
       }
       else {
         return nullptr;

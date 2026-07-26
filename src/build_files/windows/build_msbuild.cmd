@@ -1,11 +1,11 @@
-REM SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+REM SPDX-FileCopyrightText: 2026 WebSpider Studios
 REM
 REM SPDX-License-Identifier: GPL-2.0-or-later
 
 if "%NOBUILD%"=="1" goto EOF
 echo %TIME% > %BUILD_DIR%\buildtime.txt
 msbuild ^
-	%BUILD_DIR%\Mixar.sln ^
+	%BUILD_DIR%\WebSpider 3D.sln ^
 	/target:build ^
 	/property:Configuration=%BUILD_TYPE% ^
 	/maxcpucount:2 ^

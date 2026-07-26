@@ -1172,7 +1172,7 @@ void PyC_MainModule_Restore(PyObject *main_mod)
 
 bool PyC_IsInterpreterActive()
 {
-  /* MIXAR: callers use this to decide whether they may skip #PyGILState_Ensure,
+  /* WEBSPIDER: callers use this to decide whether they may skip #PyGILState_Ensure,
    * so it must answer "does the *current* thread hold the GIL". On Python <= 3.11
    * the current thread-state (#PyThreadState_GetDict, #PyThreadState_GetUnchecked)
    * is a process-global pointing at whichever thread holds the GIL, so checking it

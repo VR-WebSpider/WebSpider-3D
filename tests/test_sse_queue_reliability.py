@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+# SPDX-FileCopyrightText: 2026 WebSpider Studios
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -19,7 +19,7 @@ import pytest
 
 
 ROOT = Path(__file__).resolve().parents[1]
-CORE = ROOT / "src/scripts/mixar/modules/space_mixie_chat/core"
+CORE = ROOT / "src/scripts/webspider/modules/space_webspider_chat/core"
 
 
 def _module(monkeypatch, name: str, **attributes):
@@ -37,11 +37,11 @@ def _package(monkeypatch, name: str):
 
 
 def _install_logger_stub(monkeypatch):
-    _package(monkeypatch, "mixar")
-    _package(monkeypatch, "mixar.config")
+    _package(monkeypatch, "webspider3d")
+    _package(monkeypatch, "webspider.config")
     _module(
         monkeypatch,
-        "mixar.config.logging_config",
+        "webspider.config.logging_config",
         get_logger=lambda _name: MagicMock(),
     )
 

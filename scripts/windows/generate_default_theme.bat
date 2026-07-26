@@ -1,11 +1,11 @@
-REM SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+REM SPDX-FileCopyrightText: 2026 WebSpider Studios
 REM
 REM SPDX-License-Identifier: GPL-2.0-or-later
 
 @echo off
 setlocal enabledelayedexpansion
 
-REM Mixar Generate Default Theme Script for Windows
+REM WebSpider 3D Generate Default Theme Script for Windows
 REM Generates userdef_default_theme.c from user preferences
 
 REM Load all settings from settings.bat
@@ -16,8 +16,8 @@ if %ERRORLEVEL% neq 0 (
     exit /b 1
 )
 
-set "MIXAR_ENV=Dev"
-set "BUILD_ENV_DIR=%BUILD_DIR%\%MIXAR_ENV%"
+set "WEBSPIDER_ENV=Dev"
+set "BUILD_ENV_DIR=%BUILD_DIR%\%WEBSPIDER_ENV%"
 
 REM Find Python binary in the build output
 set "PY_BASE=%BUILD_ENV_DIR%\bin"
@@ -41,7 +41,7 @@ if not defined PYTHON_BIN (
 echo Found Python binary: %PYTHON_BIN%
 
 REM Windows user preferences path
-set "USERPREF_PATH=%APPDATA%\Mixar\Mixar\%BLENDER_VERSION%\config\mixar_userpref.blend"
+set "USERPREF_PATH=%APPDATA%\WebSpider 3D\WebSpider 3D\%BLENDER_VERSION%\config\webspider3d_userpref.blend"
 
 if not exist "%USERPREF_PATH%" (
     echo Error: User preferences file not found at: %USERPREF_PATH%

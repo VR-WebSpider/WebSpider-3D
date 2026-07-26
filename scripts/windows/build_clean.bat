@@ -1,18 +1,18 @@
-REM SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+REM SPDX-FileCopyrightText: 2026 WebSpider Studios
 REM
 REM SPDX-License-Identifier: GPL-2.0-or-later
 
 @echo off
 setlocal enabledelayedexpansion
 
-REM Mixar Clean Build Script for Windows
+REM WebSpider 3D Clean Build Script for Windows
 REM Deletes environment-specific build directory and source directory, then runs a fresh build via build.bat.
 REM
 REM Usage:
 REM   build_clean.bat          Interactive (prompts for confirmation)
 REM   build_clean.bat --yes    Non-interactive (skips confirmation, for CI/release scripts)
 
-REM Load settings to resolve BUILD_DIR, SOURCE_DIR, and MIXAR_ENV
+REM Load settings to resolve BUILD_DIR, SOURCE_DIR, and WEBSPIDER_ENV
 set "SCRIPT_DIR=%~dp0"
 call "%SCRIPT_DIR%settings.bat"
 if %ERRORLEVEL% neq 0 (
@@ -20,15 +20,15 @@ if %ERRORLEVEL% neq 0 (
     exit /b 1
 )
 
-REM MIXAR_ENV may be empty here if settings parse fails partially — use fallback
-if "%MIXAR_ENV%"=="" set "MIXAR_ENV=Prod"
+REM WEBSPIDER_ENV may be empty here if settings parse fails partially — use fallback
+if "%WEBSPIDER_ENV%"=="" set "WEBSPIDER_ENV=Prod"
 
 REM Environment-specific build directory (e.g., build\Prod, build\Dev)
-set "BUILD_ENV_DIR=%BUILD_DIR%\%MIXAR_ENV%"
+set "BUILD_ENV_DIR=%BUILD_DIR%\%WEBSPIDER_ENV%"
 
 echo === Clean Build Starting ===
 echo This will delete the following directories:
-echo   - Build (%MIXAR_ENV%):  %BUILD_ENV_DIR%
+echo   - Build (%WEBSPIDER_ENV%):  %BUILD_ENV_DIR%
 echo   - Source: %SOURCE_DIR%
 echo.
 

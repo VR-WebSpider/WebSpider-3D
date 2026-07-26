@@ -1,5 +1,5 @@
 /* SPDX-FileCopyrightText: 2009 Blender Authors
- * SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+ * SPDX-FileCopyrightText: 2026 WebSpider Studios
  *
  * SPDX-License-Identifier: GPL-2.0-or-later */
 
@@ -169,8 +169,8 @@ DEF_ICON(ZOOM_OUT)
 DEF_ICON(ZOOM_PREVIOUS)
 DEF_ICON(ZOOM_SELECTED)
 
-/* MIXIE CHAT */
-DEF_ICON_COLOR(MIXAR_ICON)
+/* WEBSPIDER_AI CHAT */
+DEF_ICON_COLOR(WEBSPIDER_ICON)
 DEF_ICON_COLOR(SUBMIT_ARROW)
 DEF_ICON_COLOR(PAPERCLIP)
 DEF_ICON_COLOR(AGENT)

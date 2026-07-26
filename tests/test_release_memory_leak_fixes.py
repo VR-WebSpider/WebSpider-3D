@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+# SPDX-FileCopyrightText: 2026 WebSpider Studios
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -7,7 +7,7 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-SRC = ROOT / "src" / "scripts" / "mixar" / "modules"
+SRC = ROOT / "src" / "scripts" / "webspider3d" / "modules"
 
 
 def read_src(relative_path: str) -> str:
@@ -21,8 +21,8 @@ def test_uv_editor_unregister_uses_timer_is_registered():
     assert "if _check_tool_and_refresh in bpy.app.timers" not in source
 
 
-def test_mixie_chat_unregisters_slot_property_classes():
-    source = read_src("space_mixie_chat/ui/properties/chat_props.py")
+def test_webspider_chat_unregisters_slot_property_classes():
+    source = read_src("space_webspider_chat/ui/properties/chat_props.py")
 
     assert "from .chat_slot_types import classes as slot_classes" in source
     assert "for cls in reversed(slot_classes):" in source
@@ -83,9 +83,9 @@ def test_lookdev_failed_depth_render_cleans_temp_compositor():
 
 
 def test_chat_file_image_datablocks_are_cleaned_when_records_are_removed():
-    image_ops = read_src("space_mixie_chat/ui/operators/image_ops.py")
-    chat_api_ops = read_src("space_mixie_chat/ui/operators/chat_api_ops.py")
-    screenshot_ops = read_src("space_mixie_chat/ui/operators/screenshot_ops.py")
+    image_ops = read_src("space_webspider_chat/ui/operators/image_ops.py")
+    chat_api_ops = read_src("space_webspider_chat/ui/operators/chat_api_ops.py")
+    screenshot_ops = read_src("space_webspider_chat/ui/operators/screenshot_ops.py")
 
     assert "cleanup_loaded_file_image(image_path)" in image_ops
     assert "cleanup_loaded_file_images(paths)" in image_ops

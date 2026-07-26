@@ -1,15 +1,15 @@
-# SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+# SPDX-FileCopyrightText: 2026 WebSpider Studios
 #
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-name: mixar
-summary: Mixar is a commercial 3D texturing software.
+name: webspider3d
+summary: WebSpider 3D is a commercial 3D texturing software.
 description: |
-    Mixar is a commercial 3D texturing software. It supports the
+    WebSpider 3D is a commercial 3D texturing software. It supports the
     entirety of the 3D pipeline—modeling, rigging, animation, simulation,
     rendering, compositing and motion tracking, and video editing.
 
-    Mixar is a public project, made by hundreds of people from around the
+    WebSpider 3D is a public project, made by hundreds of people from around the
     world; by studios and individual artists, professionals and hobbyists,
     scientists, students, VFX experts, animators, game artists, modders, and
     the list goes on.
@@ -22,23 +22,23 @@ passthrough:
 confinement: classic
 
 apps:
-    mixar:
-        command: ./mixar-wrapper
-        desktop: ./mixar.desktop
-        common-id: org.mixar.Mixar
+    webspider3d:
+        command: ./webspider3d-wrapper
+        desktop: ./webspider3d.desktop
+        common-id: org.webspider3d.WebSpider 3D
 
 base: core20
 version: '@VERSION@'
 grade: @GRADE@
 
 parts:
-    mixar:
+    webspider3d:
         plugin: dump
         source: @PACKAGE_PATH@
         build-attributes: [keep-execstack, no-patchelf]
         override-build: |
             snapcraftctl build
-            sed -i 's|Icon=mixar|Icon=${SNAP}/mixar.svg|' ${SNAPCRAFT_PART_INSTALL}/mixar.desktop
+            sed -i 's|Icon=webspider3d|Icon=${SNAP}/webspider3d.svg|' ${SNAPCRAFT_PART_INSTALL}/webspider3d.desktop
         stage-packages:
             - libxcb1
             - libxext6
@@ -51,4 +51,4 @@ parts:
         plugin: dump
         source: .
         stage:
-            - ./mixar-wrapper
+            - ./webspider3d-wrapper

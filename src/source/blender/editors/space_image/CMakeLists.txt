@@ -1,5 +1,5 @@
 # SPDX-FileCopyrightText: 2023 Blender Authors
-# SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+# SPDX-FileCopyrightText: 2026 WebSpider Studios
 #
 # SPDX-License-Identifier: GPL-2.0-or-later
 
@@ -19,15 +19,15 @@ set(SRC
   image_buttons.cc
   image_draw.cc
   image_edit.cc
-  image_mixar_uv_helpers.cc
-  image_mixar_uv_panels.cc
+  image_webspider_uv_helpers.cc
+  image_webspider_uv_panels.cc
   image_ops.cc
   image_sequence.cc
   image_undo.cc
   space_image.cc
 
   image_intern.hh
-  image_mixar_uv_panels.hh
+  image_webspider_uv_panels.hh
 )
 
 set(LIB

@@ -1,5 +1,5 @@
 /* SPDX-FileCopyrightText: 2023 Blender Authors
- * SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+ * SPDX-FileCopyrightText: 2026 WebSpider Studios
  *
  * SPDX-License-Identifier: GPL-2.0-or-later */
 
@@ -25,19 +25,19 @@
 /** Blender release cycle stage: alpha/beta/rc/release. */
 #define BLENDER_VERSION_CYCLE release
 
-#define MIXAR_VERSION 301
-#define MIXAR_VERSION_PATCH 49
-#define MIXAR_VERSION_CYCLE release
+#define WEBSPIDER_VERSION 301
+#define WEBSPIDER_VERSION_PATCH 49
+#define WEBSPIDER_VERSION_CYCLE release
 
-/* Mixar file format version, stored in FileGlobal.
+/* WebSpider 3D file format version, stored in FileGlobal.
  * Pre-versioning files (saved before this system) will read as 0.
- * Bump MIXAR_FILE_SUBVERSION when adding new versioning blocks. */
-#define MIXAR_FILE_VERSION 100
-#define MIXAR_FILE_SUBVERSION 3
+ * Bump WEBSPIDER_FILE_SUBVERSION when adding new versioning blocks. */
+#define WEBSPIDER_FILE_VERSION 100
+#define WEBSPIDER_FILE_SUBVERSION 3
 
-/* Minimum Mixar version that can read files saved by this version.
- * Older Mixar builds will show a forward-compatibility warning. */
-#define MIXAR_FILE_MIN_VERSION 100
+/* Minimum WebSpider 3D version that can read files saved by this version.
+ * Older WebSpider 3D builds will show a forward-compatibility warning. */
+#define WEBSPIDER_FILE_MIN_VERSION 100
 
 /** Blender release type suffix. LTS or blank. */
 #define BLENDER_VERSION_SUFFIX

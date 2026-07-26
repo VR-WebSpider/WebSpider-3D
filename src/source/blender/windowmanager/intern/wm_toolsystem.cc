@@ -1,5 +1,5 @@
 /* SPDX-FileCopyrightText: 2023 Blender Authors
- * SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+ * SPDX-FileCopyrightText: 2026 WebSpider Studios
  *
  * SPDX-License-Identifier: GPL-2.0-or-later */
 
@@ -734,7 +734,7 @@ static bool toolsystem_key_ensure_check(const bToolKey *tkey)
     case SPACE_VIEW3D:
       return true;
     case SPACE_IMAGE:
-      if (ELEM(tkey->mode, SI_MODE_PAINT, SI_MODE_UV, SI_MODE_VIEW, SI_MODE_MASK, SI_MODE_MIXAR_UV)) {
+      if (ELEM(tkey->mode, SI_MODE_PAINT, SI_MODE_UV, SI_MODE_VIEW, SI_MODE_MASK, SI_MODE_WEBSPIDER_UV)) {
         return true;
       }
       break;
@@ -1148,7 +1148,7 @@ static const char *toolsystem_default_tool(const bToolKey *tkey)
           return "builtin.sample";
         case SI_MODE_MASK:
         case SI_MODE_UV:
-        case SI_MODE_MIXAR_UV:
+        case SI_MODE_WEBSPIDER_UV:
           return "builtin.select_box";
       }
       break;

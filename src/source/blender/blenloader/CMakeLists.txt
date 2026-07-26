@@ -1,5 +1,5 @@
 # SPDX-FileCopyrightText: 2006 Blender Authors
-# SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+# SPDX-FileCopyrightText: 2026 WebSpider Studios
 #
 # SPDX-License-Identifier: GPL-2.0-or-later
 
@@ -40,7 +40,7 @@ set(SRC
   intern/versioning_defaults.cc
   intern/versioning_dna.cc
   intern/versioning_legacy.cc
-  intern/versioning_mixar_200.cc
+  intern/versioning_webspider_200.cc
   intern/versioning_userdef.cc
   intern/writefile.cc
 
@@ -52,7 +52,7 @@ set(SRC
   BLO_writefile.hh
   intern/readfile.hh
   versioning_common.hh
-  versioning_mixar_200.hh
+  versioning_webspider_200.hh
 )
 
 set(LIB

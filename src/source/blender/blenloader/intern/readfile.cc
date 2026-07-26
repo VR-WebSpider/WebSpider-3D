@@ -1,5 +1,5 @@
 /* SPDX-FileCopyrightText: 2001-2002 NaN Holding BV. All rights reserved.
- * SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+ * SPDX-FileCopyrightText: 2026 WebSpider Studios
  *
  * SPDX-License-Identifier: GPL-2.0-or-later */
 
@@ -490,13 +490,13 @@ static void read_file_version_and_colorspace(FileData *fd, Main *main)
         main->minsubversionfile = fg->minsubversion;
         main->has_forward_compatibility_issues = !MAIN_VERSION_FILE_OLDER_OR_EQUAL(
             main, BLENDER_FILE_VERSION, BLENDER_FILE_SUBVERSION);
-        main->mixar_versionfile = fg->mixar_version;
-        main->mixar_subversionfile = fg->mixar_subversion;
-        main->mixar_minversionfile = fg->mixar_min_version;
-        main->has_mixar_forward_compatibility_issues =
-            (fg->mixar_version > MIXAR_FILE_VERSION) ||
-            (fg->mixar_version == MIXAR_FILE_VERSION &&
-             fg->mixar_subversion > MIXAR_FILE_SUBVERSION);
+        main->webspider_versionfile = fg->webspider_version;
+        main->webspider_subversionfile = fg->webspider_subversion;
+        main->webspider_minversionfile = fg->webspider_min_version;
+        main->has_webspider_forward_compatibility_issues =
+            (fg->webspider_version > WEBSPIDER_FILE_VERSION) ||
+            (fg->webspider_version == WEBSPIDER_FILE_VERSION &&
+             fg->webspider_subversion > WEBSPIDER_FILE_SUBVERSION);
         main->is_asset_edit_file = (fg->fileflags & G_FILE_ASSET_EDIT_FILE) != 0;
         STRNCPY(main->colorspace.scene_linear_name, fg->colorspace_scene_linear_name);
         main->colorspace.scene_linear_to_xyz = blender::float3x3(
@@ -572,7 +572,7 @@ void blo_readfile_invalidate(FileData *fd, Main *bmain, const char *message)
 
   BLO_reportf_wrap(fd->reports,
                    RPT_ERROR,
-                   "A critical error happened (the mixar file is likely corrupted): %s",
+                   "A critical error happened (the webspider file is likely corrupted): %s",
                    message);
 }
 
@@ -1176,10 +1176,10 @@ static bool is_minversion_older_than_blender(FileData *fd, ReportList *reports)
       }
       BKE_reportf(reports,
                   RPT_ERROR,
-                  "The file was saved by a newer version, open it with Mixar %s or later",
+                  "The file was saved by a newer version, open it with WebSpider 3D %s or later",
                   min_reader_ver_str);
       CLOG_WARN(&LOG,
-                "%s: File saved by a newer version of Mixar (%s), Mixar %s or later is "
+                "%s: File saved by a newer version of WebSpider 3D (%s), WebSpider 3D %s or later is "
                 "needed to open it.",
                 fd->relabase,
                 writer_ver_str,
@@ -1212,7 +1212,7 @@ static FileData *blo_decode_and_check(FileData *fd, ReportList *reports)
     const char *error_message = nullptr;
     if (read_file_dna(fd, &error_message) == false) {
       BKE_reportf(
-          reports, RPT_ERROR, "Failed to read mixar file '%s': %s", fd->relabase, error_message);
+          reports, RPT_ERROR, "Failed to read webspider file '%s': %s", fd->relabase, error_message);
       blo_filedata_free(fd);
       fd = nullptr;
     }
@@ -1225,13 +1225,13 @@ static FileData *blo_decode_and_check(FileData *fd, ReportList *reports)
     BKE_reportf(
         reports,
         RPT_ERROR,
-        "Cannot read mixar file '%s', incomplete header, may be from a newer version of Mixar",
+        "Cannot read webspider file '%s', incomplete header, may be from a newer version of WebSpider 3D",
         fd->relabase);
     blo_filedata_free(fd);
     fd = nullptr;
   }
   else {
-    BKE_reportf(reports, RPT_ERROR, "Failed to read file '%s', not a mixar file", fd->relabase);
+    BKE_reportf(reports, RPT_ERROR, "Failed to read file '%s', not a webspider file", fd->relabase);
     blo_filedata_free(fd);
     fd = nullptr;
   }
@@ -1392,7 +1392,7 @@ FileData *blo_filedata_from_memfile(MemFile *memfile,
                                     BlendFileReadReport *reports)
 {
   if (!memfile) {
-    BKE_report(reports->reports, RPT_WARNING, "Unable to open mixar <memory>");
+    BKE_report(reports->reports, RPT_WARNING, "Unable to open webspider <memory>");
     return nullptr;
   }
 
@@ -2725,7 +2725,7 @@ static BHead *read_data_into_datamap(FileData *fd,
       const bool is_new = oldnewmap_insert(fd->datamap, bhead->old, data, 0);
       if (!is_new) {
         CLOG_ERROR(&LOG,
-                   "Mixarfile corruption: Invalid, or multiple `bhead` with same old address "
+                   "WebSpider 3Dfile corruption: Invalid, or multiple `bhead` with same old address "
                    "value (%p) for a given ID.",
                    bhead->old);
       }
@@ -3442,13 +3442,13 @@ static BHead *read_global(BlendFileData *bfd, FileData *fd, BHead *bhead)
   bfd->main->minversionfile = fg->minversion;
   bfd->main->minsubversionfile = fg->minsubversion;
 
-  bfd->main->mixar_versionfile = fg->mixar_version;
-  bfd->main->mixar_subversionfile = fg->mixar_subversion;
-  bfd->main->mixar_minversionfile = fg->mixar_min_version;
-  bfd->main->has_mixar_forward_compatibility_issues =
-      (fg->mixar_version > MIXAR_FILE_VERSION) ||
-      (fg->mixar_version == MIXAR_FILE_VERSION &&
-       fg->mixar_subversion > MIXAR_FILE_SUBVERSION);
+  bfd->main->webspider_versionfile = fg->webspider_version;
+  bfd->main->webspider_subversionfile = fg->webspider_subversion;
+  bfd->main->webspider_minversionfile = fg->webspider_min_version;
+  bfd->main->has_webspider_forward_compatibility_issues =
+      (fg->webspider_version > WEBSPIDER_FILE_VERSION) ||
+      (fg->webspider_version == WEBSPIDER_FILE_VERSION &&
+       fg->webspider_subversion > WEBSPIDER_FILE_SUBVERSION);
 
   bfd->main->build_commit_timestamp = fg->build_commit_timestamp;
   STRNCPY(bfd->main->build_hash, fg->build_hash);
@@ -4183,14 +4183,14 @@ BlendFileData *blo_read_file_internal(FileData *fd, const char *filepath)
     if (bfd->main->has_forward_compatibility_issues) {
       BKE_reportf(fd->reports->reports,
                   RPT_WARNING,
-                  "Mixarfile '%s' was created by a future version of Mixar and contains ID "
+                  "WebSpider 3Dfile '%s' was created by a future version of WebSpider 3D and contains ID "
                   "names longer than currently supported. These have been truncated.",
                   bfd->filepath);
     }
     else {
       BKE_reportf(fd->reports->reports,
                   RPT_ERROR,
-                  "Mixarfile '%s' appears corrupted, it contains invalid ID names. These have "
+                  "WebSpider 3Dfile '%s' appears corrupted, it contains invalid ID names. These have "
                   "been truncated.",
                   bfd->filepath);
     }
@@ -4586,9 +4586,9 @@ static void read_libraries_report_invalid_id_names(FileData *fd,
   if (has_forward_compatibility_issues) {
     BKE_reportf(reports,
                 RPT_WARNING,
-                "Library '%s' was created by a future version of Mixar and contains ID names "
+                "Library '%s' was created by a future version of WebSpider 3D and contains ID names "
                 "longer than currently supported. This may cause missing linked data, consider "
-                "opening and re-saving that library with the current Mixar version.",
+                "opening and re-saving that library with the current WebSpider 3D version.",
                 filepath);
   }
   else {
@@ -4854,7 +4854,7 @@ static void expand_doit_library(void *fdhandle,
     if (libmain->curlib == nullptr) {
       BLO_reportf_wrap(fd->reports,
                        RPT_WARNING,
-                       RPT_("LIB: Data refers to main .mixar file: '%s' from %s"),
+                       RPT_("LIB: Data refers to main .webspider file: '%s' from %s"),
                        id_name ? id_name : "<InvalidIDName>",
                        mainvar->curlib->runtime->filepath_abs);
       return;
@@ -5698,7 +5698,7 @@ static void *blo_verify_data_address(FileData *fd,
     if (MEM_allocN_len(new_address) < expected_size) {
       blo_readfile_invalidate(fd,
                               (*fd->bmain->split_mains)[fd->bmain->split_mains->size() - 1],
-                              "Corrupt .mixar file, unexpected data size.");
+                              "Corrupt .webspider file, unexpected data size.");
       /* Return null to trigger a hard-crash rather than allowing readfile code to further access
        * this invalid block of memory.
        *
@@ -5855,7 +5855,7 @@ void BLO_read_string(BlendDataReader *reader, char **ptr_p)
       }
     }
 
-    BLI_assert_msg(0, "Corrupt .mixar file, expected string to be null terminated.");
+    BLI_assert_msg(0, "Corrupt .webspider file, expected string to be null terminated.");
   }
 #endif
 }

@@ -1,5 +1,5 @@
 /* SPDX-FileCopyrightText: 2023 Blender Authors
- * SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+ * SPDX-FileCopyrightText: 2026 WebSpider Studios
  *
  * SPDX-License-Identifier: GPL-2.0-or-later */
 
@@ -218,14 +218,14 @@ bool BKE_appdir_folder_caches(char *path, const size_t path_maxncpy)
   BLI_path_join(path,
                 path_maxncpy,
                 caches_root_path->c_str(),
-                "Mixar",
-                "Mixar",
+                "WebSpider 3D",
+                "WebSpider 3D",
                 "Cache",
                 SEP_STR);
 #elif defined(__APPLE__)
-  BLI_path_join(path, path_maxncpy, caches_root_path->c_str(), "Mixar", SEP_STR);
+  BLI_path_join(path, path_maxncpy, caches_root_path->c_str(), "WebSpider 3D", SEP_STR);
 #else /* __linux__ */
-  BLI_path_join(path, path_maxncpy, caches_root_path->c_str(), "mixar", SEP_STR);
+  BLI_path_join(path, path_maxncpy, caches_root_path->c_str(), "webspider", SEP_STR);
 #endif
 
   return true;
@@ -503,7 +503,7 @@ static bool get_path_user_ex(char *targetpath,
   char user_path[FILE_MAX];
 
   /* Environment variable override. */
-  if (test_env_path(user_path, "MIXAR_USER_RESOURCES", check_is_dir)) {
+  if (test_env_path(user_path, "WEBSPIDER_USER_RESOURCES", check_is_dir)) {
     /* Pass. */
   }
   /* Portable install, to store user files next to Blender executable. */
@@ -563,7 +563,7 @@ static bool get_path_system_ex(char *targetpath,
 {
   char system_path[FILE_MAX];
 
-  if (test_env_path(system_path, "MIXAR_SYSTEM_RESOURCES", check_is_dir)) {
+  if (test_env_path(system_path, "WEBSPIDER_SYSTEM_RESOURCES", check_is_dir)) {
     /* Pass. */
   }
   else {
@@ -613,13 +613,13 @@ bool BKE_appdir_folder_id_ex(const int folder_id,
 {
   switch (folder_id) {
     case BLENDER_DATAFILES: /* general case */
-      if (get_path_environment(path, path_maxncpy, subfolder, "MIXAR_USER_DATAFILES")) {
+      if (get_path_environment(path, path_maxncpy, subfolder, "WEBSPIDER_USER_DATAFILES")) {
         break;
       }
       if (get_path_user(path, path_maxncpy, "datafiles", subfolder)) {
         break;
       }
-      if (get_path_environment(path, path_maxncpy, subfolder, "MIXAR_SYSTEM_DATAFILES")) {
+      if (get_path_environment(path, path_maxncpy, subfolder, "WEBSPIDER_SYSTEM_DATAFILES")) {
         break;
       }
       if (get_path_system(path, path_maxncpy, "datafiles", subfolder)) {
@@ -631,7 +631,7 @@ bool BKE_appdir_folder_id_ex(const int folder_id,
       return false;
 
     case BLENDER_USER_DATAFILES:
-      if (get_path_environment(path, path_maxncpy, subfolder, "MIXAR_USER_DATAFILES")) {
+      if (get_path_environment(path, path_maxncpy, subfolder, "WEBSPIDER_USER_DATAFILES")) {
         break;
       }
       if (get_path_user(path, path_maxncpy, "datafiles", subfolder)) {
@@ -640,7 +640,7 @@ bool BKE_appdir_folder_id_ex(const int folder_id,
       return false;
 
     case BLENDER_SYSTEM_DATAFILES:
-      if (get_path_environment(path, path_maxncpy, subfolder, "MIXAR_SYSTEM_DATAFILES")) {
+      if (get_path_environment(path, path_maxncpy, subfolder, "WEBSPIDER_SYSTEM_DATAFILES")) {
         break;
       }
       if (get_path_system(path, path_maxncpy, "datafiles", subfolder)) {
@@ -652,7 +652,7 @@ bool BKE_appdir_folder_id_ex(const int folder_id,
       return false;
 
     case BLENDER_USER_CONFIG:
-      if (get_path_environment(path, path_maxncpy, subfolder, "MIXAR_USER_CONFIG")) {
+      if (get_path_environment(path, path_maxncpy, subfolder, "WEBSPIDER_USER_CONFIG")) {
         break;
       }
       if (get_path_user(path, path_maxncpy, "config", subfolder)) {
@@ -661,7 +661,7 @@ bool BKE_appdir_folder_id_ex(const int folder_id,
       return false;
 
     case BLENDER_USER_SCRIPTS:
-      if (get_path_environment(path, path_maxncpy, subfolder, "MIXAR_USER_SCRIPTS")) {
+      if (get_path_environment(path, path_maxncpy, subfolder, "WEBSPIDER_USER_SCRIPTS")) {
         break;
       }
       if (get_path_user(path, path_maxncpy, "scripts", subfolder)) {
@@ -679,7 +679,7 @@ bool BKE_appdir_folder_id_ex(const int folder_id,
       return false;
 
     case BLENDER_USER_EXTENSIONS:
-      if (get_path_environment(path, path_maxncpy, subfolder, "MIXAR_USER_EXTENSIONS")) {
+      if (get_path_environment(path, path_maxncpy, subfolder, "WEBSPIDER_USER_EXTENSIONS")) {
         break;
       }
       if (get_path_user(path, path_maxncpy, "extensions", subfolder)) {
@@ -688,7 +688,7 @@ bool BKE_appdir_folder_id_ex(const int folder_id,
       return false;
 
     case BLENDER_SYSTEM_EXTENSIONS:
-      if (get_path_environment(path, path_maxncpy, subfolder, "MIXAR_SYSTEM_EXTENSIONS")) {
+      if (get_path_environment(path, path_maxncpy, subfolder, "WEBSPIDER_SYSTEM_EXTENSIONS")) {
         break;
       }
       if (get_path_system(path, path_maxncpy, "extensions", subfolder)) {
@@ -700,7 +700,7 @@ bool BKE_appdir_folder_id_ex(const int folder_id,
       return false;
 
     case BLENDER_SYSTEM_PYTHON:
-      if (get_path_environment(path, path_maxncpy, subfolder, "MIXAR_SYSTEM_PYTHON")) {
+      if (get_path_environment(path, path_maxncpy, subfolder, "WEBSPIDER_SYSTEM_PYTHON")) {
         break;
       }
       if (get_path_system(path, path_maxncpy, "python", subfolder)) {
@@ -738,7 +738,7 @@ std::optional<std::string> BKE_appdir_folder_id_user_notest(const int folder_id,
   switch (folder_id) {
     case BLENDER_USER_DATAFILES:
       if (get_path_environment_ex(
-              path, sizeof(path), subfolder, "MIXAR_USER_DATAFILES", check_is_dir))
+              path, sizeof(path), subfolder, "WEBSPIDER_USER_DATAFILES", check_is_dir))
       {
         break;
       }
@@ -746,7 +746,7 @@ std::optional<std::string> BKE_appdir_folder_id_user_notest(const int folder_id,
       break;
     case BLENDER_USER_CONFIG:
       if (get_path_environment_ex(
-              path, sizeof(path), subfolder, "MIXAR_USER_CONFIG", check_is_dir))
+              path, sizeof(path), subfolder, "WEBSPIDER_USER_CONFIG", check_is_dir))
       {
         break;
       }
@@ -754,7 +754,7 @@ std::optional<std::string> BKE_appdir_folder_id_user_notest(const int folder_id,
       break;
     case BLENDER_USER_SCRIPTS:
       if (get_path_environment_ex(
-              path, sizeof(path), subfolder, "MIXAR_USER_SCRIPTS", check_is_dir))
+              path, sizeof(path), subfolder, "WEBSPIDER_USER_SCRIPTS", check_is_dir))
       {
         break;
       }
@@ -762,7 +762,7 @@ std::optional<std::string> BKE_appdir_folder_id_user_notest(const int folder_id,
       break;
     case BLENDER_USER_EXTENSIONS:
       if (get_path_environment_ex(
-              path, sizeof(path), subfolder, "MIXAR_USER_EXTENSIONS", check_is_dir))
+              path, sizeof(path), subfolder, "WEBSPIDER_USER_EXTENSIONS", check_is_dir))
       {
         break;
       }
@@ -1110,7 +1110,7 @@ bool BKE_appdir_app_template_has_userpref(const char *app_template)
   }
 
   char userpref_path[FILE_MAX];
-  BLI_path_join(userpref_path, sizeof(userpref_path), app_template_path, MIXAR_USERPREF_FILE);
+  BLI_path_join(userpref_path, sizeof(userpref_path), app_template_path, WEBSPIDER_USERPREF_FILE);
   return BLI_exists(userpref_path);
 }
 

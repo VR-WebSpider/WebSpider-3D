@@ -1,5 +1,5 @@
 /* SPDX-FileCopyrightText: 2008 Blender Authors
- * SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+ * SPDX-FileCopyrightText: 2026 WebSpider Studios
  *
  * SPDX-License-Identifier: GPL-2.0-or-later */
 
@@ -85,14 +85,14 @@ void ED_spacetypes_init()
   ED_spacetype_statusbar();
   ED_spacetype_topbar();
   spreadsheet::register_spacetype();
-  ED_spacetype_mixie();  /* Register Mixie space */
-  ED_spacetype_mixar_layers();  /* Register Mixar Layers space */
-  ED_spacetype_mixar_properties();  /* Register Mixar Properties space */
-  ED_spacetype_mixar_assets();  /* Register Mixar Assets space */
+  ED_spacetype_webspider_ai();  /* Register WebSpider AI space */
+  ED_spacetype_webspider_layers();  /* Register WebSpider 3D Layers space */
+  ED_spacetype_webspider_properties();  /* Register WebSpider 3D Properties space */
+  ED_spacetype_webspider_assets();  /* Register WebSpider 3D Assets space */
 
   ED_spacetype_baking();  /* Register Baking space */
   ED_spacetype_texture_sets();  /* Register Texture Sets space */
-  ED_spacetype_mixie_chat();  /* Register Mixie Chat space */
+  ED_spacetype_webspider_ai_chat();  /* Register WebSpider Chat space */
   ED_spacetype_agent_bubble();  /* Register floating Agent Bubble space */
 
   /* Register operator types for screen and all spaces. */

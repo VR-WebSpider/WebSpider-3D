@@ -1,5 +1,5 @@
 /* SPDX-FileCopyrightText: 2007 Blender Authors
- * SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+ * SPDX-FileCopyrightText: 2026 WebSpider Studios
  *
  * SPDX-License-Identifier: GPL-2.0-or-later */
 
@@ -52,38 +52,38 @@
 #include "wm.hh"
 
 #if defined(__APPLE__) || defined(_WIN32)
-extern "C" void Mixar_FloatingDocksSuppressForModal();
-extern "C" void Mixar_FloatingDocksRestoreAfterModal();
+extern "C" void WebSpider_FloatingDocksSuppressForModal();
+extern "C" void WebSpider_FloatingDocksRestoreAfterModal();
 #endif
 
 /* -------------------------------------------------------------------- */
 /** \name Splash Screen
  * \{ */
 
-static void wm_mixar_floating_docks_suppress_for_modal()
+static void wm_webspider_floating_docks_suppress_for_modal()
 {
 #if defined(__APPLE__) || defined(_WIN32)
-  Mixar_FloatingDocksSuppressForModal();
+  WebSpider_FloatingDocksSuppressForModal();
 #endif
 }
 
-static void wm_mixar_floating_docks_restore_after_modal()
+static void wm_webspider_floating_docks_restore_after_modal()
 {
 #if defined(__APPLE__) || defined(_WIN32)
-  Mixar_FloatingDocksRestoreAfterModal();
+  WebSpider_FloatingDocksRestoreAfterModal();
 #endif
 }
 
-static void wm_mixar_floating_docks_restore_after_modal_free(void * /*arg*/)
+static void wm_webspider_floating_docks_restore_after_modal_free(void * /*arg*/)
 {
-  wm_mixar_floating_docks_restore_after_modal();
+  wm_webspider_floating_docks_restore_after_modal();
 }
 
 static void wm_block_splash_close(bContext *C, void *arg_block, void * /*arg*/)
 {
   wmWindow *win = CTX_wm_window(C);
   UI_popup_block_close(C, win, static_cast<uiBlock *>(arg_block));
-  wm_mixar_floating_docks_restore_after_modal();
+  wm_webspider_floating_docks_restore_after_modal();
 }
 
 static void wm_block_splash_add_label(uiBlock *block, const char *label, int x, int y)
@@ -415,9 +415,9 @@ static wmOperatorStatus wm_splash_invoke(bContext *C,
                                          wmOperator * /*op*/,
                                          const wmEvent * /*event*/)
 {
-  wm_mixar_floating_docks_suppress_for_modal();
+  wm_webspider_floating_docks_suppress_for_modal();
   UI_popup_block_invoke(
-      C, wm_block_splash_create, nullptr, wm_mixar_floating_docks_restore_after_modal_free);
+      C, wm_block_splash_create, nullptr, wm_webspider_floating_docks_restore_after_modal_free);
 
   return OPERATOR_FINISHED;
 }

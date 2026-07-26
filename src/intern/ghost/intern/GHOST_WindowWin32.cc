@@ -1,5 +1,5 @@
 /* SPDX-FileCopyrightText: 2001-2002 NaN Holding BV. All rights reserved.
- * SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+ * SPDX-FileCopyrightText: 2026 WebSpider Studios
  *
  * SPDX-License-Identifier: GPL-2.0-or-later */
 
@@ -131,7 +131,7 @@ GHOST_WindowWin32::GHOST_WindowWin32(GHOST_SystemWin32 *system,
   h_DC_ = ::GetDC(h_wnd_);
 
   if (!setDrawingContextType(type)) {
-    const char *title = "Mixar - Unsupported Graphics Card Configuration";
+    const char *title = "WebSpider 3D - Unsupported Graphics Card Configuration";
     const char *text = "";
 #if defined(WIN32)
     if (strncmp(BLI_getenv("PROCESSOR_IDENTIFIER"), "ARM", 3) == 0 &&
@@ -142,7 +142,7 @@ GHOST_WindowWin32::GHOST_WindowWin32(GHOST_SystemWin32 *system,
           "Qualcomm devices require the \"OpenCL™, OpenGL®, and Vulkan® Compatibility Pack\" "
           "from the Microsoft Store.\n\n"
           "Devices using processors older than a Qualcomm Snapdragon 8cx Gen3 are incompatible, "
-          "but may be able to run an emulated x64 copy of Mixar, such as a 3.x LTS release.";
+          "but may be able to run an emulated x64 copy of WebSpider 3D, such as a 3.x LTS release.";
     }
     else
 #endif
@@ -537,7 +537,7 @@ void GHOST_WindowWin32::clientToScreen(int32_t inX,
 GHOST_TSuccess GHOST_WindowWin32::setState(GHOST_TWindowState state)
 {
   GHOST_TWindowState curstate = getState();
-  /* Mixar: only add WS_CAPTION if the window already has it.
+  /* WebSpider 3D: only add WS_CAPTION if the window already has it.
    * Chromeless popup windows (Agent Bubble) must stay caption-free
    * or they reappear in Alt+Tab and the taskbar. */
   LONG_PTR style = GetWindowLongPtr(h_wnd_, GWL_STYLE);
@@ -1236,7 +1236,7 @@ void GHOST_WindowWin32::registerWindowAppUserModelProperties()
 
   /* Find the current executable, and see if it's blender.exe if not bail out. */
   GetModuleFileName(0, blender_path, sizeof(blender_path));
-  char *blender_app = strstr(blender_path, "mixar.exe");
+  char *blender_app = strstr(blender_path, "webspider3d.exe");
   if (!blender_app) {
     return;
   }
@@ -1248,7 +1248,7 @@ void GHOST_WindowWin32::registerWindowAppUserModelProperties()
 
   /* Set the launcher as the shell command so the console window will not flash.
    * when people pin blender to the taskbar. */
-  strcpy(blender_app, "mixar-launcher.exe");
+  strcpy(blender_app, "webspider3d-launcher.exe");
   wsprintfW(shell_command, L"\"%S\"", blender_path);
   UTF16_ENCODE(BLENDER_WIN_APPID);
   UTF16_ENCODE(BLENDER_WIN_APPID_FRIENDLY_NAME);

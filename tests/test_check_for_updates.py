@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+# SPDX-FileCopyrightText: 2026 WebSpider Studios
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -13,24 +13,24 @@ SCRIPTS = ROOT / "src" / "scripts"
 if str(SCRIPTS) not in sys.path:
     sys.path.insert(0, str(SCRIPTS))
 
-from mixar.modules.testing.mock_bpy import install_bpy_mock
+from webspider.modules.testing.mock_bpy import install_bpy_mock
 
 install_bpy_mock()
 
 for _name in ("blf", "gpu", "gpu.state", "gpu.shader", "gpu_extras", "gpu_extras.batch"):
     sys.modules.setdefault(_name, MagicMock(name=_name))
 
-# mixie_space_utils introspects bpy.types.Panel.bl_rna at import time, which
+# webspider_ai_space_utils introspects bpy.types.Panel.bl_rna at import time, which
 # the bpy mock can't satisfy — stub it so the common.utils package can load.
 sys.modules.setdefault(
-    "mixar.modules.common.utils.mixie_space_utils",
-    MagicMock(name="mixie_space_utils"),
+    "webspider.modules.common.utils.webspider_ai_space_utils",
+    MagicMock(name="webspider_ai_space_utils"),
 )
 
-from mixar.modules.common.notifications.store import get_notification_store
-from mixar.modules.common.updates.constants import UPDATE_NOTIFICATION_ID
-from mixar.modules.common.updates.core import trigger
-from mixar.modules.common.updates.core.state import get_update_state
+from webspider.modules.common.notifications.store import get_notification_store
+from webspider.modules.common.updates.constants import UPDATE_NOTIFICATION_ID
+from webspider.modules.common.updates.core import trigger
+from webspider.modules.common.updates.core.state import get_update_state
 
 
 def setup_function(_fn):

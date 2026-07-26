@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+# SPDX-FileCopyrightText: 2026 WebSpider Studios
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -6,7 +6,7 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[2]
-HUNYUAN_OPS = ROOT / "src/scripts/mixar/modules/hunyuan/ui/operators/hunyuan_ops.py"
+HUNYUAN_OPS = ROOT / "src/scripts/webspider/modules/hunyuan/ui/operators/hunyuan_ops.py"
 
 
 def read_ops() -> str:

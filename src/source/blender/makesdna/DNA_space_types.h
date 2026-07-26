@@ -1,5 +1,5 @@
 /* SPDX-FileCopyrightText: 2001-2002 NaN Holding BV. All rights reserved.
- * SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+ * SPDX-FileCopyrightText: 2026 WebSpider Studios
  *
  * SPDX-License-Identifier: GPL-2.0-or-later */
 
@@ -1282,11 +1282,11 @@ typedef struct SpreadsheetRowFilter {
 /** \} */
 
 /* -------------------------------------------------------------------- */
-/** \name Mixie Space
+/** \name WebSpider AI Space
  * \{ */
 
-/** Mixie Space for Mixar. */
-typedef struct SpaceMixie {
+/** WebSpider AI Space for WebSpider 3D. */
+typedef struct SpaceWebSpider AI {
   SpaceLink *next, *prev;
   /** Storage of regions for inactive spaces. */
   ListBase regionbase;
@@ -1298,12 +1298,12 @@ typedef struct SpaceMixie {
   /** Current mode (Ideate, Lookdev360, Texture, Ask). */
   char mode;
   char _pad[7];
-} SpaceMixie;
+} SpaceWebSpider AI;
 
 /** \} */
 
-/** Mixie Chat Space for Mixar. */
-typedef struct SpaceMixieChat {
+/** WebSpider Chat Space for WebSpider 3D. */
+typedef struct SpaceWebSpider AIChat {
   SpaceLink *next, *prev;
   /** Storage of regions for inactive spaces. */
   ListBase regionbase;
@@ -1318,26 +1318,26 @@ typedef struct SpaceMixieChat {
   int sel_end;           /* Character offset end */
   char _pad1[4];
 
-  /** Runtime data (MixieChatRuntime *), not saved to file. */
+  /** Runtime data (WebSpider AIChatRuntime *), not saved to file. */
   void *runtime;
-} SpaceMixieChat;
+} SpaceWebSpider AIChat;
 
-/** Floating Agent Bubble — small chat overlay editor for Mixar.
+/** Floating Agent Bubble — small chat overlay editor for WebSpider 3D.
  *
- * A separate editor space (not the full mixie chat) intended to be
+ * A separate editor space (not the full webspider_ai chat) intended to be
  * opened in a small tear-off Blender window so it floats over the
  * user's working area. Three regions: header (status pill), main
  * (scrollable history), footer (input + send).
  *
  * IMPORTANT: This struct is intentionally layout-identical to
- * SpaceMixieChat (same field order, same offsets) so the agent
- * bubble's main + footer regions can reuse mixie chat's
+ * SpaceWebSpider AIChat (same field order, same offsets) so the agent
+ * bubble's main + footer regions can reuse webspider_ai chat's
  * custom-drawn C++ rendering via
- * `reinterpret_cast<SpaceMixieChat *>(area->spacedata.first)`.
- * Each bubble area gets its own MixieChatRuntime, but the message
- * store is shared (lives on Scene as mixie_chat_messages).
+ * `reinterpret_cast<SpaceWebSpider AIChat *>(area->spacedata.first)`.
+ * Each bubble area gets its own WebSpider AIChatRuntime, but the message
+ * store is shared (lives on Scene as webspider_ai_chat_messages).
  *
- * If you add fields to SpaceMixieChat, mirror them here in the
+ * If you add fields to SpaceWebSpider AIChat, mirror them here in the
  * same order. Otherwise the cast becomes UB and you'll get
  * Metal/GPU corruption that surfaces far from the cause.
  */
@@ -1349,65 +1349,65 @@ typedef struct SpaceAgentBubble {
   char _pad0[6];
   /* End 'SpaceLink' header. */
 
-  /** Text selection state — mirrors SpaceMixieChat exactly. */
+  /** Text selection state — mirrors SpaceWebSpider AIChat exactly. */
   int sel_message_index; /* -1 = no selection */
   int sel_start;
   int sel_end;
   char _pad1[4];
 
-  /** Runtime data (MixieChatRuntime *), not saved to file. */
+  /** Runtime data (WebSpider AIChatRuntime *), not saved to file. */
   void *runtime;
 } SpaceAgentBubble;
 
 /* -------------------------------------------------------------------- */
-/** \name Mixar Layers Space
+/** \name WebSpider 3D Layers Space
  * \{ */
 
-/** Mixar Layers Space - Texture layer stack management. */
-typedef struct SpaceMixarLayers {
+/** WebSpider 3D Layers Space - Texture layer stack management. */
+typedef struct SpaceWebSpider 3DLayers {
   SpaceLink *next, *prev;
   ListBase regionbase;
   char spacetype;
   char link_flag;
   char _pad0[6];
   /* End 'SpaceLink' header. */
-} SpaceMixarLayers;
+} SpaceWebSpider 3DLayers;
 
 /** \} */
 
 /* -------------------------------------------------------------------- */
-/** \name Mixar Properties Space
+/** \name WebSpider 3D Properties Space
  * \{ */
 
-/** Mixar Properties Space - Layer and texture properties. */
-typedef struct SpaceMixarProperties {
+/** WebSpider 3D Properties Space - Layer and texture properties. */
+typedef struct SpaceWebSpider 3DProperties {
   SpaceLink *next, *prev;
   ListBase regionbase;
   char spacetype;
   char link_flag;
   char _pad0[6];
   /* End 'SpaceLink' header. */
-} SpaceMixarProperties;
+} SpaceWebSpider 3DProperties;
 
 /** \} */
 
 /* -------------------------------------------------------------------- */
-/** \name Mixar Assets Space
+/** \name WebSpider 3D Assets Space
  * \{ */
 
-/** Mixar Assets Space - Smart materials, brushes, textures library. */
-typedef struct SpaceMixarAssets {
+/** WebSpider 3D Assets Space - Smart materials, brushes, textures library. */
+typedef struct SpaceWebSpider 3DAssets {
   SpaceLink *next, *prev;
   ListBase regionbase;
   char spacetype;
   char link_flag;
   char _pad0[6];
   /* End 'SpaceLink' header. */
-} SpaceMixarAssets;
+} SpaceWebSpider 3DAssets;
 
 /** \} */
 
-/* SPACE_MIXAR_UV_PROPERTIES removed: merged into IMAGE_EDITOR sidebar. */
+/* SPACE_WEBSPIDER_UV_PROPERTIES removed: merged into IMAGE_EDITOR sidebar. */
 
 /** \name Texturing Baking Space
  * \{ */

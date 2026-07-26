@@ -1,5 +1,5 @@
 # SPDX-FileCopyrightText: 2006 Blender Authors
-# SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+# SPDX-FileCopyrightText: 2026 WebSpider Studios
 #
 # SPDX-License-Identifier: GPL-2.0-or-later
 
@@ -12,7 +12,7 @@
 if(${CMAKE_SOURCE_DIR} STREQUAL ${CMAKE_BINARY_DIR})
   if(NOT DEFINED WITH_IN_SOURCE_BUILD)
     message(FATAL_ERROR
-      "CMake generation for mixar is not allowed within the source directory!"
+      "CMake generation for webspider3d is not allowed within the source directory!"
       "\n Remove \"${CMAKE_SOURCE_DIR}/CMakeCache.txt\""
       "\n then try again from another directory, e.g.:"
       "\n "
@@ -20,7 +20,7 @@ if(${CMAKE_SOURCE_DIR} STREQUAL ${CMAKE_BINARY_DIR})
       "\n cd .."
       "\n mkdir cmake-make"
       "\n cd cmake-make"
-      "\n cmake ../mixar-blender"
+      "\n cmake ../webspider3d-blender"
       "\n "
       "\n Alternately define WITH_IN_SOURCE_BUILD to force this option (not recommended!)"
     )
@@ -102,7 +102,7 @@ if(POLICY CMP0177)
 endif()
 
 # -----------------------------------------------------------------------------
-# Load Mixar's Local Macros
+# Load WebSpider 3D's Local Macros
 
 include(build_files/cmake/macros.cmake)
 
@@ -111,7 +111,7 @@ include(build_files/cmake/macros.cmake)
 
 blender_project_hack_pre()
 
-project(Mixar)
+project(WebSpider 3D)
 
 blender_project_hack_post()
 
@@ -187,18 +187,18 @@ endif()
 get_blender_version()
 
 if(WIN32)
-  # Use Mixar version for app ID if available, otherwise fall back to Blender version
-  if(DEFINED ENV{MIXAR_VERSION})
-    string(REPLACE "." ";" _mixar_ver "$ENV{MIXAR_VERSION}")
-    list(GET _mixar_ver 0 _APPID_MAJOR)
-    list(GET _mixar_ver 1 _APPID_MINOR)
+  # Use WebSpider 3D version for app ID if available, otherwise fall back to Blender version
+  if(DEFINED ENV{WEBSPIDER_VERSION})
+    string(REPLACE "." ";" _webspider3d_ver "$ENV{WEBSPIDER_VERSION}")
+    list(GET _webspider3d_ver 0 _APPID_MAJOR)
+    list(GET _webspider3d_ver 1 _APPID_MINOR)
   else()
     set(_APPID_MAJOR ${BLENDER_VERSION_MAJOR})
     set(_APPID_MINOR ${BLENDER_VERSION_MINOR})
   endif()
   add_definitions(
-    -DBLENDER_WIN_APPID="mixar.${_APPID_MAJOR}.${_APPID_MINOR}"
-    -DBLENDER_WIN_APPID_FRIENDLY_NAME="Mixar ${_APPID_MAJOR}.${_APPID_MINOR}"
+    -DBLENDER_WIN_APPID="webspider3d.${_APPID_MAJOR}.${_APPID_MINOR}"
+    -DBLENDER_WIN_APPID_FRIENDLY_NAME="WebSpider 3D ${_APPID_MAJOR}.${_APPID_MINOR}"
   )
 endif()
 
@@ -212,8 +212,8 @@ endif()
 # -----------------------------------------------------------------------------
 # Declare Options
 
-# Mixar internal features
-option(WITH_BLENDER "Build mixar (disable to build only Cycles stand-alone)." ON)
+# WebSpider 3D internal features
+option(WITH_BLENDER "Build webspider3d (disable to build only Cycles stand-alone)." ON)
 mark_as_advanced(WITH_BLENDER)
 
 if(WIN32)
@@ -224,13 +224,13 @@ thumbnails from `.blend` files."
   )
 elseif(UNIX AND NOT APPLE)
   option(WITH_BLENDER_THUMBNAILER "\
-Build stand-alone \"mixar-thumbnailer\" command-line thumbnail extraction utility, \
+Build stand-alone \"webspider3d-thumbnailer\" command-line thumbnail extraction utility, \
 intended for use by file-managers to extract PNG images from `.blend` files."
     ON
   )
 elseif(APPLE)
   option(WITH_BLENDER_THUMBNAILER "\
-Build \"mixar-thumbnailer.appex\" extension for Finder/ QuickLook thumbnail \
+Build \"webspider3d-thumbnailer.appex\" extension for Finder/ QuickLook thumbnail \
 support for blend files."
     ON
   )
@@ -254,7 +254,7 @@ Enable internal API error checking to track invalid data to prevent crash on acc
 mark_as_advanced(WITH_PYTHON_SAFETY)
 option(WITH_PYTHON_MODULE "\
 Enable building as a python module which runs without a user interface, \
-like running regular mixar in background mode (only enable for development), \
+like running regular webspider3d in background mode (only enable for development), \
 installs to PYTHON_SITE_PACKAGES (or CMAKE_INSTALL_PREFIX if WITH_INSTALL_PORTABLE is enabled)."
   OFF
 )
@@ -375,16 +375,16 @@ option(WITH_GHOST_DEBUG "Enable debugging output for the GHOST library" OFF)
 mark_as_advanced(WITH_GHOST_DEBUG)
 
 option(WITH_GHOST_SDL "\
-Enable building Mixar against SDL for windowing rather than the native APIs"
+Enable building WebSpider 3D against SDL for windowing rather than the native APIs"
   OFF
 )
 mark_as_advanced(WITH_GHOST_SDL)
 
 if(UNIX AND NOT (APPLE OR HAIKU))
-  option(WITH_GHOST_X11 "Enable building Mixar against X11 for windowing" ON)
+  option(WITH_GHOST_X11 "Enable building WebSpider 3D against X11 for windowing" ON)
   mark_as_advanced(WITH_GHOST_X11)
 
-  option(WITH_GHOST_WAYLAND "Enable building Mixar against Wayland for windowing" ON)
+  option(WITH_GHOST_WAYLAND "Enable building WebSpider 3D against Wayland for windowing" ON)
   mark_as_advanced(WITH_GHOST_WAYLAND)
 
   if(WITH_GHOST_WAYLAND)
@@ -395,8 +395,8 @@ if(UNIX AND NOT (APPLE OR HAIKU))
     mark_as_advanced(WITH_GHOST_WAYLAND_DYNLOAD)
 
     set(WITH_GHOST_WAYLAND_APP_ID "" CACHE STRING "\
-The application ID used for Mixar (use default when an empty string), \
-this can be used to differentiate Mixar instances by version or branch for example."
+The application ID used for WebSpider 3D (use default when an empty string), \
+this can be used to differentiate WebSpider 3D instances by version or branch for example."
     )
     mark_as_advanced(WITH_GHOST_WAYLAND_APP_ID)
   endif()
@@ -413,7 +413,7 @@ mark_as_advanced(WITH_HEADLESS)
 option(WITH_QUADRIFLOW "Build with quadriflow remesher support" ON)
 
 option(WITH_AUDASPACE "\
-Build with mixars audio library (only disable if you know what you're doing!)"
+Build with webspider3ds audio library (only disable if you know what you're doing!)"
   ON
 )
 option(WITH_SYSTEM_AUDASPACE "\
@@ -566,7 +566,7 @@ that point to pre-compiled libraries will be left as-is."
 
   option(WITH_STATIC_LIBS "\
 Try to link with static libraries, as much as possible, \
-to make mixar more portable across distributions"
+to make webspider3d more portable across distributions"
     OFF
   )
 endif()
@@ -578,7 +578,7 @@ else()
   set(WITH_INPUT_IME OFF)
 endif()
 option(WITH_INPUT_NDOF "Enable NDOF input devices (SpaceNavigator and friends)" ON)
-# On Windows and for the Mixar application on macOS, portable install
+# On Windows and for the WebSpider 3D application on macOS, portable install
 # is the only supported installation type, so there is no option.
 if(UNIX AND (NOT APPLE OR WITH_PYTHON_MODULE))
   option(WITH_INSTALL_PORTABLE "\
@@ -587,16 +587,16 @@ Install redistributable runtime, otherwise install into CMAKE_INSTALL_PREFIX"
   )
 endif()
 
-option(WITH_PYTHON_INSTALL "Copy system python into the mixar install directory" ON)
+option(WITH_PYTHON_INSTALL "Copy system python into the webspider3d install directory" ON)
 
 option(WITH_INSTALL_COPYRIGHT "\
-Copy the official Blender Authors's copyright.txt into the Mixar install directory"
+Copy the official Blender Authors's copyright.txt into the WebSpider 3D install directory"
   OFF
 )
 mark_as_advanced(WITH_INSTALL_COPYRIGHT)
 
 if((WITH_AUDASPACE AND NOT WITH_SYSTEM_AUDASPACE) OR WITH_MOD_FLUID)
-  option(WITH_PYTHON_NUMPY "Include NumPy in Mixar (used by Audaspace and Mantaflow)" ON)
+  option(WITH_PYTHON_NUMPY "Include NumPy in WebSpider 3D (used by Audaspace and Mantaflow)" ON)
 endif()
 
 if(WIN32 OR APPLE)
@@ -610,11 +610,11 @@ Path to python site-packages or dist-packages containing 'numpy' module"
   mark_as_advanced(PYTHON_NUMPY_INCLUDE_DIRS)
 endif()
 if(WITH_PYTHON_INSTALL)
-  option(WITH_PYTHON_INSTALL_NUMPY "Copy system NumPy into the mixar install directory" ON)
+  option(WITH_PYTHON_INSTALL_NUMPY "Copy system NumPy into the webspider3d install directory" ON)
 
   if(UNIX AND NOT APPLE)
     option(WITH_PYTHON_INSTALL_REQUESTS "\
-Copy system requests into the mixar install directory"
+Copy system requests into the webspider3d install directory"
       ON
     )
     set(PYTHON_REQUESTS_PATH "" CACHE PATH "\
@@ -623,7 +623,7 @@ Path to python site-packages or dist-packages containing 'requests' module"
     mark_as_advanced(PYTHON_REQUESTS_PATH)
   endif()
 
-  option(WITH_PYTHON_INSTALL_ZSTANDARD "Copy zstandard into the mixar install directory" ON)
+  option(WITH_PYTHON_INSTALL_ZSTANDARD "Copy zstandard into the webspider3d install directory" ON)
   set(PYTHON_ZSTANDARD_PATH "" CACHE PATH "\
 Path to python site-packages or dist-packages containing 'zstandard' module"
   )
@@ -808,7 +808,7 @@ endif()
 
 option(WITH_EXPERIMENTAL_FEATURES "Enable experimental features" ON)
 
-# This should be turned off when Mixar enter beta/rc/release
+# This should be turned off when WebSpider 3D enter beta/rc/release
 if("${BLENDER_VERSION_CYCLE}" STREQUAL "alpha" AND WITH_EXPERIMENTAL_FEATURES)
   set(WITH_EXPERIMENTAL_FEATURES ON)
 else()
@@ -910,7 +910,7 @@ mark_as_advanced(TEST_PYTHON_EXE)
 # System python tests.
 option(WITH_SYSTEM_PYTHON_TESTS "\
 Enable tests validating some build-related scripts against the 'system' version of Python \
-(buildbots currently can use significantly older versions of Python than Mixar's)"
+(buildbots currently can use significantly older versions of Python than WebSpider 3D's)"
   OFF
 )
 mark_as_advanced(WITH_SYSTEM_PYTHON_TESTS)
@@ -2038,7 +2038,7 @@ if(CMAKE_COMPILER_IS_GNUCC)
 
     # NOTE(@ideasman42): In GCC 13.2.1 on Linux this causes internal compiler errors.
     # The crashes can be resolved by disabling the flag per module (but not via pragmas).
-    # However this also causes a type mix-up FreeStyle  (Mixar & FreeStyle's `Curve`)
+    # However this also causes a type mix-up FreeStyle  (WebSpider 3D & FreeStyle's `Curve`)
     # so it seems to impact GCC's the internal state enough that it's too risky to enable.
     # When this is resolved the check can be enabled for fixed GCC versions.
     #
@@ -2770,7 +2770,7 @@ add_subdirectory(tests)
 
 
 # -----------------------------------------------------------------------------
-# Add Mixar Application
+# Add WebSpider 3D Application
 
 if(WITH_BLENDER)
   add_subdirectory(source/creator)
@@ -2799,7 +2799,7 @@ include(build_files/cmake/generate_datamodels.cmake)
 
 if(FIRST_RUN)
 
-  set(_config_msg "\nMixar Configuration\n=====================")
+  set(_config_msg "\nWebSpider 3D Configuration\n=====================")
 
   function(info_cfg_option
     _setting

@@ -1,5 +1,5 @@
 # SPDX-FileCopyrightText: 2011-2023 Blender Authors
-# SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+# SPDX-FileCopyrightText: 2026 WebSpider Studios
 #
 # SPDX-License-Identifier: GPL-2.0-or-later
 
@@ -346,10 +346,10 @@ endif
 # Allow passing in own BLENDER_BIN so developers who don't
 # use the default build path can still use utility helpers.
 ifeq ($(OS), Darwin)
-	BLENDER_BIN?="$(BUILD_DIR)/bin/Mixar.app/Contents/MacOS/Mixar"
-	BLENDER_BIN_DIR?="$(BUILD_DIR)/bin/Mixar.app/Contents/MacOS/Mixar"
+	BLENDER_BIN?="$(BUILD_DIR)/bin/WebSpider 3D.app/Contents/MacOS/WebSpider 3D"
+	BLENDER_BIN_DIR?="$(BUILD_DIR)/bin/WebSpider 3D.app/Contents/MacOS/WebSpider 3D"
 else
-	BLENDER_BIN?="$(BUILD_DIR)/bin/mixar"
+	BLENDER_BIN?="$(BUILD_DIR)/bin/webspider"
 	BLENDER_BIN_DIR?="$(BUILD_DIR)/bin"
 endif
 
@@ -394,7 +394,7 @@ endif
 # Build Blender
 all: .FORCE
 	@echo
-	@echo Configuring Mixar in \"$(BUILD_DIR)\" ...
+	@echo Configuring WebSpider 3D in \"$(BUILD_DIR)\" ...
 
 #	# if test ! -f $(BUILD_DIR)/CMakeCache.txt ; then \
 #	# 	$(CMAKE_CONFIG); \
@@ -404,14 +404,14 @@ all: .FORCE
 	@$(CMAKE_CONFIG)
 
 	@echo
-	@echo Building Mixar ...
+	@echo Building WebSpider 3D ...
 	$(BUILD_COMMAND) -C "$(BUILD_DIR)" -j $(NPROCS) install
 	@echo
 	@echo Edit build configuration with: \"$(BUILD_DIR)/CMakeCache.txt\" run make again to rebuild.
 	@if test -z "$(BLENDER_IS_PYTHON_MODULE)"; then \
-		echo Mixar successfully built, run from: $(BLENDER_BIN); \
+		echo WebSpider 3D successfully built, run from: $(BLENDER_BIN); \
 	else \
-		echo Mixar successfully built as a Python module, \"bpy\" can be imported from: $(BLENDER_BIN_DIR); \
+		echo WebSpider 3D successfully built as a Python module, \"bpy\" can be imported from: $(BLENDER_BIN_DIR); \
 	fi
 	@echo
 
@@ -609,7 +609,7 @@ source_archive_complete: .FORCE
 
 icons_geom: .FORCE
 	@BLENDER_BIN=$(BLENDER_BIN) \
-	    "$(BLENDER_DIR)/release/datafiles/mixar_icons_geom_update.py"
+	    "$(BLENDER_DIR)/release/datafiles/webspider_icons_geom_update.py"
 
 update: .FORCE
 	@$(PYTHON) ./build_files/utils/make_update.py

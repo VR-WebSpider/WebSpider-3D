@@ -1,5 +1,5 @@
 /* SPDX-FileCopyrightText: 2008 Blender Authors
- * SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+ * SPDX-FileCopyrightText: 2026 WebSpider Studios
  *
  * SPDX-License-Identifier: GPL-2.0-or-later */
 
@@ -233,7 +233,7 @@ static SpaceLink *view3d_create(const ScrArea * /*area*/, const Scene *scene)
   region->regiontype = RGN_TYPE_ASSET_SHELF_HEADER;
   region->alignment = RGN_ALIGN_BOTTOM | RGN_ALIGN_HIDE_WITH_PREV;
 
-  /* agent scene strip (Mixar): poll-driven, only appears while the sticky
+  /* agent scene strip (WebSpider 3D): poll-driven, only appears while the sticky
    * agent-scene set is non-empty. */
   region = BKE_area_region_new();
 
@@ -1481,7 +1481,7 @@ static void space_view3d_listener(const wmSpaceTypeListenerParams *params)
       break;
   }
 
-  /* Agent scene strip (Mixar): dirty tagging + refresh tick. */
+  /* Agent scene strip (WebSpider 3D): dirty tagging + refresh tick. */
   view3d_agent_strip_space_listener(params);
 }
 
@@ -1502,7 +1502,7 @@ static void space_view3d_refresh(const bContext *C, ScrArea *area)
                                U.smooth_viewtx);
   }
 
-  /* Agent scene strip (Mixar): evaluate non-active tile scenes and detect
+  /* Agent scene strip (WebSpider 3D): evaluate non-active tile scenes and detect
    * changes. Runs on the main-loop refresh phase, never during drawing. */
   view3d_agent_strip_refresh(C, area);
 }
@@ -1764,7 +1764,7 @@ void ED_spacetype_view3d()
   art->regionid = RGN_TYPE_XR;
   BLI_addhead(&st->regiontypes, art);
 
-  /* regions: agent scene strip (Mixar) */
+  /* regions: agent scene strip (WebSpider 3D) */
   view3d_agent_strip_region_register(st.get());
 
   WM_menutype_add(

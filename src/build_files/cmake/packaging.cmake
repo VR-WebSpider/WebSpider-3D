@@ -1,24 +1,24 @@
 # SPDX-FileCopyrightText: 2011-2022 Blender Authors
-# SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+# SPDX-FileCopyrightText: 2026 WebSpider Studios
 #
 # SPDX-License-Identifier: GPL-2.0-or-later
 
 string(TIMESTAMP CURRENT_YEAR "%Y")
 
-set(PROJECT_DESCRIPTION  "Mixar - Advanced 3D Content Creation Suite")
-set(PROJECT_COPYRIGHT    "Copyright (C) 2025-${CURRENT_YEAR} Mixar")
-set(PROJECT_CONTACT      "support@mixar.app")
-set(PROJECT_VENDOR       "Mixar")
+set(PROJECT_DESCRIPTION  "WebSpider 3D - Advanced 3D Content Creation Suite")
+set(PROJECT_COPYRIGHT    "Copyright (C) 2025-${CURRENT_YEAR} WebSpider 3D")
+set(PROJECT_CONTACT      "support@webspider3d.com")
+set(PROJECT_VENDOR       "WebSpider 3D")
 
-# Use Mixar app version from environment (set by settings.bat from mixar.json),
+# Use WebSpider 3D app version from environment (set by settings.bat from webspider.json),
 # falling back to Blender version if not available.
-if(DEFINED ENV{MIXAR_VERSION})
-  string(REPLACE "." ";" _mixar_ver_parts "$ENV{MIXAR_VERSION}")
-  list(GET _mixar_ver_parts 0 MAJOR_VERSION)
-  list(GET _mixar_ver_parts 1 MINOR_VERSION)
-  list(LENGTH _mixar_ver_parts _mixar_ver_len)
-  if(_mixar_ver_len GREATER 2)
-    list(GET _mixar_ver_parts 2 PATCH_VERSION)
+if(DEFINED ENV{WEBSPIDER_VERSION})
+  string(REPLACE "." ";" _webspider3d_ver_parts "$ENV{WEBSPIDER_VERSION}")
+  list(GET _webspider3d_ver_parts 0 MAJOR_VERSION)
+  list(GET _webspider3d_ver_parts 1 MINOR_VERSION)
+  list(LENGTH _webspider3d_ver_parts _webspider3d_ver_len)
+  if(_webspider3d_ver_len GREATER 2)
+    list(GET _webspider3d_ver_parts 2 PATCH_VERSION)
   else()
     set(PATCH_VERSION 0)
   endif()
@@ -100,21 +100,21 @@ if(APPLE)
 endif()
 
 if(WIN32)
-  set(CPACK_PACKAGE_INSTALL_DIRECTORY "Mixar/Mixar ${MAJOR_VERSION}.${MINOR_VERSION}")
-  set(CPACK_PACKAGE_INSTALL_REGISTRY_KEY "Mixar/Mixar ${MAJOR_VERSION}.${MINOR_VERSION}")
+  set(CPACK_PACKAGE_INSTALL_DIRECTORY "WebSpider 3D/WebSpider 3D ${MAJOR_VERSION}.${MINOR_VERSION}")
+  set(CPACK_PACKAGE_INSTALL_REGISTRY_KEY "WebSpider 3D/WebSpider 3D ${MAJOR_VERSION}.${MINOR_VERSION}")
 
-  set(CPACK_NSIS_MUI_ICON ${CMAKE_SOURCE_DIR}/release/windows/icons/winmixar.ico)
+  set(CPACK_NSIS_MUI_ICON ${CMAKE_SOURCE_DIR}/release/windows/icons/winwebspider.ico)
   set(CPACK_NSIS_COMPRESSOR "/SOLID lzma")
 
   # Even though we no longer display this, we still need to set it otherwise it'll throw an error
   # during the msi build.
   set(CPACK_RESOURCE_FILE_LICENSE ${CMAKE_SOURCE_DIR}/release/license/spdx/GPL-3.0-or-later.txt)
-  set(CPACK_WIX_PRODUCT_ICON ${CMAKE_SOURCE_DIR}/release/windows/icons/winmixar.ico)
+  set(CPACK_WIX_PRODUCT_ICON ${CMAKE_SOURCE_DIR}/release/windows/icons/winwebspider.ico)
 
-  set(MIXAR_NAMESPACE_GUID "A83F2E1B-7C4D-4E5F-9B6A-1D2E3F4A5B6C")
+  set(WEBSPIDER_NAMESPACE_GUID "A83F2E1B-7C4D-4E5F-9B6A-1D2E3F4A5B6C")
 
   string(UUID CPACK_WIX_UPGRADE_GUID
-    NAMESPACE ${MIXAR_NAMESPACE_GUID}
+    NAMESPACE ${WEBSPIDER_NAMESPACE_GUID}
     NAME ${CPACK_PACKAGE_INSTALL_DIRECTORY}
     TYPE SHA1 UPPER
   )
@@ -127,8 +127,8 @@ if(WIN32)
   set(CPACK_WIX_LIGHT_EXTRA_FLAGS -dcl:medium)
 endif()
 
-set(CPACK_PACKAGE_EXECUTABLES "mixar-launcher" "Mixar ${MAJOR_VERSION}.${MINOR_VERSION}")
-set(CPACK_CREATE_DESKTOP_LINKS "mixar-launcher" "Mixar ${MAJOR_VERSION}.${MINOR_VERSION}")
+set(CPACK_PACKAGE_EXECUTABLES "webspider3d-launcher" "WebSpider 3D ${MAJOR_VERSION}.${MINOR_VERSION}")
+set(CPACK_CREATE_DESKTOP_LINKS "webspider3d-launcher" "WebSpider 3D ${MAJOR_VERSION}.${MINOR_VERSION}")
 
 include(CPack)
 

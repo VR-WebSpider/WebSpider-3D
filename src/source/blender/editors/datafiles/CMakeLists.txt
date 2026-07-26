@@ -1,5 +1,5 @@
 # SPDX-FileCopyrightText: 2023 Blender Authors
-# SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+# SPDX-FileCopyrightText: 2026 WebSpider Studios
 #
 # SPDX-License-Identifier: GPL-2.0-or-later
 
@@ -22,7 +22,7 @@ set(LIB
 )
 
 # This section is maintained by the updating script, keep BEGIN/END comments.
-# See: `make icons_geom` and the script `./release/datafiles/mixar_icons_geom_update.py`.
+# See: `make icons_geom` and the script `./release/datafiles/webspider_icons_geom_update.py`.
 set_property(GLOBAL PROPERTY ICON_GEOM_NAMES
   # BEGIN ICON_GEOM_NAMES
   brush.generic
@@ -573,7 +573,7 @@ if(WITH_BLENDER)
       meta_data
       meta_ellipsoid
       meta_plane
-      mixar_icon
+      webspider_icon
       paperclip
       submit_arrow
       modifier
@@ -1074,7 +1074,7 @@ if(WITH_BLENDER)
   endif()
 
   data_to_c_simple(../../../../release/datafiles/startup.blend SRC)
-  data_to_c_simple(../../../../release/datafiles/startup.mixar SRC)
+  data_to_c_simple(../../../../release/datafiles/startup.webspider SRC)
 endif()
 
 unset(ICON_NAMES)

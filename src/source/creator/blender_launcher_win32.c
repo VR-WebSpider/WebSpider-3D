@@ -1,5 +1,5 @@
 /* SPDX-FileCopyrightText: 2023 Blender Authors
- * SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+ * SPDX-FileCopyrightText: 2026 WebSpider Studios
  *
  * SPDX-License-Identifier: GPL-2.0-or-later */
 
@@ -71,7 +71,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
   siStartInfo.wShowWindow = SW_HIDE;
   siStartInfo.dwFlags = STARTF_USESHOWWINDOW;
 
-  /* Get the path to the currently running executable (`mixar-launcher.exe`). */
+  /* Get the path to the currently running executable (`webspider-launcher.exe`). */
 
   DWORD nSize = GetModuleFileName(NULL, path, MAX_PATH);
   if (!nSize) {
@@ -87,13 +87,13 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
     return -1;
   }
 
-  /* Remove the filename (mixar-launcher.exe) from path. */
+  /* Remove the filename (webspider-launcher.exe) from path. */
   if (PathCchRemoveFileSpec(path, MAX_PATH) != S_OK) {
     return -1;
   }
 
-  /* Add mixar.exe to path, resulting in the full path to the mixar executable. */
-  if (PathCchCombine(path, MAX_PATH, path, L"mixar.exe") != S_OK) {
+  /* Add webspider.exe to path, resulting in the full path to the webspider executable. */
+  if (PathCchCombine(path, MAX_PATH, path, L"webspider.exe") != S_OK) {
     return -1;
   }
 
@@ -126,8 +126,8 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
   DWORD returnValue = success ? 0 : -1;
 
   if (success) {
-    /* If mixar-launcher is called with background command line flag or launched from steam,
-     * wait for the mixar process to exit and return its return value. */
+    /* If webspider-launcher is called with background command line flag or launched from steam,
+     * wait for the webspider process to exit and return its return value. */
     BOOL background = LaunchedFromSteam();
     int argc = 0;
     LPWSTR *argv = CommandLineToArgvW(pCmdLine, &argc);

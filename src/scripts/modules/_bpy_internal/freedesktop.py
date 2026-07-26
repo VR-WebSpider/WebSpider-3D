@@ -1,5 +1,5 @@
 # SPDX-FileCopyrightText: 2017-2023 Blender Authors
-# SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+# SPDX-FileCopyrightText: 2026 WebSpider Studios
 #
 # SPDX-License-Identifier: GPL-2.0-or-later
 
@@ -59,18 +59,18 @@ BLENDER_DIR = ""
 # Path Constants
 
 # These files are included along side a portable Blender installation.
-BLENDER_DESKTOP = "mixar.desktop"
+BLENDER_DESKTOP = "webspider.desktop"
 # The target binary.
-BLENDER_FILENAME = "mixar"
+BLENDER_FILENAME = "webspider3d"
 # The target binary (thumbnailer).
-BLENDER_THUMBNAILER_FILENAME = "mixar-thumbnailer"
+BLENDER_THUMBNAILER_FILENAME = "webspider3d-thumbnailer"
 
 
 # -----------------------------------------------------------------------------
 # Other Constants
 
 # The mime type Blender users.
-BLENDER_MIME = "application/x-mixar"
+BLENDER_MIME = "application/x-webspider3d"
 # Use `/usr/local` because this is not managed by the systems package manager.
 SYSTEM_PREFIX = "/usr/local"
 
@@ -200,7 +200,7 @@ def handle_desktop_file(do_register: bool, all_users: bool) -> str | None:
     with open(filepath_desktop_src, "r", encoding="utf-8") as fh:
         data = fh.read()
 
-    data = data.replace("\nExec=mixar %f\n", "\nExec={:s} %f\n".format(BLENDER_BIN))
+    data = data.replace("\nExec=webspider3d %f\n", "\nExec={:s} %f\n".format(BLENDER_BIN))
 
     with open(filepath_desktop_dst, "w", encoding="utf-8") as fh:
         fh.write(data)
@@ -208,7 +208,7 @@ def handle_desktop_file(do_register: bool, all_users: bool) -> str | None:
 
 
 def handle_thumbnailer(do_register: bool, all_users: bool) -> str | None:
-    filename = "mixar.thumbnailer"
+    filename = "webspider.thumbnailer"
 
     if all_users:
         base_dir = os.path.join(SYSTEM_PREFIX, "share")
@@ -255,7 +255,7 @@ def handle_thumbnailer(do_register: bool, all_users: bool) -> str | None:
 
 def handle_mime_association_xml(do_register: bool, all_users: bool) -> str | None:
     # `xdg-mime install x-blender.xml`
-    filename = "x-mixar.xml"
+    filename = "x-webspider3d.xml"
 
     if all_users:
         base_dir = os.path.join(SYSTEM_PREFIX, "share")
@@ -288,9 +288,9 @@ def handle_mime_association_xml(do_register: bool, all_users: bool) -> str | Non
     if not do_register:
         if not os.path.exists(package_xml_dst):
             return None
-        # NOTE: `xdg-mime query default application/x-mixar` could be used to check
+        # NOTE: `xdg-mime query default application/x-webspider3d` could be used to check
         # if the XML is installed, however there is some slim chance the XML is installed
-        # but the default doesn't point to Mixar, just uninstall as it's harmless.
+        # but the default doesn't point to WebSpider 3D, just uninstall as it's harmless.
         cmd = (
             XDG_MIME_PROG,
             "uninstall",
@@ -307,12 +307,12 @@ def handle_mime_association_xml(do_register: bool, all_users: bool) -> str | Non
             fh.write("""<mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info">\n""")
             fh.write("""  <mime-type type="{:s}">\n""".format(BLENDER_MIME))
             # NOTE: not using a trailing full-stop seems to be the convention here.
-            fh.write("""    <comment>Mixar scene</comment>\n""")
-            fh.write("""    <glob pattern="*.mixar"/>\n""")
+            fh.write("""    <comment>WebSpider 3D scene</comment>\n""")
+            fh.write("""    <glob pattern="*.webspider3d"/>\n""")
             # TODO: this doesn't seem to work, GNOME's Nautilus & KDE's Dolphin
             # already have a file-type icon for this so we might consider this low priority.
             if False:
-                fh.write("""    <icon name="application-x-mixar"/>\n""")
+                fh.write("""    <icon name="application-x-webspider3d"/>\n""")
             fh.write("""  </mime-type>\n""")
             fh.write("""</mime-info>\n""")
 
@@ -327,7 +327,7 @@ def handle_mime_association_xml(do_register: bool, all_users: bool) -> str | Non
 
 
 def handle_mime_association_default(do_register: bool, all_users: bool) -> str | None:
-    # `xdg-mime default mixar.desktop application/x-mixar`
+    # `xdg-mime default webspider3d.desktop application/x-webspider3d`
 
     if VERBOSE:
         sys.stdout.write("- {:s} mime type as default\n".format(
@@ -349,7 +349,7 @@ def handle_mime_association_default(do_register: bool, all_users: bool) -> str |
 
 
 def handle_icon(do_register: bool, all_users: bool) -> str | None:
-    filename = "mixar.svg"
+    filename = "webspider.svg"
     if all_users:
         base_dir = os.path.join(SYSTEM_PREFIX, "share")
     else:

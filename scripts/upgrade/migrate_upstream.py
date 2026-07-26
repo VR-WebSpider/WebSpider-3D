@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-# SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+# SPDX-FileCopyrightText: 2026 WebSpider Studios
 #
 # SPDX-License-Identifier: GPL-2.0-or-later
 
 """
-Master script to migrate Mixar customizations to a new upstream Blender version.
+Master script to migrate WebSpider 3D customizations to a new upstream Blender version.
 
 This orchestrates the complete migration workflow:
 1. Generate diff from current src/
@@ -83,7 +83,7 @@ class MigrationOrchestrator:
         """Print the script header."""
         print()
         print(f"{Colors.CYAN}{'═' * 70}{Colors.NC}")
-        print(f"{Colors.CYAN}║{Colors.BOLD}{'Mixar Upstream Migration Tool'.center(68)}{Colors.NC}{Colors.CYAN}║{Colors.NC}")
+        print(f"{Colors.CYAN}║{Colors.BOLD}{'WebSpider 3D Upstream Migration Tool'.center(68)}{Colors.NC}{Colors.CYAN}║{Colors.NC}")
         print(f"{Colors.CYAN}{'═' * 70}{Colors.NC}")
         print()
         print(f"{Colors.BOLD}Target:{Colors.NC} {self.target_ref}")
@@ -191,7 +191,7 @@ class MigrationOrchestrator:
 
         # Generate filenames
         timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
-        self.patch_file = self.patches_dir / f'mixar_modifications_{timestamp}.patch'
+        self.patch_file = self.patches_dir / f'webspider3d_modifications_{timestamp}.patch'
         self.custom_files_json = self.patches_dir / f'custom_files_{timestamp}.json'
 
         # Run generate_diff.py

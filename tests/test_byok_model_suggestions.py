@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+# SPDX-FileCopyrightText: 2026 WebSpider Studios
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -14,13 +14,13 @@ SCRIPTS = ROOT / "src" / "scripts"
 if str(SCRIPTS) not in sys.path:
     sys.path.insert(0, str(SCRIPTS))
 
-from mixar.modules.testing.mock_bpy import install_bpy_mock
+from webspider.modules.testing.mock_bpy import install_bpy_mock
 
 install_bpy_mock()
 
-from mixar.modules.byok.core import model_suggestions
-from mixar.modules.byok.ui.operators import byok_ops
-from mixar.modules.byok.ui.properties import byok_props
+from webspider.modules.byok.core import model_suggestions
+from webspider.modules.byok.ui.operators import byok_ops
+from webspider.modules.byok.ui.properties import byok_props
 
 
 def test_client_provider_fallback_does_not_duplicate_catalog_entries():
@@ -114,8 +114,8 @@ def test_save_rejects_stale_model_from_another_provider(monkeypatch):
         ),
     )
 
-    assert byok_ops.MIXAR_BYOK_OT_save.poll(context) is False
-    assert byok_ops.MIXAR_BYOK_OT_save().execute(context) == {'CANCELLED'}
+    assert byok_ops.WEBSPIDER_BYOK_OT_save.poll(context) is False
+    assert byok_ops.WEBSPIDER_BYOK_OT_save().execute(context) == {'CANCELLED'}
     assert wm.byok_dialog_state == "ERROR"
     model_suggestions.clear()
 
@@ -126,7 +126,7 @@ def test_dialog_cancel_wipes_live_secret_fields():
         byok_form_codex_bundle="jwt-bundle",
     )
 
-    byok_ops.MIXAR_BYOK_OT_open_dialog().cancel(
+    byok_ops.WEBSPIDER_BYOK_OT_open_dialog().cancel(
         SimpleNamespace(window_manager=wm)
     )
 

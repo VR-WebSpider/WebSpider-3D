@@ -1,5 +1,5 @@
 /* SPDX-FileCopyrightText: 2001-2002 NaN Holding BV. All rights reserved.
- * SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+ * SPDX-FileCopyrightText: 2026 WebSpider Studios
  *
  * SPDX-License-Identifier: GPL-2.0-or-later */
 
@@ -33,8 +33,8 @@
 #include <fmt/format.h>
 
 #if defined(__APPLE__) || defined(_WIN32)
-extern "C" void Mixar_FloatingDocksSuppressForModal();
-extern "C" void Mixar_FloatingDocksRestoreAfterModal();
+extern "C" void WebSpider_FloatingDocksSuppressForModal();
+extern "C" void WebSpider_FloatingDocksRestoreAfterModal();
 #endif
 
 #include "MEM_CacheLimiterC-Api.h"
@@ -464,7 +464,7 @@ static void wm_file_read_setup_wm_use_new(bContext *C,
 
   bool has_match = false;
   LISTBASE_FOREACH (wmWindow *, win, &wm->windows) {
-    /* Mixar: never hand a live GHOST window to a deserialized Agent Bubble
+    /* WebSpider 3D: never hand a live GHOST window to a deserialized Agent Bubble
      * window. Bubble windows should not exist in files at all (they are
      * runtime overlay UI), but files written before the autosave fix carry
      * them, and their `winid` can collide with a real window of the current
@@ -475,7 +475,7 @@ static void wm_file_read_setup_wm_use_new(bContext *C,
       continue;
     }
     LISTBASE_FOREACH (wmWindow *, old_win, &old_wm->windows) {
-      /* Mixar: the symmetric case — a live bubble/pill of the outgoing
+      /* WebSpider 3D: the symmetric case — a live bubble/pill of the outgoing
        * session must not donate its chromeless 400x350 OS window to a
        * regular window of the incoming file on a `winid` collision.
        * Unmatched old windows are freed together with their GHOST windows
@@ -493,7 +493,7 @@ static void wm_file_read_setup_wm_use_new(bContext *C,
   }
   /* Ensure that at least one window is kept open so we don't lose the context, see #42303. */
   if (!has_match) {
-    /* Mixar: prefer non-bubble windows on both sides of the substitution,
+    /* WebSpider 3D: prefer non-bubble windows on both sides of the substitution,
      * for the same reasons the matching loops above skip bubble windows. */
     wmWindow *win_new = static_cast<wmWindow *>(wm->windows.first);
     LISTBASE_FOREACH (wmWindow *, win, &wm->windows) {
@@ -523,13 +523,13 @@ static void wm_file_read_setup_wm_use_new(bContext *C,
 }
 
 /**
- * Mixar: remove Agent Bubble overlay windows that were deserialized from the
+ * WebSpider 3D: remove Agent Bubble overlay windows that were deserialized from the
  * file being read.
  *
  * Bubble/pill windows are pure runtime UI — the Python module recreates them
  * after load — and every interactive save path unlinks them before writing.
  * Files written by builds whose autosave path missed that unlink (and any
- * `quit.blend` / `_crash.mixar` style recovery writes) still contain them, and
+ * `quit.blend` / `_crash.webspider` style recovery writes) still contain them, and
  * such files are already out in the wild. Left in place they materialize as
  * plain OS windows on the next #WM_check, then get "repaired" into
  * half-initialized bubbles that crash on the next save's purge.
@@ -645,7 +645,7 @@ static void wm_file_read_setup_wm_finalize(bContext *C,
   BLI_assert(wm_setup_data->old_wm == nullptr);
   MEM_delete(wm_setup_data);
 
-  /* Mixar: drop Agent Bubble windows deserialized from the file, before the
+  /* WebSpider 3D: drop Agent Bubble windows deserialized from the file, before the
    * first #WM_check would create OS windows for them. */
   wm_file_read_strip_agent_bubble_windows(C, static_cast<wmWindowManager *>(bmain->wm.first));
 
@@ -774,8 +774,8 @@ static int wm_read_exotic(const char *filepath)
   rawfile->seek(rawfile, 0, SEEK_SET);
 
   /* Check for uncompressed `.blend`. */
-    /* check for uncompressed .blend or .mixar */
-  if (STREQLEN(header, "BLENDER", 7) || STREQLEN(header, "MIXAR", 5)) {
+    /* check for uncompressed .blend or .webspider */
+  if (STREQLEN(header, "BLENDER", 7) || STREQLEN(header, "WEBSPIDER", 5)) {
     rawfile->close(rawfile);
     return BKE_READ_EXOTIC_OK_BLEND;
   }
@@ -796,7 +796,7 @@ static int wm_read_exotic(const char *filepath)
   if (compressed_file != nullptr) {
     size_t len = compressed_file->read(compressed_file, header, sizeof(header));
     compressed_file->close(compressed_file);
-    if (len == sizeof(header) && (STREQLEN(header, "BLENDER", 7) || STREQLEN(header, "MIXAR", 5))) {
+    if (len == sizeof(header) && (STREQLEN(header, "BLENDER", 7) || STREQLEN(header, "WEBSPIDER", 5))) {
       return BKE_READ_EXOTIC_OK_BLEND;
     }
   }
@@ -1139,7 +1139,7 @@ static void file_read_reports_finalize(BlendFileReadReport *bf_reports)
                                   nullptr);
 
   CLOG_INFO(
-      &LOG, "Mixar file read in %.0fm%.2fs", duration_whole_minutes, duration_whole_seconds);
+      &LOG, "WebSpider 3D file read in %.0fm%.2fs", duration_whole_minutes, duration_whole_seconds);
   CLOG_INFO(&LOG,
             " * Loading libraries: %.0fm%.2fs",
             duration_libraries_minutes,
@@ -1201,9 +1201,9 @@ static void file_read_reports_finalize(BlendFileReadReport *bf_reports)
   {
     BKE_reportf(bf_reports->reports,
                 RPT_WARNING,
-                "Proxies have been removed from Mixar (%d proxies were automatically converted "
+                "Proxies have been removed from WebSpider 3D (%d proxies were automatically converted "
                 "to library overrides, %d proxies could not be converted and were cleared). "
-                "Consider re-saving any library .mixar file with the newest Mixar version",
+                "Consider re-saving any library .webspider file with the newest WebSpider 3D version",
                 bf_reports->count.proxies_to_lib_overrides_success,
                 bf_reports->count.proxies_to_lib_overrides_failures);
   }
@@ -1535,7 +1535,7 @@ void wm_homefile_read_ex(bContext *C,
       filepath_startup_is_factory = false;
       if (use_userdef) {
         BLI_path_join(
-            filepath_userdef, sizeof(filepath_startup), cfgdir->c_str(), MIXAR_USERPREF_FILE);
+            filepath_userdef, sizeof(filepath_startup), cfgdir->c_str(), WEBSPIDER_USERPREF_FILE);
       }
     }
     else {
@@ -1676,14 +1676,14 @@ void wm_homefile_read_ex(bContext *C,
     char temp_path[FILE_MAX];
     temp_path[0] = '\0';
     if (!use_factory_settings) {
-      BLI_path_join(temp_path, sizeof(temp_path), app_template_config, MIXAR_USERPREF_FILE);
+      BLI_path_join(temp_path, sizeof(temp_path), app_template_config, WEBSPIDER_USERPREF_FILE);
       if (BLI_access(temp_path, R_OK) != 0) {
         temp_path[0] = '\0';
       }
     }
 
     if (temp_path[0] == '\0') {
-      BLI_path_join(temp_path, sizeof(temp_path), app_template_system, MIXAR_USERPREF_FILE);
+      BLI_path_join(temp_path, sizeof(temp_path), app_template_system, WEBSPIDER_USERPREF_FILE);
     }
 
     if (use_userdef) {
@@ -2257,7 +2257,7 @@ bool write_crash_blend()
   char filepath[FILE_MAX];
 
   STRNCPY(filepath, BKE_main_blendfile_path_from_global());
-  BLI_path_extension_replace(filepath, sizeof(filepath), "_crash.mixar");
+  BLI_path_extension_replace(filepath, sizeof(filepath), "_crash.webspider");
   BlendFileWriteParams params{};
   const bool success = BLO_write_file(G_MAIN, filepath, G.fileflags, &params, nullptr);
   printf("%s: \"%s\"\n", success ? "written" : "failed", filepath);
@@ -2335,7 +2335,7 @@ static bool wm_file_write(bContext *C,
 
     if (!BLI_file_is_writable(filepath)) {
       BKE_reportf(
-          reports, RPT_ERROR, "Cannot save mixar file, path \"%s\" is not writable", filepath);
+          reports, RPT_ERROR, "Cannot save webspider file, path \"%s\" is not writable", filepath);
       ok = false;
     }
     else if (S_ISDIR(st_mode)) {
@@ -2345,7 +2345,7 @@ static bool wm_file_write(bContext *C,
        * the file versioning logic (to create `*.blend1` files)
        * would rename the directory with a `1` suffix, see #134101. */
       BKE_reportf(
-          reports, RPT_ERROR, "Cannot save mixar file, path \"%s\" is a directory", filepath);
+          reports, RPT_ERROR, "Cannot save webspider file, path \"%s\" is a directory", filepath);
       ok = false;
     }
 
@@ -2487,10 +2487,10 @@ static void wm_autosave_location(char filepath[FILE_MAX])
   if (blendfile_path && (blendfile_path[0] != '\0')) {
     const char *basename = BLI_path_basename(blendfile_path);
     int len = strlen(basename) - 6;
-    SNPRINTF(filename, "%.*s_%d_autosave.mixar", len, basename, pid);
+    SNPRINTF(filename, "%.*s_%d_autosave.webspider", len, basename, pid);
   }
   else {
-    SNPRINTF(filename, "%d_autosave.mixar", pid);
+    SNPRINTF(filename, "%d_autosave.webspider", pid);
   }
 
   const char *tempdir_base = BKE_tempdir_base();
@@ -2542,7 +2542,7 @@ void WM_autosave_write(wmWindowManager *wm, Main *bmain)
    *
    * Unlink the Agent Bubble overlay windows exactly like the interactive save
    * paths (#wm_file_write / #wm_homefile_write_exec) do. Without this, every
-   * autosave serializes the bubble/pill wmWindows into the `*_autosave.mixar`
+   * autosave serializes the bubble/pill wmWindows into the `*_autosave.webspider`
    * file; recovering such a file then instantiates bubble windows that never
    * went through the live open path — the state behind the reported
    * crash-on-save of recovered autosave files. */
@@ -2767,7 +2767,7 @@ static wmOperatorStatus wm_homefile_write_invoke(bContext *C,
     return WM_operator_confirm_ex(C,
                                   op,
                                   IFACE_("Overwrite Startup File"),
-                                  IFACE_("Mixar will start next time as it is now."),
+                                  IFACE_("WebSpider 3D will start next time as it is now."),
                                   IFACE_("Overwrite"),
                                   ALERT_ICON_QUESTION,
                                   false);
@@ -2970,7 +2970,7 @@ static wmOperatorStatus wm_userpref_read_invoke(bContext *C,
                         IFACE_(display_name));
   }
   else {
-    title = IFACE_("Load Factory Mixar Preferences");
+    title = IFACE_("Load Factory WebSpider 3D Preferences");
   }
 
   return WM_operator_confirm_ex(
@@ -3196,7 +3196,7 @@ void WM_OT_read_homefile(wmOperatorType *ot)
 
   /* So scripts can use an alternative start-up file without the UI. */
   prop = RNA_def_boolean(
-      ot->srna, "load_ui", true, "Load UI", "Load user interface setup from the .mixar file");
+      ot->srna, "load_ui", true, "Load UI", "Load user interface setup from the .webspider file");
   RNA_def_property_flag(prop, PROP_HIDDEN | PROP_SKIP_SAVE);
 
   /* So the splash can be kept open after loading a file (for templates). */
@@ -3557,7 +3557,7 @@ static void wm_open_mainfile_def_property_use_scripts(wmOperatorType *ot)
                   "use_scripts",
                   false,
                   "Trusted Source",
-                  "Allow .mixar file to execute scripts automatically, default available from "
+                  "Allow .webspider file to execute scripts automatically, default available from "
                   "system preferences");
 }
 
@@ -3565,7 +3565,7 @@ void WM_OT_open_mainfile(wmOperatorType *ot)
 {
   ot->name = "Open";
   ot->idname = "WM_OT_open_mainfile";
-  ot->description = "Open a Mixar file";
+  ot->description = "Open a WebSpider 3D file";
   ot->get_description = wm_open_mainfile_get_description;
 
   ot->invoke = wm_open_mainfile_invoke;
@@ -3575,7 +3575,7 @@ void WM_OT_open_mainfile(wmOperatorType *ot)
   /* Omit window poll so this can work in background mode. */
 
   WM_operator_properties_filesel(ot,
-                                 FILE_TYPE_FOLDER | FILE_TYPE_MIXAR,
+                                 FILE_TYPE_FOLDER | FILE_TYPE_WEBSPIDER,
                                  FILE_BLENDER,
                                  FILE_OPENFILE,
                                  WM_FILESEL_FILEPATH,
@@ -3583,7 +3583,7 @@ void WM_OT_open_mainfile(wmOperatorType *ot)
                                  FILE_SORT_DEFAULT);
 
   RNA_def_boolean(
-      ot->srna, "load_ui", true, "Load UI", "Load user interface setup in the .mixar file");
+      ot->srna, "load_ui", true, "Load UI", "Load user interface setup in the .webspider file");
 
   wm_open_mainfile_def_property_use_scripts(ot);
 
@@ -3592,7 +3592,7 @@ void WM_OT_open_mainfile(wmOperatorType *ot)
   RNA_def_property_flag(prop, PROP_SKIP_SAVE);
 
   static const EnumPropertyItem file_extension_items[] = {
-      {0, "MIXAR", 0, "Mixar Files", "Show only .mixar files"},
+      {0, "WEBSPIDER", 0, "WebSpider 3D Files", "Show only .webspider files"},
       {1, "BLEND", 0, "Blend Files", "Show only .blend files"},
       {0, nullptr, 0, nullptr, nullptr},
   };
@@ -3600,7 +3600,7 @@ void WM_OT_open_mainfile(wmOperatorType *ot)
   prop = RNA_def_enum(ot->srna,
                       "file_extension",
                       file_extension_items,
-                      0, // default to MIXAR
+                      0, // default to WEBSPIDER
                       "File Extension",
                       "File extension filter");
   RNA_def_property_flag(prop, PROP_HIDDEN | PROP_SKIP_SAVE);
@@ -3811,7 +3811,7 @@ void WM_OT_recover_auto_save(wmOperatorType *ot)
   ot->exec = wm_recover_auto_save_exec;
 
   WM_operator_properties_filesel(ot,
-                                 FILE_TYPE_MIXAR,
+                                 FILE_TYPE_WEBSPIDER,
                                  FILE_BLENDER,
                                  FILE_OPENFILE,
                                  WM_FILESEL_FILEPATH,
@@ -3829,7 +3829,7 @@ void WM_OT_recover_auto_save(wmOperatorType *ot)
  * Both #WM_OT_save_as_mainfile & #WM_OT_save_mainfile.
  * \{ */
 
-static void wm_filepath_default(const Main *bmain, char *filepath, const char *extension = ".mixar")
+static void wm_filepath_default(const Main *bmain, char *filepath, const char *extension = ".webspider")
 {
   if (bmain->filepath[0] == '\0') {
     char filename_untitled[FILE_MAXFILE];
@@ -3881,11 +3881,11 @@ static void save_set_filepath(bContext *C, wmOperator *op)
         blender::StringRef(filepath).endswith(BLENDER_ASSET_FILE_SUFFIX))
     {
       filepath[strlen(filepath) - strlen(BLENDER_ASSET_FILE_SUFFIX)] = '\0';
-      BLI_path_extension_ensure(filepath, FILE_MAX, ".mixar");
+      BLI_path_extension_ensure(filepath, FILE_MAX, ".webspider");
     }
 
     /* Check file_extension parameter to determine the appropriate extension */
-    const char *target_extension = ".mixar";
+    const char *target_extension = ".webspider";
     PropertyRNA *ext_prop = RNA_struct_find_property(op->ptr, "file_extension");
     if (ext_prop && RNA_property_is_set(op->ptr, ext_prop)) {
       int file_ext_enum = RNA_property_enum_get(op->ptr, ext_prop);
@@ -4049,7 +4049,7 @@ static bool wm_save_mainfile_check(bContext * /*C*/, wmOperator *op)
     /* NOTE(@ideasman42): some users would prefer #BLI_path_extension_replace(),
      * we have had some nitpicking bug reports about this.
      * Always adding the extension as users may use '.' as part of the file-name. */
-    BLI_path_extension_ensure(filepath, FILE_MAX, ".mixar");
+    BLI_path_extension_ensure(filepath, FILE_MAX, ".webspider");
     RNA_string_set(op->ptr, "filepath", filepath);
     return true;
   }
@@ -4091,13 +4091,13 @@ void WM_OT_save_as_mainfile(wmOperatorType *ot)
   /* Omit window poll so this can work in background mode. */
 
   WM_operator_properties_filesel(ot,
-                                 FILE_TYPE_FOLDER | FILE_TYPE_MIXAR,
+                                 FILE_TYPE_FOLDER | FILE_TYPE_WEBSPIDER,
                                  FILE_BLENDER,
                                  FILE_SAVE,
                                  WM_FILESEL_FILEPATH,
                                  FILE_DEFAULTDISPLAY,
                                  FILE_SORT_DEFAULT);
-  RNA_def_boolean(ot->srna, "compress", false, "Compress", "Write compressed .mixar file");
+  RNA_def_boolean(ot->srna, "compress", false, "Compress", "Write compressed .webspider file");
   RNA_def_boolean(ot->srna,
                   "relative_remap",
                   true,
@@ -4112,7 +4112,7 @@ void WM_OT_save_as_mainfile(wmOperatorType *ot)
   RNA_def_property_flag(prop, PROP_SKIP_SAVE);
 
   static const EnumPropertyItem save_file_extension_items[] = {
-      {0, "MIXAR", 0, "Mixar Files", "Save as .mixar file"},
+      {0, "WEBSPIDER", 0, "WebSpider 3D Files", "Save as .webspider file"},
       {1, "BLEND", 0, "Blend Files", "Save as .blend file"},
       {0, nullptr, 0, nullptr, nullptr},
   };
@@ -4120,7 +4120,7 @@ void WM_OT_save_as_mainfile(wmOperatorType *ot)
   prop = RNA_def_enum(ot->srna,
                       "file_extension",
                       save_file_extension_items,
-                      0, // default to MIXAR
+                      0, // default to WEBSPIDER
                       "File Extension",
                       "File extension filter");
   RNA_def_property_flag(prop, PROP_HIDDEN);
@@ -4174,7 +4174,7 @@ static std::string wm_save_mainfile_get_description(bContext * /*C*/,
 {
   if (RNA_boolean_get(ptr, "incremental")) {
     return TIP_(
-        "Save the current Mixar file with a numerically incremented name that does not "
+        "Save the current WebSpider 3D file with a numerically incremented name that does not "
         "overwrite any existing files");
   }
   return "";
@@ -4182,9 +4182,9 @@ static std::string wm_save_mainfile_get_description(bContext * /*C*/,
 
 void WM_OT_save_mainfile(wmOperatorType *ot)
 {
-  ot->name = "Save Mixar File";
+  ot->name = "Save WebSpider 3D File";
   ot->idname = "WM_OT_save_mainfile";
-  ot->description = "Save the current Mixar file";
+  ot->description = "Save the current WebSpider 3D file";
 
   ot->invoke = wm_save_mainfile_invoke;
   ot->exec = wm_save_as_mainfile_exec;
@@ -4194,27 +4194,27 @@ void WM_OT_save_mainfile(wmOperatorType *ot)
 
   PropertyRNA *prop;
   WM_operator_properties_filesel(ot,
-                                 FILE_TYPE_FOLDER | FILE_TYPE_MIXAR,
+                                 FILE_TYPE_FOLDER | FILE_TYPE_WEBSPIDER,
                                  FILE_BLENDER,
                                  FILE_SAVE,
                                  WM_FILESEL_FILEPATH,
                                  FILE_DEFAULTDISPLAY,
                                  FILE_SORT_DEFAULT);
-  RNA_def_boolean(ot->srna, "compress", false, "Compress", "Write compressed .mixar file");
+  RNA_def_boolean(ot->srna, "compress", false, "Compress", "Write compressed .webspider file");
   RNA_def_boolean(ot->srna,
                   "relative_remap",
                   false,
                   "Remap Relative",
                   "Remap relative paths when saving to a different directory");
 
-  prop = RNA_def_boolean(ot->srna, "exit", false, "Exit", "Exit Mixar after saving");
+  prop = RNA_def_boolean(ot->srna, "exit", false, "Exit", "Exit WebSpider 3D after saving");
   RNA_def_property_flag(prop, PROP_HIDDEN | PROP_SKIP_SAVE);
 
   prop = RNA_def_boolean(ot->srna,
                          "incremental",
                          false,
                          "Incremental",
-                         "Save the current Mixar file with a numerically incremented name that "
+                         "Save the current WebSpider 3D file with a numerically incremented name that "
                          "does not overwrite any existing files");
   RNA_def_property_flag(prop, PROP_HIDDEN | PROP_SKIP_SAVE);
 }
@@ -4608,10 +4608,10 @@ static void file_overwrite_detailed_info_show(uiLayout *parent_layout, Main *bma
     char message_line1[256];
     char message_line2[256];
     SNPRINTF(message_line1,
-             RPT_("This file was saved by a newer version of Mixar (%s)."),
+             RPT_("This file was saved by a newer version of WebSpider 3D (%s)."),
              writer_ver_str);
     SNPRINTF(message_line2,
-             RPT_("Saving it with this Mixar (%s) may cause loss of data."),
+             RPT_("Saving it with this WebSpider 3D (%s) may cause loss of data."),
              current_ver_str);
     layout->label(message_line1, ICON_NONE);
     layout->label(message_line2, ICON_NONE);
@@ -4622,7 +4622,7 @@ static void file_overwrite_detailed_info_show(uiLayout *parent_layout, Main *bma
       layout->separator(1.4f);
     }
 
-    layout->label(RPT_("This file is managed by the Mixar asset system. It can only be"),
+    layout->label(RPT_("This file is managed by the WebSpider 3D asset system. It can only be"),
                   ICON_NONE);
     layout->label(RPT_("saved as a new, regular file."), ICON_NONE);
   }
@@ -4762,7 +4762,7 @@ static uiBlock *block_create_save_file_overwrite_dialog(bContext *C, ARegion *re
   }
   else {
     /* While a filename need not be UTF8, at this point the constructed name should be UTF8. */
-    SNPRINTF_UTF8(filename, "%s.mixar", DATA_("Untitled"));
+    SNPRINTF_UTF8(filename, "%s.webspider", DATA_("Untitled"));
     /* Since this dialog should only be shown when re-saving an existing file, current filepath
      * should never be empty. */
     BLI_assert_unreachable();
@@ -4822,14 +4822,14 @@ void wm_save_file_overwrite_dialog(bContext *C, wmOperator *op)
 
 static char save_images_when_file_is_closed = true;
 
-static void wm_mixar_floating_docks_suppress_for_modal();
-static void wm_mixar_floating_docks_restore_after_modal();
+static void wm_webspider_floating_docks_suppress_for_modal();
+static void wm_webspider_floating_docks_restore_after_modal();
 
 static void wm_block_file_close_cancel(bContext *C, void *arg_block, void * /*arg_data*/)
 {
   wmWindow *win = CTX_wm_window(C);
   UI_popup_block_close(C, win, static_cast<uiBlock *>(arg_block));
-  wm_mixar_floating_docks_restore_after_modal();
+  wm_webspider_floating_docks_restore_after_modal();
 }
 
 static void wm_block_file_close_discard(bContext *C, void *arg_block, void *arg_data)
@@ -4841,7 +4841,7 @@ static void wm_block_file_close_discard(bContext *C, void *arg_block, void *arg_
    * to a crash. */
   wmWindow *win = CTX_wm_window(C);
   UI_popup_block_close(C, win, static_cast<uiBlock *>(arg_block));
-  wm_mixar_floating_docks_restore_after_modal();
+  wm_webspider_floating_docks_restore_after_modal();
 
   callback->exec(C, callback->user_data);
   WM_generic_callback_free(callback);
@@ -4856,7 +4856,7 @@ static void wm_block_file_close_save(bContext *C, void *arg_block, void *arg_dat
 
   wmWindow *win = CTX_wm_window(C);
   UI_popup_block_close(C, win, static_cast<uiBlock *>(arg_block));
-  wm_mixar_floating_docks_restore_after_modal();
+  wm_webspider_floating_docks_restore_after_modal();
 
   int modified_images_count = ED_image_save_all_modified_info(CTX_data_main(C), nullptr);
   if (modified_images_count > 0 && save_images_when_file_is_closed) {
@@ -4948,19 +4948,19 @@ static void wm_block_file_close_save_button(uiBlock *block,
 
 static const char *close_file_dialog_name = "file_close_popup";
 
-static void wm_mixar_floating_docks_suppress_for_modal()
+static void wm_webspider_floating_docks_suppress_for_modal()
 {
 #if defined(__APPLE__) || defined(_WIN32)
-  Mixar_FloatingDocksSuppressForModal();
+  WebSpider_FloatingDocksSuppressForModal();
 #endif
 }
 
-static void wm_mixar_floating_docks_restore_after_modal()
+static void wm_webspider_floating_docks_restore_after_modal()
 {
 #if defined(__APPLE__) || defined(_WIN32)
-  Mixar_FloatingDocksRestoreAfterModal();
+  WebSpider_FloatingDocksRestoreAfterModal();
   /* wm_draw_update skips natively-hidden windows entirely (see the
-   * Mixar_WindowIsVisible check in wm_draw.cc), so a dock's content is
+   * WebSpider_WindowIsVisible check in wm_draw.cc), so a dock's content is
    * frozen while suppressed — tag a global redraw so the first visible
    * frame after the modal closes isn't stale. */
   WM_main_add_notifier(NC_WINDOW, nullptr);
@@ -4969,7 +4969,7 @@ static void wm_mixar_floating_docks_restore_after_modal()
 
 static void free_post_file_close_action_restore_floating_docks(void *arg)
 {
-  wm_mixar_floating_docks_restore_after_modal();
+  wm_webspider_floating_docks_restore_after_modal();
   free_post_file_close_action(arg);
 }
 
@@ -5008,7 +5008,7 @@ static uiBlock *block_create__close_file_dialog(bContext *C, ARegion *region, vo
   }
   else {
     /* While a filename need not be UTF8, at this point the constructed name should be UTF8. */
-    SNPRINTF_UTF8(filename, "%s.mixar", DATA_("Untitled"));
+    SNPRINTF_UTF8(filename, "%s.webspider", DATA_("Untitled"));
   }
   layout->label(filename, ICON_NONE);
 
@@ -5155,7 +5155,7 @@ static uiBlock *block_create__close_file_dialog(bContext *C, ARegion *region, vo
 void wm_close_file_dialog(bContext *C, wmGenericCallback *post_action)
 {
   if (!UI_popup_block_name_exists(CTX_wm_screen(C), close_file_dialog_name)) {
-    wm_mixar_floating_docks_suppress_for_modal();
+    wm_webspider_floating_docks_suppress_for_modal();
     UI_popup_block_invoke(
         C,
         block_create__close_file_dialog,

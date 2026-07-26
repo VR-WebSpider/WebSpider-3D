@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
-# SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+# SPDX-FileCopyrightText: 2026 WebSpider Studios
 #
 # SPDX-License-Identifier: GPL-2.0-or-later
 
 set -euo pipefail
 
 # Upstream Overlay Conflict Detector
-# Detects when upstream Blender changes files that Mixar also overlays.
+# Detects when upstream Blender changes files that WebSpider 3D also overlays.
 #
 # Usage:
 #   ./check_overlay_conflicts.sh --generate   Generate/update the manifest

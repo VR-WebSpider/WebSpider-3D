@@ -1,5 +1,5 @@
 /* SPDX-FileCopyrightText: 2025 Blender Authors
- * SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+ * SPDX-FileCopyrightText: 2026 WebSpider Studios
  *
  * SPDX-License-Identifier: GPL-3.0-or-later */
 
@@ -142,7 +142,7 @@ AgentStripRuntime *view3d_agent_strip_runtime_ensure(ARegion *region);
 ARegion *view3d_agent_strip_region_find(const ScrArea *area);
 
 /** Per-scene busy flag maintained by the Python chat module
- * (`scene.mixie_chat_is_busy`); false when the property isn't registered. */
+ * (`scene.webspider_ai_chat_is_busy`); false when the property isn't registered. */
 bool view3d_agent_strip_scene_busy(Scene *scene);
 
 /** Rebuild the tile list from all scenes in `bmain` except `scene_active`

@@ -1,5 +1,5 @@
 # SPDX-FileCopyrightText: 2023 Blender Authors
-# SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+# SPDX-FileCopyrightText: 2026 WebSpider Studios
 #
 # SPDX-License-Identifier: GPL-2.0-or-later
 
@@ -40,14 +40,14 @@ if(WITH_BLENDER)
   add_subdirectory(space_graph)
   add_subdirectory(space_image)
   add_subdirectory(space_info)
-  add_subdirectory(space_mixie)  # Add Mixie space
-  add_subdirectory(space_mixar_layers)  # Add Mixar Layers space
-  add_subdirectory(space_mixar_properties)  # Add Mixar Properties space
-  add_subdirectory(space_mixar_assets)  # Add Mixar Assets space
+  add_subdirectory(space_webspider_ai)  # Add WebSpider AI space
+  add_subdirectory(space_webspider_layers)  # Add WebSpider 3D Layers space
+  add_subdirectory(space_webspider_properties)  # Add WebSpider 3D Properties space
+  add_subdirectory(space_webspider_assets)  # Add WebSpider 3D Assets space
 
   add_subdirectory(space_baking)  # Add Texturing Baking space
   add_subdirectory(space_texture_sets)  # Add Texture Sets space
-  add_subdirectory(space_mixie_chat)  # Add Mixie Chat space
+  add_subdirectory(space_webspider_ai_chat)  # Add WebSpider Chat space
   add_subdirectory(space_agent_bubble)  # Add floating Agent Bubble space
   add_subdirectory(space_nla)
   add_subdirectory(space_node)

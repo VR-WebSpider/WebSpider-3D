@@ -1,5 +1,5 @@
 # SPDX-FileCopyrightText: 2022-2023 Blender Authors
-# SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+# SPDX-FileCopyrightText: 2026 WebSpider Studios
 #
 # SPDX-License-Identifier: GPL-2.0-or-later
 
@@ -9,7 +9,7 @@ import sys
 import os
 
 # Path to Blender shared libraries.
-shared_lib_dirname = "mixar.shared" if sys.platform == "win32" else "lib"
+shared_lib_dirname = "webspider.shared" if sys.platform == "win32" else "lib"
 
 if os.path.basename(__file__) == "bpy_site_customize.py":
     # Blender as Python Module.

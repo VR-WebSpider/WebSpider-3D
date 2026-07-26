@@ -1,9 +1,9 @@
 #!/bin/bash
-# SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+# SPDX-FileCopyrightText: 2026 WebSpider Studios
 #
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-# Mixar Application Settings
+# WebSpider 3D Application Settings
 # Source this file in scripts that need these settings
 #
 # Configuration priority:
@@ -25,31 +25,31 @@ if [ -f "$ENV_FILE" ]; then
 fi
 
 # Version always comes from VERSION file (canonical source)
-if [ -z "${MIXAR_VERSION:-}" ]; then
+if [ -z "${WEBSPIDER_VERSION:-}" ]; then
     VERSION_FILE="$ROOT_DIR/VERSION"
     if [ -f "$VERSION_FILE" ]; then
-        export MIXAR_VERSION="$(cat "$VERSION_FILE" | tr -d '[:space:]')"
+        export WEBSPIDER_VERSION="$(cat "$VERSION_FILE" | tr -d '[:space:]')"
     else
-        export MIXAR_VERSION="0.0.0"
+        export WEBSPIDER_VERSION="0.0.0"
     fi
 fi
 
 # Core environment settings (env var > .env > default)
-export MIXAR_ENV="${MIXAR_ENV:-Prod}"
-export MIXAR_BACKEND_URL="${MIXAR_BACKEND_URL:-https://api.mixar.app}"
-export MIXAR_FRONTEND_URL="${MIXAR_FRONTEND_URL:-https://www.mixar.app}"
+export WEBSPIDER_ENV="${WEBSPIDER_ENV:-${WEBSPIDER_ENV:-Prod}}"
+export WEBSPIDER_BACKEND_URL="${WEBSPIDER_BACKEND_URL:-https://api.webspider3d.com}"
+export WEBSPIDER_FRONTEND_URL="${WEBSPIDER_FRONTEND_URL:-https://www.webspider3d.com}"
 
 # App info (constants)
-export MIXAR_VERSION_PATCH="${MIXAR_VERSION_PATCH:-0}"
-export MIXAR_APP_NAME="${MIXAR_APP_NAME:-Mixar}"
-export MIXAR_EXECUTABLE_NAME="${MIXAR_EXECUTABLE_NAME:-mixar}"
-export MIXAR_DESCRIPTION="${MIXAR_DESCRIPTION:-AI Native 3D Content Creation Software}"
-export MIXAR_VENDOR="${MIXAR_VENDOR:-Mixar}"
-export MIXAR_WEBSITE="${MIXAR_WEBSITE:-https://mixar.app}"
+export WEBSPIDER_VERSION_PATCH="${WEBSPIDER_VERSION_PATCH:-0}"
+export WEBSPIDER_APP_NAME="${WEBSPIDER_APP_NAME:-WebSpider 3D}"
+export WEBSPIDER_EXECUTABLE_NAME="${WEBSPIDER_EXECUTABLE_NAME:-webspider3d}"
+export WEBSPIDER_DESCRIPTION="${WEBSPIDER_DESCRIPTION:-WebSpider 3D Content Creation Software}"
+export WEBSPIDER_VENDOR="${WEBSPIDER_VENDOR:-WebSpider Studios}"
+export WEBSPIDER_WEBSITE="${WEBSPIDER_WEBSITE:-https://webspider3d.com}"
 
 # Bundle settings (constants)
-export MIXAR_BUNDLE_IDENTIFIER="${MIXAR_BUNDLE_IDENTIFIER:-com.mixar.mixar}"
-export MIXAR_BUNDLE_COPYRIGHT="${MIXAR_BUNDLE_COPYRIGHT:-© 2025 Mixar}"
+export WEBSPIDER_BUNDLE_IDENTIFIER="${WEBSPIDER_BUNDLE_IDENTIFIER:-com.webspiderstudios.webspider3d}"
+export WEBSPIDER_BUNDLE_COPYRIGHT="${WEBSPIDER_BUNDLE_COPYRIGHT:-© 2026 WebSpider Studios}"
 
 # Build settings (constants)
 export BLENDER_VERSION="${BLENDER_VERSION:-5.0}"
@@ -65,12 +65,12 @@ export CMAKE_DIR="${ROOT_DIR}/cmake"
 # Upstream Blender tree (multi-GB, gitignored — populated once per machine).
 # Linked git worktrees don't carry ignored files, so a worktree checkout has
 # no upstream/ of its own. Resolution order:
-#   1. MIXAR_UPSTREAM_DIR (env / .env override)
+#   1. WEBSPIDER_UPSTREAM_DIR (env / .env override)
 #   2. this checkout's own upstream/ (a real tree, not an empty dir)
 #   3. the main checkout's upstream/ (worktrees share it — overlay.sh only
 #      ever READS from $UPSTREAM_DIR, so sharing is safe)
-if [ -n "${MIXAR_UPSTREAM_DIR:-}" ]; then
-    export UPSTREAM_DIR="$MIXAR_UPSTREAM_DIR"
+if [ -n "${WEBSPIDER_UPSTREAM_DIR:-${WEBSPIDER_UPSTREAM_DIR:-}}" ]; then
+    export UPSTREAM_DIR="${WEBSPIDER_UPSTREAM_DIR:-${WEBSPIDER_UPSTREAM_DIR:-}}"
 elif [ -f "${ROOT_DIR}/upstream/CMakeLists.txt" ]; then
     export UPSTREAM_DIR="${ROOT_DIR}/upstream"
 else
@@ -86,7 +86,7 @@ else
         _actual="$(git -C "$UPSTREAM_DIR" rev-parse HEAD 2>/dev/null || true)"
         if [ -n "$_pinned" ] && [ -n "$_actual" ] && [ "$_pinned" != "$_actual" ]; then
             echo "WARNING: shared upstream is at ${_actual:0:12} but this branch pins ${_pinned:0:12}." >&2
-            echo "         Update it (git -C \"$UPSTREAM_DIR\" checkout $_pinned) or set MIXAR_UPSTREAM_DIR." >&2
+            echo "         Update it (git -C \"$UPSTREAM_DIR\" checkout $_pinned) or set WEBSPIDER_UPSTREAM_DIR." >&2
         fi
         unset _pinned _actual
     else

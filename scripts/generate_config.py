@@ -1,16 +1,16 @@
 #!/usr/bin/env python3
-# SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+# SPDX-FileCopyrightText: 2026 WebSpider Studios
 #
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-"""Generate config/mixar.json for the runtime bundle from environment variables.
+"""Generate config/webspider.json for the runtime bundle from environment variables.
 
 Called by build.sh / build.bat during the build step.
 All values come from env vars with sensible hardcoded defaults.
 
 Usage:
-    python3 scripts/generate_config.py --output <path>/mixar.json
-    python3 scripts/generate_config.py --output <path>/mixar.json --version-file VERSION
+    python3 scripts/generate_config.py --output <path>/webspider.json
+    python3 scripts/generate_config.py --output <path>/webspider.json --version-file VERSION
 """
 
 import argparse
@@ -45,15 +45,15 @@ def _env_bool(key: str, default: bool = False) -> bool:
 def generate_config(version_file: str) -> dict:
     """Build the config dict from environment variables + hardcoded defaults.
 
-    The ``dev_bypass`` block is only emitted for ``MIXAR_ENV=Dev`` builds.
+    The ``dev_bypass`` block is only emitted for ``WEBSPIDER_ENV=Dev`` builds.
     For any other environment, having ``DEV_BYPASS_*`` set in the build
     environment is treated as a configuration error and aborts the build —
     this is the C4 guard against accidentally shipping plaintext credentials
     inside the runtime bundle.
     """
 
-    version = _env("MIXAR_VERSION") or _read_version(version_file)
-    environment = _env("MIXAR_ENV", "Prod")
+    version = _env("WEBSPIDER_VERSION") or _read_version(version_file)
+    environment = _env("WEBSPIDER_ENV", "Prod")
 
     bypass_enabled = _env_bool("DEV_BYPASS_ENABLED", False)
     bypass_username = _env("DEV_BYPASS_USERNAME")
@@ -62,18 +62,18 @@ def generate_config(version_file: str) -> dict:
 
     if environment != "Dev" and bypass_any_set:
         sys.stderr.write(
-            "ERROR: DEV_BYPASS_* environment variables are set but MIXAR_ENV="
+            "ERROR: DEV_BYPASS_* environment variables are set but WEBSPIDER_ENV="
             f"{environment!r}. Dev bypass is only permitted in Dev builds. "
             "Unset DEV_BYPASS_ENABLED / DEV_BYPASS_USERNAME / DEV_BYPASS_PASSWORD "
-            "or build with MIXAR_ENV=Dev.\n"
+            "or build with WEBSPIDER_ENV=Dev.\n"
         )
         sys.exit(1)
 
     config = {
         "environment": environment,
-        "log_level": _env("MIXAR_LOG_LEVEL", "INFO"),
-        "backend_url": _env("MIXAR_BACKEND_URL", "https://api.mixar.app"),
-        "frontend_url": _env("MIXAR_FRONTEND_URL", "https://www.mixar.app"),
+        "log_level": _env("WEBSPIDER_LOG_LEVEL", "INFO"),
+        "backend_url": _env("WEBSPIDER_BACKEND_URL", "https://api.webspider3d.com"),
+        "frontend_url": _env("WEBSPIDER_FRONTEND_URL", "https://www.webspider3d.com"),
         "app_info": {
             "version": version,
         },
@@ -94,10 +94,10 @@ def generate_config(version_file: str) -> dict:
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Generate mixar.json for the runtime bundle"
+        description="Generate webspider.json for the runtime bundle"
     )
     parser.add_argument(
-        "--output", required=True, help="Output path for mixar.json"
+        "--output", required=True, help="Output path for webspider.json"
     )
     parser.add_argument(
         "--version-file",

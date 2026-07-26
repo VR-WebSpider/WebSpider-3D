@@ -1,5 +1,5 @@
 /* SPDX-FileCopyrightText: 2007 Blender Authors
- * SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+ * SPDX-FileCopyrightText: 2026 WebSpider Studios
  *
  * SPDX-License-Identifier: GPL-2.0-or-later */
 
@@ -74,13 +74,13 @@
 #endif
 
 #if defined(WIN32) || defined(__APPLE__)
-/* Mixar GHOST overlay helper — implemented in GHOST_SystemWin32.cc /
+/* WebSpider 3D GHOST overlay helper — implemented in GHOST_SystemWin32.cc /
  * GHOST_SystemCocoa.mm. True when the native window is currently shown;
  * false for windows hidden via ShowWindow(SW_HIDE) / orderOut: (minimised
  * Agent Bubble, modal-suppressed floating docks) and for dead handles.
  * Declared extern "C" here to avoid a GHOST header just for this — same
  * pattern as space_agent_bubble.cc. */
-extern "C" bool Mixar_WindowIsVisible(void *window_handle);
+extern "C" bool WebSpider_WindowIsVisible(void *window_handle);
 #endif
 
 /* -------------------------------------------------------------------- */
@@ -622,11 +622,11 @@ static const char *wm_area_name(const ScrArea *area)
     SPACE_NAME(SPACE_TOPBAR);
     SPACE_NAME(SPACE_STATUSBAR);
     SPACE_NAME(SPACE_SPREADSHEET);
-    SPACE_NAME(SPACE_MIXIE);
-    SPACE_NAME(SPACE_MIXIE_CHAT);
-    SPACE_NAME(SPACE_MIXAR_LAYERS);
-    SPACE_NAME(SPACE_MIXAR_PROPERTIES);
-    SPACE_NAME(SPACE_MIXAR_ASSETS);
+    SPACE_NAME(SPACE_WEBSPIDER_AI);
+    SPACE_NAME(SPACE_WEBSPIDER_CHAT);
+    SPACE_NAME(SPACE_WEBSPIDER_LAYERS);
+    SPACE_NAME(SPACE_WEBSPIDER_PROPERTIES);
+    SPACE_NAME(SPACE_WEBSPIDER_ASSETS);
 
     SPACE_NAME(SPACE_BAKING);
     SPACE_NAME(SPACE_TEXTURE_SETS);
@@ -1665,14 +1665,14 @@ void wm_draw_update(bContext *C)
 #endif
 
 #if defined(WIN32) || defined(__APPLE__)
-    /* Mixar: never draw or present a window that is natively hidden.
+    /* WebSpider 3D: never draw or present a window that is natively hidden.
      *
      * The Agent Bubble overlay windows are hidden with ShowWindow(SW_HIDE) /
      * orderOut: while the bubble is minimised to its pill or suppressed for a
      * modal — they stay in `wm->windows` so upstream's loop keeps drawing
      * them and calling SwapBuffers on their GL contexts. Upstream Blender
      * never hides a GHOST window, so this present-into-a-hidden-window state
-     * is Mixar-only, and NVIDIA's GL driver intermittently crashes on it
+     * is WebSpider 3D-only, and NVIDIA's GL driver intermittently crashes on it
      * right after resume-from-sleep (access violation in DrvPresentBuffers,
      * nvoglv64.dll). The minimized-state skip above doesn't catch it:
      * SW_HIDE windows still report GHOST_kWindowStateNormal.
@@ -1680,7 +1680,7 @@ void wm_draw_update(bContext *C)
      * The bubble restore paths force a refresh + redraw tag after re-showing
      * the window, so skipping updates while hidden never leaves stale
      * content on screen. */
-    if (win->ghostwin != nullptr && !Mixar_WindowIsVisible(win->ghostwin)) {
+    if (win->ghostwin != nullptr && !WebSpider_WindowIsVisible(win->ghostwin)) {
       continue;
     }
 #endif

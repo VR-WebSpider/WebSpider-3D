@@ -1,5 +1,5 @@
 /* SPDX-FileCopyrightText: 2007 Blender Authors
- * SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+ * SPDX-FileCopyrightText: 2026 WebSpider Studios
  *
  * SPDX-License-Identifier: GPL-2.0-or-later */
 
@@ -139,12 +139,12 @@ void WM_operator_properties_filesel(wmOperatorType *ot,
       ot->srna, "filter_blender", (filter & FILE_TYPE_BLENDER) != 0, "Filter .blend files", "");
   RNA_def_property_flag(prop, PROP_HIDDEN | PROP_SKIP_SAVE);
   prop = RNA_def_boolean(
-      ot->srna, "filter_mixar", (filter & FILE_TYPE_MIXAR) != 0, "Filter .mixar files", "");
+      ot->srna, "filter_webspider", (filter & FILE_TYPE_WEBSPIDER) != 0, "Filter .webspider files", "");
   RNA_def_property_flag(prop, PROP_HIDDEN | PROP_SKIP_SAVE);
   prop = RNA_def_boolean(ot->srna,
                          "filter_backup",
                          (filter & FILE_TYPE_BLENDER_BACKUP) != 0,
-                         "Filter .mixar files",
+                         "Filter .webspider files",
                          "");
   RNA_def_property_flag(prop, PROP_HIDDEN | PROP_SKIP_SAVE);
   prop = RNA_def_boolean(

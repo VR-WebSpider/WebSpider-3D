@@ -1,5 +1,5 @@
 /* SPDX-FileCopyrightText: 2023 Blender Authors
- * SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+ * SPDX-FileCopyrightText: 2026 WebSpider Studios
  *
  * SPDX-License-Identifier: GPL-2.0-or-later */
 
@@ -45,7 +45,7 @@ bool exists()
   }
 
   char userpref[FILE_MAX];
-  BLI_path_join(userpref, sizeof(userpref), cfgdir->c_str(), MIXAR_USERPREF_FILE);
+  BLI_path_join(userpref, sizeof(userpref), cfgdir->c_str(), WEBSPIDER_USERPREF_FILE);
   return BLI_exists(userpref);
 }
 
@@ -146,7 +146,7 @@ void BKE_preferences_asset_library_default_add(UserDef *userdef)
 
   /* Add new "Default" library under '[doc_path]/Blender/Assets'. */
   BLI_path_join(
-      library->dirpath, sizeof(library->dirpath), documents_path, N_("Mixar"), N_("Assets"));
+      library->dirpath, sizeof(library->dirpath), documents_path, N_("WebSpider 3D"), N_("Assets"));
 }
 
 /** \} */

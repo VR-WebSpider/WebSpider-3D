@@ -1,8 +1,8 @@
-# SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+# SPDX-FileCopyrightText: 2026 WebSpider Studios
 #
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-"""Self-contained ObjectGraph (Outliner hierarchy) for Mixar.
+"""Self-contained ObjectGraph (Outliner hierarchy) for WebSpider 3D.
 
 This builds the structural BACKBONE only: every scene object is a node, and the
 edges are the parent/child relationships from the Outliner (your `*_Root`
@@ -14,13 +14,13 @@ Encoding (consistent with how the spatial layer will be added):
   nodes        : every object -> {id, type, coll, root}
   layers.hierarchy.relations : triplets [parent_idx, child_idx, 1]  (parent_of)
 
-No external imports: open in Mixar's Text Editor and Run Script (or paste into
+No external imports: open in WebSpider 3D's Text Editor and Run Script (or paste into
 the Python Console). It builds the graph, registers an auto-update watcher,
 saves JSON, prints a summary. Query later via the bpy handle:
     import bpy
-    bpy.mixar_sg.query("roots")
-    bpy.mixar_sg.query("children",       {"object_name": "Cast_Iron_Mooring_Bollard_Root.003"})
-    bpy.mixar_sg.query("describe_object", {"object_name": "Cast_Iron_Mooring_Bollard_Root.003"})
+    bpy.webspider3d_sg.query("roots")
+    bpy.webspider3d_sg.query("children",       {"object_name": "Cast_Iron_Mooring_Bollard_Root.003"})
+    bpy.webspider3d_sg.query("describe_object", {"object_name": "Cast_Iron_Mooring_Bollard_Root.003"})
 """
 
 import json
@@ -113,7 +113,7 @@ class SceneGraphStore:
         relations = sorted([idx[p], idx[c], REL_PARENT_OF]
                            for c, p in self._parent.items() if p is not None)
         return {
-            "schema": "mixar.scene_graph", "version": 5,
+            "schema": "webspider.scene_graph", "version": 5,
             "layers_present": ["hierarchy"],
             "node_count": len(nodes), "nodes": nodes,
             "layers": {"hierarchy": {
@@ -220,7 +220,7 @@ def run_tool(name, params=None):
 # --------------------------------------------------------------------------- #
 # Depsgraph watcher (auto-update on add/modify/delete)
 # --------------------------------------------------------------------------- #
-_TAG = "_mixar_sg"
+_TAG = "_webspider3d_sg"
 
 
 @persistent
@@ -238,8 +238,8 @@ def _on_load(*args):
     STORE.reset()
 
 
-_on_depsgraph._mixar_sg = True
-_on_load._mixar_sg = True
+_on_depsgraph._webspider3d_sg = True
+_on_load._webspider3d_sg = True
 
 
 def _purge(handler_list):
@@ -274,7 +274,7 @@ def main():
     with open(path, "w", encoding="utf-8") as f:
         json.dump(graph, f, indent=2)
 
-    bpy.mixar_sg = types.SimpleNamespace(store=STORE, query=run_tool, view=get_view)
+    bpy.webspider3d_sg = types.SimpleNamespace(store=STORE, query=run_tool, view=get_view)
 
     print("=" * 70)
     print(f"ObjectGraph v{graph['version']}: {graph['node_count']} objects, "
@@ -286,7 +286,7 @@ def main():
     print(f"{s['root_count']} top-level roots, by_type={s['by_type']}")
     print("roots:", s["roots"])
     print("=" * 70)
-    print("Query later:  import bpy; bpy.mixar_sg.query('children', {'object_name': '<root>'})")
+    print("Query later:  import bpy; bpy.webspider3d_sg.query('children', {'object_name': '<root>'})")
     return graph
 
 

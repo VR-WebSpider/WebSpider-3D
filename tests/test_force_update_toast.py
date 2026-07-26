@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+# SPDX-FileCopyrightText: 2026 WebSpider Studios
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -13,24 +13,24 @@ SCRIPTS = ROOT / "src" / "scripts"
 if str(SCRIPTS) not in sys.path:
     sys.path.insert(0, str(SCRIPTS))
 
-from mixar.modules.testing.mock_bpy import install_bpy_mock
+from webspider.modules.testing.mock_bpy import install_bpy_mock
 
 install_bpy_mock()
 
 for _name in ("blf", "gpu", "gpu.state", "gpu.shader", "gpu_extras", "gpu_extras.batch"):
     sys.modules.setdefault(_name, MagicMock(name=_name))
 
-# mixie_space_utils introspects bpy.types.Panel.bl_rna at import time, which
+# webspider_ai_space_utils introspects bpy.types.Panel.bl_rna at import time, which
 # the bpy mock can't satisfy — stub it so the common.utils package can load.
 sys.modules.setdefault(
-    "mixar.modules.common.utils.mixie_space_utils",
-    MagicMock(name="mixie_space_utils"),
+    "webspider.modules.common.utils.webspider_ai_space_utils",
+    MagicMock(name="webspider_ai_space_utils"),
 )
 
-from mixar.modules.common.notifications.store import get_notification_store
-from mixar.modules.common.updates.constants import UPDATE_NOTIFICATION_ID
-from mixar.modules.common.updates.core.state import UpdateInfo
-from mixar.modules.common.updates.core.trigger import (
+from webspider.modules.common.notifications.store import get_notification_store
+from webspider.modules.common.updates.constants import UPDATE_NOTIFICATION_ID
+from webspider.modules.common.updates.core.state import UpdateInfo
+from webspider.modules.common.updates.core.trigger import (
     _push_update_available_toast,
     is_forced,
 )
@@ -73,7 +73,7 @@ def test_normal_toast_has_skip_and_is_dismissible():
     _push_update_available_toast(_info())
     item = _pushed_item()
     assert item.dismissible is True
-    assert item.title == "Mixar Update Available"
+    assert item.title == "WebSpider 3D Update Available"
     assert "available" in item.body
     assert [a.label for a in item.actions] == ["Skip", "Download"]
 
@@ -82,7 +82,7 @@ def test_forced_toast_has_no_skip_and_is_not_dismissible():
     _push_update_available_toast(_info(force_update=True))
     item = _pushed_item()
     assert item.dismissible is False
-    assert item.title == "Mixar Update Required"
+    assert item.title == "WebSpider 3D Update Required"
     assert item.priority == "critical"
     assert [a.label for a in item.actions] == ["Download"]
     assert "required" in item.body
@@ -99,4 +99,4 @@ def test_download_action_opens_downloads_page_operator():
     _push_update_available_toast(_info())
     item = _pushed_item()
     download = next(a for a in item.actions if a.label == "Download")
-    assert download.operator == "mixar.open_downloads_page"
+    assert download.operator == "webspider.open_downloads_page"

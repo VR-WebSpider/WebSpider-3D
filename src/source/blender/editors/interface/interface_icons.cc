@@ -1,5 +1,5 @@
 /* SPDX-FileCopyrightText: 2001-2002 NaN Holding BV. All rights reserved.
- * SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+ * SPDX-FileCopyrightText: 2026 WebSpider Studios
  *
  * SPDX-License-Identifier: GPL-2.0-or-later */
 
@@ -60,17 +60,17 @@
 static CLG_LogRef LOG = {"ui.icon"};
 
 /* ----------------------------------------------------------------------- */
-/* Mixar — SVG icons drawn in toolbar tool buttons need the same scale-up
+/* WebSpider 3D — SVG icons drawn in toolbar tool buttons need the same scale-up
  * that GEOM `.dat` icons get via `USE_UI_TOOLBAR_HACK`, otherwise UI-enum
- * fallback icons (used as toolbar glyphs via the Mixar icon-handle
+ * fallback icons (used as toolbar glyphs via the WebSpider 3D icon-handle
  * patch) render at 16 px while the surrounding `.dat` icons render at
  * `ICON_DEFAULT_HEIGHT_TOOLBAR` (≈ 32 px). `interface_widgets.cc` sets
  * this flag around the `UI_icon_draw_ex` call for tool buttons. */
-static thread_local bool g_mixar_drawing_tool_icon = false;
+static thread_local bool g_webspider_drawing_tool_icon = false;
 
-extern "C" void UI_mixar_set_drawing_tool_icon(bool value)
+extern "C" void UI_webspider_set_drawing_tool_icon(bool value)
 {
-  g_mixar_drawing_tool_icon = value;
+  g_webspider_drawing_tool_icon = value;
 }
 
 struct IconImage {
@@ -1515,9 +1515,9 @@ static void svg_replace_color_attributes(std::string &svg,
       {"blender_collection_color_06", btheme->collection_color[5].color},
       {"blender_collection_color_07", btheme->collection_color[6].color},
       {"blender_collection_color_08", btheme->collection_color[7].color},
-      {"blender_send_icon_gradient_start", btheme->space_mixie_chat.chat_send_icon_gradient_start},
-      {"blender_send_icon_gradient_end", btheme->space_mixie_chat.chat_send_icon_gradient_end},
-      {"blender_send_arrow_color", btheme->space_mixie_chat.chat_send_arrow_color},
+      {"blender_send_icon_gradient_start", btheme->space_webspider_ai_chat.chat_send_icon_gradient_start},
+      {"blender_send_icon_gradient_end", btheme->space_webspider_ai_chat.chat_send_icon_gradient_end},
+      {"blender_send_arrow_color", btheme->space_webspider_ai_chat.chat_send_arrow_color},
       {"blender_object", nullptr, TH_ICON_OBJECT},
       {"blender_object_data", nullptr, TH_ICON_OBJECT_DATA},
       {"blender_modifier", nullptr, TH_ICON_MODIFIER},
@@ -1786,7 +1786,7 @@ static void icon_draw_size(float x,
 
     color[3] *= alpha;
 
-    /* Mixar: match the GEOM toolbar hack so UI-enum SVG icons used as
+    /* WebSpider 3D: match the GEOM toolbar hack so UI-enum SVG icons used as
      * toolbar glyphs (e.g. `TOOL_SETTINGS`) render at toolbar size
      * instead of the default 16 px. Centers vertically like the GEOM
      * branch above. */
@@ -1794,7 +1794,7 @@ static void icon_draw_size(float x,
     float svg_y = y;
     float svg_size = float(draw_size) / aspect;
 #ifdef USE_UI_TOOLBAR_HACK
-    if (g_mixar_drawing_tool_icon) {
+    if (g_webspider_drawing_tool_icon) {
       const float toolbar_scale = float(ICON_DEFAULT_HEIGHT_TOOLBAR) / float(ICON_DEFAULT_HEIGHT);
       const float new_size = svg_size * toolbar_scale;
       svg_y = (y + (h / 2)) - (new_size / 2.0f);

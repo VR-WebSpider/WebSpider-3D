@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+# SPDX-FileCopyrightText: 2026 WebSpider Studios
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -25,14 +25,14 @@ SCRIPTS = ROOT / "src" / "scripts"
 if str(SCRIPTS) not in sys.path:
     sys.path.insert(0, str(SCRIPTS))
 
-from mixar.modules.testing.mock_bpy import install_bpy_mock
+from webspider.modules.testing.mock_bpy import install_bpy_mock
 
 install_bpy_mock()
 
 import pytest
 
-from mixar.modules.agent_viewport_lock.ui.operators import viewport_block_op as VBO
-from mixar.modules.common.notifications import toast_renderer as TR
+from webspider.modules.agent_viewport_lock.ui.operators import viewport_block_op as VBO
+from webspider.modules.common.notifications import toast_renderer as TR
 
 REGION_PTR = 0xBEEF
 # Region sits at (100, 50) in the window; a toast control at region-local
@@ -56,7 +56,7 @@ def _clean_bounds():
 def _install_action_bounds():
     TR.toast_bounds_by_region[REGION_PTR] = _bounds(
         action=[(
-            "nid-1", "mixie.queue_view", None,
+            "nid-1", "webspider_ai.queue_view", None,
             CTRL_X, CTRL_Y, CTRL_W, CTRL_H,
         )],
     )
@@ -81,7 +81,7 @@ def test_hit_on_close_button():
 
 def test_hit_on_url_link():
     TR.toast_bounds_by_region[REGION_PTR] = _bounds(
-        url=[("nid-1", "https://mixar.app", CTRL_X, CTRL_Y, CTRL_W, CTRL_H)],
+        url=[("nid-1", "https://webspider3d.com", CTRL_X, CTRL_Y, CTRL_W, CTRL_H)],
     )
     assert TR.point_in_any_toast_control(REGION_PTR, CTRL_X + 1, CTRL_Y + 1)
 
@@ -136,7 +136,7 @@ def _event(type='LEFTMOUSE', value='PRESS', on_control=True):
 def _run_modal(event, monkeypatch, executing=True):
     monkeypatch.setattr(VBO, "is_agent_executing", lambda: executing)
     region = _FakeRegion()
-    op = VBO.MIXAR_OT_agent_viewport_block()
+    op = VBO.WEBSPIDER_OT_agent_viewport_block()
     return op.modal(_context_with_view3d(region), event)
 
 

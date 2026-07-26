@@ -1,5 +1,5 @@
 /* SPDX-FileCopyrightText: 2008 Blender Authors
- * SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+ * SPDX-FileCopyrightText: 2026 WebSpider Studios
  *
  * SPDX-License-Identifier: GPL-2.0-or-later */
 
@@ -42,28 +42,28 @@ void ED_spacetype_userpref();
 void ED_spacetype_clip();
 void ED_spacetype_statusbar();
 void ED_spacetype_topbar();
-void ED_spacetype_mixie();  /* Mixie space for Mixar */
-void ED_spacetype_mixar_layers();  /* Mixar Layers space */
-void ED_spacetype_mixar_properties();  /* Mixar Properties space */
-void ED_spacetype_mixar_assets();  /* Mixar Assets space */
+void ED_spacetype_webspider_ai();  /* WebSpider AI space for WebSpider 3D */
+void ED_spacetype_webspider_layers();  /* WebSpider 3D Layers space */
+void ED_spacetype_webspider_properties();  /* WebSpider 3D Properties space */
+void ED_spacetype_webspider_assets();  /* WebSpider 3D Assets space */
 
 void ED_spacetype_baking();  /* Texturing Baking space */
 void ED_spacetype_texture_sets();  /* Texture Sets space */
-void ED_spacetype_mixie_chat();  /* Mixie Chat space for Mixar */
-void ED_spacetype_agent_bubble();  /* Floating Agent Bubble overlay editor for Mixar */
+void ED_spacetype_webspider_ai_chat();  /* WebSpider Chat space for WebSpider 3D */
+void ED_spacetype_agent_bubble();  /* Floating Agent Bubble overlay editor for WebSpider 3D */
 
-/* Mixar: reset the Agent Bubble's cached native-window pointers (bubble/
+/* WebSpider 3D: reset the Agent Bubble's cached native-window pointers (bubble/
  * pill ghost windows, minimised/expanded flags). wm_window_close() calls
  * this itself whenever the window it just destroyed hosted an Agent Bubble
  * space, so every close path (quit, save-pre purge, the purge operator,
  * plain `bpy.ops.wm.window_close()`) is covered automatically — callers
  * don't need to call this directly. Exposed here only because
- * MIXAR_OT_agent_bubble_purge_windows also calls it as a belt-and-suspenders
+ * WEBSPIDER_OT_agent_bubble_purge_windows also calls it as a belt-and-suspenders
  * reset for stale flags left behind with no live window to close. Safe to
  * call even when no bubble window was ever opened. */
 void ED_agent_bubble_windows_closed();
 
-/* Mixar: notify the Agent Bubble cache that a native GHOST window is being
+/* WebSpider 3D: notify the Agent Bubble cache that a native GHOST window is being
  * destroyed. Clears whichever cached pointer (bubble / pill / host) matches
  * `ghostwin`, so the cache can never dangle regardless of the teardown path.
  * wm_window_free() calls this for every window it destroys — including the

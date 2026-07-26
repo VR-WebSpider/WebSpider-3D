@@ -1,5 +1,5 @@
 /* SPDX-FileCopyrightText: 2023 Blender Authors
- * SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+ * SPDX-FileCopyrightText: 2026 WebSpider Studios
  *
  * SPDX-License-Identifier: GPL-2.0-or-later */
 
@@ -164,7 +164,7 @@ class Grid : Overlay {
     std::array<float, SI_GRID_STEPS_LEN> grid_steps_y = {0.0f};
 
     /* Only UV Edit mode has the various Overlay options for now. */
-    const bool is_uv_edit = ELEM(sima->mode, SI_MODE_UV, SI_MODE_MIXAR_UV);
+    const bool is_uv_edit = ELEM(sima->mode, SI_MODE_UV, SI_MODE_WEBSPIDER_UV);
 
     const bool background_enabled = is_uv_edit ? (!state.hide_overlays &&
                                                   (sima->overlay.flag &

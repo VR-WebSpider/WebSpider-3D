@@ -1,5 +1,5 @@
 /* SPDX-FileCopyrightText: 2025 Blender Authors
- * SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+ * SPDX-FileCopyrightText: 2026 WebSpider Studios
  *
  * SPDX-License-Identifier: GPL-2.0-or-later */
 
@@ -865,7 +865,7 @@ void block_layout_free(uiBlock *block);
 
 }  // namespace blender::ui
 
-/* Mixar: suppress hover tooltip on the most recently added button
+/* WebSpider 3D: suppress hover tooltip on the most recently added button
  * in `layout`'s block. Used by the new `no_tooltip` kwarg on
  * bpy.types.UILayout.operator() to handle the agent bubble's
  * traffic-light + pill buttons whose host NSWindow is too small

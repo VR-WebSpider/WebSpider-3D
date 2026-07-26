@@ -1,5 +1,5 @@
 /* SPDX-FileCopyrightText: 2023 Blender Authors
- * SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+ * SPDX-FileCopyrightText: 2026 WebSpider Studios
  *
  * SPDX-License-Identifier: GPL-2.0-or-later */
 
@@ -203,7 +203,7 @@ static const EnumPropertyItem *rna_Area_ui_type_itemf(bContext *C,
   }
 
   for (; item_from->identifier; item_from++) {
-    /* Mixar: SPACE_AGENT_BUBBLE is hidden from the Editor Type
+    /* WebSpider 3D: SPACE_AGENT_BUBBLE is hidden from the Editor Type
      * dropdown. It's still a fully registered space (the agent
      * bubble's floating window uses it, and Python panels reference
      * it via bl_space_type='AGENT_BUBBLE'), but offering it in the
@@ -383,7 +383,7 @@ static void rna_View2D_view_to_region(View2D *v2d, float x, float y, bool clip, 
   }
 }
 
-/* Mixar: read-only access to the View2D total (content) rect. For
+/* WebSpider 3D: read-only access to the View2D total (content) rect. For
  * panel regions this is the laid-out panel-stack extent set by
  * `UI_panels_end` / `UI_view2d_totRect_set`, which lets Python
  * overlays (the onboarding highlight) measure the real rendered
@@ -583,7 +583,7 @@ static void rna_def_view2d(BlenderRNA *brna)
   RNA_def_struct_ui_text(srna, "View2D", "Scroll and zoom for a 2D region");
   RNA_def_struct_sdna(srna, "View2D");
 
-  /* Mixar: total (content) rect in view-space coordinates as
+  /* WebSpider 3D: total (content) rect in view-space coordinates as
    * (xmin, xmax, ymin, ymax) — convert with `view_to_region()`. */
   prop = RNA_def_property(srna, "tot_rect", PROP_FLOAT, PROP_NONE);
   RNA_def_property_array(prop, 4);

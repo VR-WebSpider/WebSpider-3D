@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+# SPDX-FileCopyrightText: 2026 WebSpider Studios
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -18,14 +18,14 @@ SCRIPTS = ROOT / "src" / "scripts"
 if str(SCRIPTS) not in sys.path:
     sys.path.insert(0, str(SCRIPTS))
 
-from mixar.modules.testing.mock_bpy import install_bpy_mock
+from webspider.modules.testing.mock_bpy import install_bpy_mock
 
 install_bpy_mock()
 
 import pytest
 
-from mixar.modules.space_mixie_chat.core import rules_api, rules_global
-from mixar.modules.space_mixie_chat.core.rules import (
+from webspider.modules.space_webspider_chat.core import rules_api, rules_global
+from webspider.modules.space_webspider_chat.core.rules import (
     get_project_rules,
     parse_rules,
 )
@@ -36,7 +36,7 @@ class FakeScene:
 
     def __init__(self):
         self.name = "Scene"
-        self.mixie_chat_rules = ""
+        self.webspider_chat_rules = ""
 
 
 @pytest.fixture(autouse=True)
@@ -64,7 +64,7 @@ def test_add_project_rule_persists_and_lists(scene):
          "scope": "project"},
     ]
     # Persisted as the JSON store format.
-    assert parse_rules(scene.mixie_chat_rules) == [
+    assert parse_rules(scene.webspider_chat_rules) == [
         {"text": "keep everything low-poly", "enabled": True},
     ]
 
@@ -121,7 +121,7 @@ def test_scope_move_project_to_global_and_back(scene, _tmp_global_store):
     result = rules_api.update_rule(scene, 0, scope="global")
     assert result["success"]
     assert result["rules"][0]["scope"] == "global"
-    assert parse_rules(scene.mixie_chat_rules) == []
+    assert parse_rules(scene.webspider_chat_rules) == []
     assert rules_global.load_global_rules() == [
         {"text": "movable rule", "enabled": True},
     ]
@@ -139,7 +139,7 @@ def test_scope_move_keeps_rule_when_destination_full(scene, monkeypatch):
     assert not result["success"]
     # Destination write failed -> the rule must remain in the project store.
     assert result["rules"][0]["scope"] == "project"
-    assert parse_rules(scene.mixie_chat_rules) == [
+    assert parse_rules(scene.webspider_chat_rules) == [
         {"text": "stays put", "enabled": True},
     ]
 

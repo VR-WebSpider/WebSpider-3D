@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+# SPDX-FileCopyrightText: 2026 WebSpider Studios
 #
 # SPDX-License-Identifier: GPL-2.0-or-later
 
@@ -230,5 +230,5 @@ class SceneGraphStore:
         self._diag = math.sqrt(sum((self._scene_max[i] - self._scene_min[i]) ** 2 for i in range(3)))
 
 
-# Module-level singleton (mirrors Mixar's ConnectionManager singleton pattern).
+# Module-level singleton (mirrors WebSpider 3D's ConnectionManager singleton pattern).
 STORE = SceneGraphStore()

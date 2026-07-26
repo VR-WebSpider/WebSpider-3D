@@ -1,5 +1,5 @@
 /* SPDX-FileCopyrightText: 2001-2002 NaN Holding BV. All rights reserved. 2007 Blender Authors.
- * SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+ * SPDX-FileCopyrightText: 2026 WebSpider Studios
  *
  * SPDX-License-Identifier: GPL-2.0-or-later */
 
@@ -247,7 +247,7 @@ static void wm_ghostwindow_destroy(wmWindowManager *wm, wmWindow *win)
 
 void wm_window_free(bContext *C, wmWindowManager *wm, wmWindow *win)
 {
-  /* Mixar: capture before wm_ghostwindow_destroy() below nulls it. Every
+  /* WebSpider 3D: capture before wm_ghostwindow_destroy() below nulls it. Every
    * window teardown funnels through this function — including the paths
    * that never pass wm_window_close(), e.g. #wm_close_and_free replacing
    * the whole window-manager on file load — so this is where the Agent
@@ -655,7 +655,7 @@ void wm_window_close(bContext *C, wmWindowManager *wm, wmWindow *win)
   const bool is_single_editor = !WM_window_is_main_top_level(win) &&
                                 (screen && BLI_listbase_is_single(&screen->areabase));
 
-  /* Mixar: space_agent_bubble.cc caches raw GHOST_WindowWin32 pointers for
+  /* WebSpider 3D: space_agent_bubble.cc caches raw GHOST_WindowWin32 pointers for
    * the bubble/pill windows (g_bubble_ghostwin / g_pill_ghostwin) so its
    * minimise/restore/expand operators can address them from either
    * window's context. Every consumer of those statics only null-checks
@@ -708,7 +708,7 @@ void WM_window_title(wmWindowManager *wm, wmWindow *win, const char *title)
     bScreen *screen = WM_window_get_active_screen(win);
     const bool is_single = screen && BLI_listbase_is_single(&screen->areabase);
     ScrArea *area = (screen) ? static_cast<ScrArea *>(screen->areabase.first) : nullptr;
-    const char *name = "Mixar";
+    const char *name = "WebSpider 3D";
     if (is_single && area && area->spacetype != SPACE_EMPTY) {
       name = IFACE_(ED_area_name(area).c_str());
     }
@@ -793,7 +793,7 @@ void WM_window_title(wmWindowManager *wm, wmWindow *win, const char *title)
     }
   }
 
-  win_title.append(fmt::format(" - Mixar {}", BKE_blender_version_string()));
+  win_title.append(fmt::format(" - WebSpider 3D {}", BKE_blender_version_string()));
 
   GHOST_SetTitle(handle, win_title.c_str());
 
@@ -1192,7 +1192,7 @@ static void wm_window_ghostwindow_ensure(wmWindowManager *wm, wmWindow *win, boo
       win->cursor = WM_CURSOR_DEFAULT;
     }
 
-    wm_window_ghostwindow_add(wm, "Mixar", win, is_dialog);
+    wm_window_ghostwindow_add(wm, "WebSpider 3D", win, is_dialog);
   }
 
   if (win->ghostwin != nullptr) {

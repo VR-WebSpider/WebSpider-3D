@@ -1,8 +1,8 @@
-# SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+# SPDX-FileCopyrightText: 2026 WebSpider Studios
 #
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-"""Benchmark scene_graph build cost (run in the BUILT Mixar app).
+"""Benchmark scene_graph build cost (run in the BUILT WebSpider 3D app).
 
 Creates UNITS x DEPTH objects nested DEPTH deep (default 5000 objects, depth 5),
 times a full rebuild, a cached query, and a query-after-change, then cleans up.
@@ -13,8 +13,8 @@ import time
 
 import bpy
 
-from mixar.modules.scene_graph.core.store import get_scene_graph
-from mixar.modules.scene_graph.core.tools import run_tool
+from webspider.modules.scene_graph.core.store import get_scene_graph
+from webspider.modules.scene_graph.core.tools import run_tool
 
 UNITS = 1000   # total objects = UNITS * DEPTH
 DEPTH = 5

@@ -1,5 +1,5 @@
 /* SPDX-FileCopyrightText: 2001-2002 NaN Holding BV. All rights reserved.
- * SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+ * SPDX-FileCopyrightText: 2026 WebSpider Studios
  *
  * SPDX-License-Identifier: GPL-2.0-or-later */
 
@@ -650,8 +650,8 @@ typedef enum eFileSel_File_Types {
   FILE_TYPE_OBJECT_IO = (1 << 17),
   FILE_TYPE_USD = (1 << 18),
   FILE_TYPE_VOLUME = (1 << 19),
-  FILE_TYPE_MIXAR = (1 << 20),
-  FILE_TYPE_MIXAR_BACKUP = (1 << 21),
+  FILE_TYPE_WEBSPIDER = (1 << 20),
+  FILE_TYPE_WEBSPIDER_BACKUP = (1 << 21),
 
   FILE_TYPE_ASSET = (1 << 28),
   /** An FS directory (i.e. S_ISDIR on its path is true). */
@@ -724,7 +724,7 @@ typedef enum eSpaceImage_Mode {
   SI_MODE_PAINT = 1,
   SI_MODE_MASK = 2,
   SI_MODE_UV = 3,
-  SI_MODE_MIXAR_UV = 4,
+  SI_MODE_WEBSPIDER_UV = 4,
 } eSpaceImage_Mode;
 
 /** #SpaceImage.flag */
@@ -1126,17 +1126,17 @@ typedef enum eSpace_Type {
   SPACE_STATUSBAR = 22,
   SPACE_SPREADSHEET = 23,
 
-  /* Mixar custom space types: start at 100 to avoid collisions with upstream Blender.
+  /* WebSpider 3D custom space types: start at 100 to avoid collisions with upstream Blender.
    * Do NOT change the order or values — saved files depend on these via versioning. */
-  SPACE_MIXIE = 100,              /* Mixie space for Mixar */
-  SPACE_MIXAR_LAYERS = 101,       /* Mixar Layers space */
-  SPACE_MIXAR_PROPERTIES = 102,   /* Mixar Properties space */
-  SPACE_MIXAR_ASSETS = 103,       /* Mixar Assets space */
-  /* SPACE_MIXAR_UV_PROPERTIES = 104 — REMOVED: merged into IMAGE_EDITOR sidebar.
+  SPACE_WEBSPIDER_AI = 100,              /* WebSpider AI space for WebSpider 3D */
+  SPACE_WEBSPIDER_LAYERS = 101,       /* WebSpider 3D Layers space */
+  SPACE_WEBSPIDER_PROPERTIES = 102,   /* WebSpider 3D Properties space */
+  SPACE_WEBSPIDER_ASSETS = 103,       /* WebSpider 3D Assets space */
+  /* SPACE_WEBSPIDER_UV_PROPERTIES = 104 — REMOVED: merged into IMAGE_EDITOR sidebar.
    * Value reserved for backwards compatibility with versioning. */
   SPACE_BAKING = 105,             /* Texturing Baking space */
   SPACE_TEXTURE_SETS = 106,       /* Texture Sets management space */
-  SPACE_MIXIE_CHAT = 107,         /* Mixie Chat space for Mixar */
+  SPACE_WEBSPIDER_CHAT = 107,         /* WebSpider Chat space for WebSpider 3D */
   SPACE_AGENT_BUBBLE = 108,       /* Floating Agent Bubble — small chat overlay editor */
   /* SPACE_SCENE_GRID = 109 — REMOVED: replaced by the View3D Agent Scene Strip region.
    * Value reserved for backwards compatibility; unregistered spaces fall back to

@@ -1,5 +1,5 @@
 /* SPDX-FileCopyrightText: 2023 Blender Authors
- * SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+ * SPDX-FileCopyrightText: 2026 WebSpider Studios
  *
  * SPDX-License-Identifier: GPL-2.0-or-later */
 
@@ -43,10 +43,10 @@
 
 #include "CLG_log.h"
 
-/* Mixar: forward decl for the Window.global_areas RNA extension.
- * Defined in rna_wm_mixar.cc — not declared in rna_internal.hh
- * because that header is upstream and Mixar avoids overlaying it. */
-void RNA_def_wm_mixar(BlenderRNA *brna);
+/* WebSpider 3D: forward decl for the Window.global_areas RNA extension.
+ * Defined in rna_wm_webspider.cc — not declared in rna_internal.hh
+ * because that header is upstream and WebSpider 3D avoids overlaying it. */
+void RNA_def_wm_webspider(BlenderRNA *brna);
 
 static CLG_LogRef LOG = {"makesrna"};
 
@@ -5023,9 +5023,9 @@ static RNAProcessItem PROCESS_ITEMS[] = {
     {"rna_vfont.cc", "rna_vfont_api.cc", RNA_def_vfont},
     {"rna_volume.cc", nullptr, RNA_def_volume},
     {"rna_wm.cc", "rna_wm_api.cc", RNA_def_wm},
-    /* Mixar: ``Window.global_areas`` extension. Must come AFTER
+    /* WebSpider 3D: ``Window.global_areas`` extension. Must come AFTER
      * ``rna_wm.cc`` so ``RNA_struct_find(brna, "Window")`` resolves. */
-    {"rna_wm_mixar.cc", nullptr, RNA_def_wm_mixar},
+    {"rna_wm_webspider.cc", nullptr, RNA_def_wm_webspider},
     {"rna_wm_gizmo.cc", "rna_wm_gizmo_api.cc", RNA_def_wm_gizmo},
     {"rna_workspace.cc", "rna_workspace_api.cc", RNA_def_workspace},
     {"rna_world.cc", nullptr, RNA_def_world},
@@ -5083,15 +5083,15 @@ static void rna_generate(BlenderRNA *brna, FILE *f, const char *filename, const 
 
   if (filename) {
     fprintf(f, "#include \"%s\"\n", filename);
-    /* Mixar: rna_wm_mixar.cc adds properties to the Window struct
+    /* WebSpider 3D: rna_wm_webspider.cc adds properties to the Window struct
      * defined in rna_wm.cc. Properties on Window are emitted into
      * rna_wm_gen.cc, so its auto-generated wrappers need to see
-     * the helper functions defined in rna_wm_mixar.cc. Inject the
+     * the helper functions defined in rna_wm_webspider.cc. Inject the
      * include here so those helpers are visible. The helpers are
-     * ``static`` so the duplicate inclusion (in rna_wm_mixar_gen.cc
+     * ``static`` so the duplicate inclusion (in rna_wm_webspider_gen.cc
      * too) doesn't cause linker conflicts. */
     if (filename != nullptr && strcmp(filename, "rna_wm.cc") == 0) {
-      fprintf(f, "#include \"rna_wm_mixar.cc\"\n");
+      fprintf(f, "#include \"rna_wm_webspider.cc\"\n");
     }
   }
   if (api_filename) {

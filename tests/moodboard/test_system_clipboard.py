@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+# SPDX-FileCopyrightText: 2026 WebSpider Studios
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -14,7 +14,7 @@ import pytest
 ROOT = Path(__file__).resolve().parents[2]
 MODULE_PATH = (
     ROOT
-    / "src/scripts/mixar/modules/moodboard/core/system_clipboard.py"
+    / "src/scripts/webspider/modules/moodboard/core/system_clipboard.py"
 )
 
 

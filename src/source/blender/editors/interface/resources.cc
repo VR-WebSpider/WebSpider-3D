@@ -1,5 +1,5 @@
 /* SPDX-FileCopyrightText: 2001-2002 NaN Holding BV. All rights reserved.
- * SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+ * SPDX-FileCopyrightText: 2026 WebSpider Studios
  *
  * SPDX-License-Identifier: GPL-2.0-or-later */
 
@@ -165,8 +165,8 @@ const uchar *UI_ThemeGetColorPtr(bTheme *btheme, int spacetype, int colorid)
         case SPACE_SPREADSHEET:
           ts = &btheme->space_spreadsheet;
           break;
-        case SPACE_MIXIE_CHAT:
-          ts = &btheme->space_mixie_chat;
+        case SPACE_WEBSPIDER_CHAT:
+          ts = &btheme->space_webspider_ai_chat;
           break;
         case SPACE_AGENT_BUBBLE:
           ts = &btheme->space_agent_bubble;

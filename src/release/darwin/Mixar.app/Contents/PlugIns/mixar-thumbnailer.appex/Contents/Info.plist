@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited -->
+<!-- SPDX-FileCopyrightText: 2026 WebSpider Studios -->
 <!-- SPDX-License-Identifier: GPL-3.0-or-later -->
 
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
@@ -8,13 +8,13 @@
 		<key>CFBundleDevelopmentRegion</key>
 		<string>en</string>
 		<key>CFBundleName</key>
-		<string>mixar-thumbnailer</string>
+		<string>webspider-thumbnailer</string>
 		<key>CFBundleDisplayName</key>
-		<string>Mixar Thumbnailer</string>
+		<string>WebSpider 3D Thumbnailer</string>
 		<key>CFBundleExecutable</key>
-		<string>mixar-thumbnailer</string>
+		<string>webspider-thumbnailer</string>
 		<key>CFBundleIdentifier</key>
-		<string>com.mixar.mixar.thumbnailer</string>
+		<string>com.webspiderstudios.webspider3d.thumbnailer</string>
 		<key>CFBundleInfoDictionaryVersion</key>
 		<string>6.0</string>
 		<key>CFBundlePackageType</key>
@@ -28,7 +28,7 @@
 		<key>CFBundleVersion</key>
 		<string>${MACOSX_BUNDLE_LONG_VERSION_STRING}</string>
 		<key>CFBundleGetInfoString</key>
-		<string>${MACOSX_BUNDLE_LONG_VERSION_STRING}, Mixar</string>
+		<string>${MACOSX_BUNDLE_LONG_VERSION_STRING}, WebSpider 3D</string>
 		<key>LSMinimumSystemVersion</key>
 		<string>10.15</string>
 		<key>NSExtension</key>
@@ -38,7 +38,7 @@
 				<key>QLSupportedContentTypes</key>
 				<array>
 					<!-- The supported file UTIs. Not inherited from parent bundle. -->
-					<string>com.mixar.mixar.file</string>
+					<string>com.webspiderstudios.webspider3d.file</string>
 				</array>
 				<key>QLThumbnailMinimumDimension</key>
 				<integer>0</integer>

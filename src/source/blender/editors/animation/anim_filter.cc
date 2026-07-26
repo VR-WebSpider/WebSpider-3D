@@ -1,5 +1,5 @@
 /* SPDX-FileCopyrightText: 2008 Blender Authors, Joshua Leung. All rights reserved.
- * SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+ * SPDX-FileCopyrightText: 2026 WebSpider Studios
  *
  * SPDX-License-Identifier: GPL-2.0-or-later */
 
@@ -401,11 +401,11 @@ bool ANIM_animdata_context_getdata(bAnimContext *ac)
       case SPACE_TOPBAR:
       case SPACE_STATUSBAR:
       case SPACE_SPREADSHEET:
-      case SPACE_MIXIE:
-      case SPACE_MIXIE_CHAT:
-      case SPACE_MIXAR_LAYERS:
-      case SPACE_MIXAR_PROPERTIES:
-      case SPACE_MIXAR_ASSETS:
+      case SPACE_WEBSPIDER_AI:
+      case SPACE_WEBSPIDER_CHAT:
+      case SPACE_WEBSPIDER_LAYERS:
+      case SPACE_WEBSPIDER_PROPERTIES:
+      case SPACE_WEBSPIDER_ASSETS:
 
       case SPACE_BAKING:
       case SPACE_TEXTURE_SETS:

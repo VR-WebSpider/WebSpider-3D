@@ -1,11 +1,11 @@
 # SPDX-FileCopyrightText: 2018-2023 Blender Authors
-# SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+# SPDX-FileCopyrightText: 2026 WebSpider Studios
 #
 # SPDX-License-Identifier: Apache-2.0
 
 """
 Vendored from Blender's release/datafiles/blender_icons_geom.py.
-Mixar-local changes are marked with "Mixar fix" comments.
+WebSpider 3D-local changes are marked with "WebSpider 3D fix" comments.
 
 Example Usage
 =============
@@ -133,7 +133,7 @@ def mesh_data_lists_from_mesh(me, material_colors):
     me_verts = me.vertices[:]
     me_polys = me.polygons[:]
 
-    # Mixar fix: upstream references the undefined name
+    # WebSpider 3D fix: upstream references the undefined name
     # `me_loops_color_active.data[:]` here, which raises a NameError for
     # every mesh that actually has an active color attribute (i.e. every
     # icon eligible for export). Resolve through `me.attributes` so the

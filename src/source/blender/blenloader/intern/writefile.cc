@@ -1,5 +1,5 @@
 /* SPDX-FileCopyrightText: 2001-2002 NaN Holding BV. All rights reserved.
- * SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+ * SPDX-FileCopyrightText: 2026 WebSpider Studios
  *
  * SPDX-License-Identifier: GPL-2.0-or-later */
 
@@ -1485,9 +1485,9 @@ static void write_global(WriteData *wd, const int fileflags, Main *mainvar)
   char subvstr[8];
 
   /* Prevent memory checkers from complaining. */
-  fg.mixar_version = 0;
-  fg.mixar_subversion = 0;
-  fg.mixar_min_version = 0;
+  fg.webspider_version = 0;
+  fg.webspider_subversion = 0;
+  fg.webspider_min_version = 0;
   memset(fg.filepath, 0, sizeof(fg.filepath));
   memset(fg.build_hash, 0, sizeof(fg.build_hash));
   fg._pad1 = nullptr;
@@ -1520,9 +1520,9 @@ static void write_global(WriteData *wd, const int fileflags, Main *mainvar)
   fg.minversion = BLENDER_FILE_MIN_VERSION;
   fg.minsubversion = BLENDER_FILE_MIN_SUBVERSION;
 
-  fg.mixar_version = MIXAR_FILE_VERSION;
-  fg.mixar_subversion = MIXAR_FILE_SUBVERSION;
-  fg.mixar_min_version = MIXAR_FILE_MIN_VERSION;
+  fg.webspider_version = WEBSPIDER_FILE_VERSION;
+  fg.webspider_subversion = WEBSPIDER_FILE_SUBVERSION;
+  fg.webspider_min_version = WEBSPIDER_FILE_MIN_VERSION;
 #ifdef WITH_BUILDINFO
   /* TODO(sergey): Add branch name to file as well? */
   fg.build_commit_timestamp = build_commit_timestamp;

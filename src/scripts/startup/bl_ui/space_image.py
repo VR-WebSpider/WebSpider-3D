@@ -1,5 +1,5 @@
 # SPDX-FileCopyrightText: 2009-2023 Blender Authors
-# SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+# SPDX-FileCopyrightText: 2026 WebSpider Studios
 #
 # SPDX-License-Identifier: GPL-2.0-or-later
 
@@ -77,7 +77,7 @@ class IMAGE_MT_view(Menu):
         show_maskedit = sima.show_maskedit
 
         layout.prop(sima, "show_region_toolbar")
-        if sima.mode != 'MIXAR_UV':
+        if sima.mode != 'WEBSPIDER_UV':
             layout.prop(sima, "show_region_ui")
         layout.prop(sima, "show_region_tool_header")
         layout.prop(sima, "show_region_asset_shelf")
@@ -728,23 +728,23 @@ class IMAGE_HT_tool_header(Header):
         if draw_fn is not None:
             draw_fn(context, layout, tool)
 
-        # Mixar UV view buttons and visualize button in tool settings
+        # WebSpider 3D UV view buttons and visualize button in tool settings
         sima = context.space_data
-        if sima.mode == 'MIXAR_UV':
+        if sima.mode == 'WEBSPIDER_UV':
             layout.separator(factor=1.0)
             
             row = layout.row(align=True)
             row.scale_x = 1.2
             row.scale_y = 1.2
-            row.operator("mixar.view_selected", text="", icon='ZOOM_SELECTED')
-            row.operator("mixar.view_all", text="", icon='ZOOM_ALL')
-            row.operator("mixar.view_center_cursor", text="", icon='CURSOR')
+            row.operator("webspider.view_selected", text="", icon='ZOOM_SELECTED')
+            row.operator("webspider.view_all", text="", icon='ZOOM_ALL')
+            row.operator("webspider.view_center_cursor", text="", icon='CURSOR')
             
             layout.separator(factor=0.5)
             
             row = layout.row(align=True)
             row.scale_y = 1.2
-            row.operator("mixar.visualize", text="Visualize", icon='HIDE_OFF')
+            row.operator("webspider.visualize", text="Visualize", icon='HIDE_OFF')
 
         if tool_mode == 'PAINT':
             if (tool is not None) and tool.use_brushes:
@@ -767,7 +767,7 @@ class IMAGE_HT_tool_header(Header):
         if tool_mode == 'PAINT':
             layout.popover_group(space_type='IMAGE_EDITOR', region_type='UI', context=".imagepaint_2d", category="")
 
-        # Mixar UV panel selector buttons - MOVED TO MAIN HEADER
+        # WebSpider 3D UV panel selector buttons - MOVED TO MAIN HEADER
         # Previously here, now in IMAGE_HT_header.draw() after UV select controls
         # Keeping this comment for reference during transition
 
@@ -826,8 +826,8 @@ class IMAGE_HT_header(Header):
         sima = context.space_data
         show_uvedit = sima.show_uvedit
 
-        # Skip for MIXAR_UV mode - pivot, snap, and proportional editing are in active panel system
-        if sima.mode == 'MIXAR_UV':
+        # Skip for WEBSPIDER_UV mode - pivot, snap, and proportional editing are in active panel system
+        if sima.mode == 'WEBSPIDER_UV':
             return
 
         if show_uvedit:
@@ -889,7 +889,7 @@ class IMAGE_HT_header(Header):
 
         layout.template_header()
 
-        if sima.mode not in {'UV', 'MIXAR_UV'}:
+        if sima.mode not in {'UV', 'WEBSPIDER_UV'}:
             layout.prop(sima, "ui_mode", text="")
 
         # UV editing.
@@ -914,7 +914,7 @@ class IMAGE_HT_header(Header):
             # Proportional Editing — bullseye toggle + falloff popover.
             # The popover (IMAGE_PT_proportional_edit) carries the full
             # set of controls (Connected Only, Falloff list, Size) so
-            # they're reachable without the Mixar transform sub-panel.
+            # they're reachable without the WebSpider 3D transform sub-panel.
             pe_row = layout.row(align=True)
             pe_row.prop(tool_settings, "use_proportional_edit",
                         icon_only=True)
@@ -928,21 +928,21 @@ class IMAGE_HT_header(Header):
                 panel="IMAGE_PT_proportional_edit",
             )
 
-        # Mixar UV active panel selector buttons in main header
+        # WebSpider 3D UV active panel selector buttons in main header
         # Note: Selection, Tools, Functions, and Transform are tool-based (appear automatically)
-        if sima.mode == 'MIXAR_UV':
+        if sima.mode == 'WEBSPIDER_UV':
             wm = context.window_manager
-            if hasattr(wm, 'mixar_uv_ui'):
+            if hasattr(wm, 'webspider3d_uv_ui'):
                 layout.separator(factor=0.5)
                 row = layout.row(align=True)
                 row.scale_y = 1.2
-                row.prop_enum(wm.mixar_uv_ui, "active_panel", 'UV_SET', text="UV Set", icon='UV')
-                row.prop_enum(wm.mixar_uv_ui, "active_panel", 'UNWRAP', text="Unwrap", icon='UV_SYNC_SELECT')
-                row.prop_enum(wm.mixar_uv_ui, "active_panel", 'TEXEL_DENSITY', text="Texel", icon='TEXTURE')
-                row.prop_enum(wm.mixar_uv_ui, "active_panel", 'PACK_ISLANDS', text="Layout", icon='PACKAGE')
-                row.prop_enum(wm.mixar_uv_ui, "active_panel", 'IMAGE', text="Image", icon='IMAGE_DATA')
-                row.prop_enum(wm.mixar_uv_ui, "active_panel", 'MATERIAL_SLOT', text="Material", icon='MATERIAL')
-                row.prop_enum(wm.mixar_uv_ui, "active_panel", 'EXPORT', text="Export", icon='EXPORT')
+                row.prop_enum(wm.webspider3d_uv_ui, "active_panel", 'UV_SET', text="UV Set", icon='UV')
+                row.prop_enum(wm.webspider3d_uv_ui, "active_panel", 'UNWRAP', text="Unwrap", icon='UV_SYNC_SELECT')
+                row.prop_enum(wm.webspider3d_uv_ui, "active_panel", 'TEXEL_DENSITY', text="Texel", icon='TEXTURE')
+                row.prop_enum(wm.webspider3d_uv_ui, "active_panel", 'PACK_ISLANDS', text="Layout", icon='PACKAGE')
+                row.prop_enum(wm.webspider3d_uv_ui, "active_panel", 'IMAGE', text="Image", icon='IMAGE_DATA')
+                row.prop_enum(wm.webspider3d_uv_ui, "active_panel", 'MATERIAL_SLOT', text="Material", icon='MATERIAL')
+                row.prop_enum(wm.webspider3d_uv_ui, "active_panel", 'EXPORT', text="Export", icon='EXPORT')
 
         IMAGE_MT_editor_menus.draw_collapsible(context, layout)
 
@@ -950,8 +950,8 @@ class IMAGE_HT_header(Header):
 
         IMAGE_HT_header.draw_xform_template(layout, context)
 
-        # Skip image browser for MIXAR_UV mode - now in Image active panel
-        if sima.mode != 'MIXAR_UV':
+        # Skip image browser for WEBSPIDER_UV mode - now in Image active panel
+        if sima.mode != 'WEBSPIDER_UV':
             layout.template_ID(sima, "image", new="image.new", open="image.open")
 
         if show_maskedit:
@@ -970,14 +970,14 @@ class IMAGE_HT_header(Header):
                 panel="IMAGE_PT_proportional_edit",
             )
 
-        # Skip pin image for MIXAR_UV mode - now in Image active panel
-        if not show_render and sima.mode != 'MIXAR_UV':
+        # Skip pin image for WEBSPIDER_UV mode - now in Image active panel
+        if not show_render and sima.mode != 'WEBSPIDER_UV':
             layout.prop(sima, "use_image_pin", text="", emboss=False)
 
         layout.separator_spacer()
 
-        # Skip Gizmo and Overlay for MIXAR_UV mode - managed through separate systems
-        if sima.mode != 'MIXAR_UV':
+        # Skip Gizmo and Overlay for WEBSPIDER_UV mode - managed through separate systems
+        if sima.mode != 'WEBSPIDER_UV':
             # Gizmo toggle & popover.
             row = layout.row(align=True)
             row.prop(sima, "show_gizmo", icon='GIZMO', text="")
@@ -1029,8 +1029,8 @@ class IMAGE_MT_editor_menus(Menu):
         show_uvedit = sima.show_uvedit
         show_maskedit = sima.show_maskedit
 
-        # Skip drawing menus for MIXAR_UV mode - they're now in the active panel system
-        if sima.mode == 'MIXAR_UV':
+        # Skip drawing menus for WEBSPIDER_UV mode - they're now in the active panel system
+        if sima.mode == 'WEBSPIDER_UV':
             return
 
         layout.menu("IMAGE_MT_view")
@@ -1785,7 +1785,7 @@ class IMAGE_PT_overlay_uv_display(Panel):
     @classmethod
     def poll(cls, context):
         sima = context.space_data
-        return (sima and sima.mode in {'UV', 'MIXAR_UV', 'PAINT'} and not (sima.show_uvedit or sima.show_render))
+        return (sima and sima.mode in {'UV', 'WEBSPIDER_UV', 'PAINT'} and not (sima.show_uvedit or sima.show_render))
 
     def draw(self, context):
         layout = self.layout

@@ -1,5 +1,5 @@
 /* SPDX-FileCopyrightText: 2023 Blender Authors
- * SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+ * SPDX-FileCopyrightText: 2026 WebSpider Studios
  *
  * SPDX-License-Identifier: GPL-2.0-or-later */
 
@@ -639,11 +639,11 @@ static MenuSearch_Data *menu_items_from_ui_create(bContext *C,
           SPACE_MENU_NOP(SPACE_STATUSBAR);
           SPACE_MENU_NOP(SPACE_TOPBAR);
           SPACE_MENU_NOP(SPACE_SPREADSHEET);
-          SPACE_MENU_NOP(SPACE_MIXIE);
-          SPACE_MENU_NOP(SPACE_MIXIE_CHAT);
-          SPACE_MENU_NOP(SPACE_MIXAR_LAYERS);
-          SPACE_MENU_NOP(SPACE_MIXAR_PROPERTIES);
-          SPACE_MENU_NOP(SPACE_MIXAR_ASSETS);
+          SPACE_MENU_NOP(SPACE_WEBSPIDER_AI);
+          SPACE_MENU_NOP(SPACE_WEBSPIDER_CHAT);
+          SPACE_MENU_NOP(SPACE_WEBSPIDER_LAYERS);
+          SPACE_MENU_NOP(SPACE_WEBSPIDER_PROPERTIES);
+          SPACE_MENU_NOP(SPACE_WEBSPIDER_ASSETS);
 
           SPACE_MENU_NOP(SPACE_BAKING);
           SPACE_MENU_NOP(SPACE_TEXTURE_SETS);

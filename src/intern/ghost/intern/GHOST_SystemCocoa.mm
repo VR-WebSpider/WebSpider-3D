@@ -1,5 +1,5 @@
 /* SPDX-FileCopyrightText: 2001-2002 NaN Holding BV. All rights reserved.
- * SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+ * SPDX-FileCopyrightText: 2026 WebSpider Studios
  *
  * SPDX-License-Identifier: GPL-2.0-or-later */
 
@@ -357,7 +357,7 @@ extern "C" int GHOST_HACK_getFirstFile(char buf[FIRSTFILEBUFLG])
 }
 
 /* --------------------------------------------------------------------
- * Mixar — chromeless / floating-bubble window styling
+ * WebSpider 3D — chromeless / floating-bubble window styling
  *
  * Strips the macOS title bar and the three traffic-light buttons
  * (close / minimize / zoom) from a window after creation. Used by
@@ -390,7 +390,7 @@ extern "C" int GHOST_HACK_getFirstFile(char buf[FIRSTFILEBUFLG])
  * Lowers contentMinSize to the requested size as a side-effect so
  * subsequent user resize doesn't immediately snap back to the old
  * minimum. */
-extern "C" void Mixar_WindowForceSize(void *window_handle, int width, int height)
+extern "C" void WebSpider_WindowForceSize(void *window_handle, int width, int height)
 {
   if (window_handle == nullptr) {
     return;
@@ -463,20 +463,20 @@ extern "C" void Mixar_WindowForceSize(void *window_handle, int width, int height
  * to the surface bounds. macOS handles this correctly for both
  * — the content gets clipped to the rounded rect.
  */
-static NSMutableDictionary *s_mixar_parent_observers_by_child = nil;
+static NSMutableDictionary *s_webspider_parent_observers_by_child = nil;
 
-static NSValue *mixar_observer_key_for_child(NSWindow *child)
+static NSValue *webspider_observer_key_for_child(NSWindow *child)
 {
   return [NSValue valueWithNonretainedObject:child];
 }
 
-static void mixar_clear_parent_observers_for_child(NSWindow *child)
+static void webspider_clear_parent_observers_for_child(NSWindow *child)
 {
-  if (child == nil || s_mixar_parent_observers_by_child == nil) {
+  if (child == nil || s_webspider_parent_observers_by_child == nil) {
     return;
   }
-  NSValue *key = mixar_observer_key_for_child(child);
-  NSArray *tokens = [s_mixar_parent_observers_by_child objectForKey:key];
+  NSValue *key = webspider_observer_key_for_child(child);
+  NSArray *tokens = [s_webspider_parent_observers_by_child objectForKey:key];
   if (tokens == nil) {
     return;
   }
@@ -484,28 +484,28 @@ static void mixar_clear_parent_observers_for_child(NSWindow *child)
   for (id token in tokens) {
     [centre removeObserver:token];
   }
-  [s_mixar_parent_observers_by_child removeObjectForKey:key];
+  [s_webspider_parent_observers_by_child removeObjectForKey:key];
 }
 
-static void mixar_store_parent_observers_for_child(NSWindow *child, NSArray *tokens)
+static void webspider_store_parent_observers_for_child(NSWindow *child, NSArray *tokens)
 {
   if (child == nil || tokens == nil) {
     return;
   }
-  if (s_mixar_parent_observers_by_child == nil) {
-    s_mixar_parent_observers_by_child = [[NSMutableDictionary alloc] init];
+  if (s_webspider_parent_observers_by_child == nil) {
+    s_webspider_parent_observers_by_child = [[NSMutableDictionary alloc] init];
   }
-  [s_mixar_parent_observers_by_child setObject:tokens
-                                        forKey:mixar_observer_key_for_child(child)];
+  [s_webspider_parent_observers_by_child setObject:tokens
+                                        forKey:webspider_observer_key_for_child(child)];
 }
 
 /* Identifier string set on the Agent Bubble + pill NSWindows so
  * hasDialogWindow() can exempt them from the modal-dialog gate that
  * BlenderWindow.canBecomeKeyWindow enforces.  See
- * Mixar_WindowMarkAsFloatingDock below. */
-static NSString *const kMixarFloatingDockIdentifier = @"mixar_floating_dock";
-static NSInteger s_mixar_floating_dock_suppression_depth = 0;
-static NSMutableArray<NSWindow *> *s_mixar_suppressed_floating_docks = nil;
+ * WebSpider_WindowMarkAsFloatingDock below. */
+static NSString *const kWebSpider 3DFloatingDockIdentifier = @"webspider_floating_dock";
+static NSInteger s_webspider_floating_dock_suppression_depth = 0;
+static NSMutableArray<NSWindow *> *s_webspider_suppressed_floating_docks = nil;
 
 /* Force a full Blender redraw for the given NSWindow.
  *
@@ -526,7 +526,7 @@ static NSMutableArray<NSWindow *> *s_mixar_suppressed_floating_docks = nil;
  * (a subview of contentView — NOT the contentView itself) and
  * schedule a delayed re-invalidation to cover edge cases where
  * Blender hasn't finished preparing the content at the first trigger. */
-static void mixar_force_window_redraw(NSWindow *win)
+static void webspider_force_window_redraw(NSWindow *win)
 {
   if (win == nil) {
     return;
@@ -567,7 +567,7 @@ static void mixar_force_window_redraw(NSWindow *win)
 
 /* If floating-dock suppression is active AND the given NSWindow is
  * tagged as a floating dock, hide it and add it to the suppressed list
- * so Mixar_FloatingDocksRestoreAfterModal will re-show it later.
+ * so WebSpider_FloatingDocksRestoreAfterModal will re-show it later.
  *
  * Uses alpha + ignoresMouseEvents instead of orderOut because
  * orderOut on a child window DETACHES it from its parent — the
@@ -575,19 +575,19 @@ static void mixar_force_window_redraw(NSWindow *win)
  * and fall behind the main window on the next click.
  *
  * Returns true if the window was suppressed. */
-static bool mixar_suppress_floating_dock_if_needed(NSWindow *win)
+static bool webspider_suppress_floating_dock_if_needed(NSWindow *win)
 {
-  if (win == nil || s_mixar_floating_dock_suppression_depth <= 0) {
+  if (win == nil || s_webspider_floating_dock_suppression_depth <= 0) {
     return false;
   }
-  if (![win.identifier isEqualToString:kMixarFloatingDockIdentifier]) {
+  if (![win.identifier isEqualToString:kWebSpider 3DFloatingDockIdentifier]) {
     return false;
   }
-  if (s_mixar_suppressed_floating_docks == nil) {
-    s_mixar_suppressed_floating_docks = [[NSMutableArray alloc] init];
+  if (s_webspider_suppressed_floating_docks == nil) {
+    s_webspider_suppressed_floating_docks = [[NSMutableArray alloc] init];
   }
-  if (![s_mixar_suppressed_floating_docks containsObject:win]) {
-    [s_mixar_suppressed_floating_docks addObject:win];
+  if (![s_webspider_suppressed_floating_docks containsObject:win]) {
+    [s_webspider_suppressed_floating_docks addObject:win];
   }
   [win setAlphaValue:0.0];
   [win setIgnoresMouseEvents:YES];
@@ -607,7 +607,7 @@ static bool mixar_suppress_floating_dock_if_needed(NSWindow *win)
  * NSWindowAbove keeps the child always rendered above the parent in
  * the window stack — important so the pill sits visibly above the
  * bubble rather than disappearing behind it after focus changes. */
-extern "C" void Mixar_WindowSetParent(void *child_handle, void *parent_handle)
+extern "C" void WebSpider_WindowSetParent(void *child_handle, void *parent_handle)
 {
   if (child_handle == nullptr || parent_handle == nullptr) {
     return;
@@ -620,11 +620,11 @@ extern "C" void Mixar_WindowSetParent(void *child_handle, void *parent_handle)
     return;
   }
   @autoreleasepool {
-    mixar_clear_parent_observers_for_child(child);
+    webspider_clear_parent_observers_for_child(child);
     [parent addChildWindow:child ordered:NSWindowAbove];
     /* addChildWindow:ordered:NSWindowAbove implicitly shows the child.
      * If a modal is active, suppress the dock immediately. */
-    mixar_suppress_floating_dock_if_needed(child);
+    webspider_suppress_floating_dock_if_needed(child);
 
     /* macOS child windows track the parent's POSITION (origin) but
      * NOT its SIZE. So when the user drags the parent's top edge
@@ -685,7 +685,7 @@ extern "C" void Mixar_WindowSetParent(void *child_handle, void *parent_handle)
                                         object:parent
                                          queue:[NSOperationQueue mainQueue]
                                      usingBlock:reposition];
-    mixar_store_parent_observers_for_child(child, @[ resize_token, end_resize_token, move_token ]);
+    webspider_store_parent_observers_for_child(child, @[ resize_token, end_resize_token, move_token ]);
   }
 }
 
@@ -698,7 +698,7 @@ extern "C" void Mixar_WindowSetParent(void *child_handle, void *parent_handle)
  *
  * offset_x shifts horizontally (positive = right), offset_y shifts
  * vertically away from the parent (positive = further up). */
-extern "C" void Mixar_WindowPositionAboveParent(void *child_handle,
+extern "C" void WebSpider_WindowPositionAboveParent(void *child_handle,
                                                 void *parent_handle,
                                                 int offset_x,
                                                 int offset_y)
@@ -733,12 +733,12 @@ extern "C" void Mixar_WindowPositionAboveParent(void *child_handle,
  * back when the app reactivates.
  *
  * Used together with NSFloatingWindowLevel: the floating level
- * keeps the bubble above all normal Mixar windows while Mixar is
+ * keeps the bubble above all normal WebSpider 3D windows while WebSpider 3D is
  * active, and hidesOnDeactivate hides it when the user switches
  * to another application — without this, the floating level kept
  * the bubble visible above other apps' windows too, which was
  * exactly the cross-app leak the user reported. */
-extern "C" void Mixar_WindowSetHidesOnDeactivate(void *window_handle, bool hides)
+extern "C" void WebSpider_WindowSetHidesOnDeactivate(void *window_handle, bool hides)
 {
   if (window_handle == nullptr) {
     return;
@@ -757,13 +757,13 @@ extern "C" void Mixar_WindowSetHidesOnDeactivate(void *window_handle, bool hides
 /* Pin a window to its owning Space so it never leaks onto another
  * Space (macOS virtual desktop / full-screen app).
  *
- * The bug this fixes: when Mixar's main window is full-screen it lives
+ * The bug this fixes: when WebSpider 3D's main window is full-screen it lives
  * in its own dedicated Space. The Agent Bubble + pill are floating
  * child windows of that main window. With the default collection
  * behaviour AppKit treats these small auxiliary windows as eligible to
  * appear on whatever Space is currently active — so the moment the
  * user swipes to another Space (the three-finger gesture / Mission
- * Control), the bubble "comes out of Mixar" and renders on top of the
+ * Control), the bubble "comes out of WebSpider 3D" and renders on top of the
  * window in that other Space.
  *
  * The fix is two flags working together:
@@ -778,7 +778,7 @@ extern "C" void Mixar_WindowSetHidesOnDeactivate(void *window_handle, bool hides
  * We explicitly clear CanJoinAllSpaces / MoveToActiveSpace (the two
  * behaviours that make a window appear everywhere / chase the active
  * Space) in case AppKit set them implicitly for the borderless dock. */
-extern "C" void Mixar_WindowBindToParentSpace(void *window_handle)
+extern "C" void WebSpider_WindowBindToParentSpace(void *window_handle)
 {
   if (window_handle == nullptr) {
     return;
@@ -800,20 +800,20 @@ extern "C" void Mixar_WindowBindToParentSpace(void *window_handle)
 }
 
 
-/* Keep the bubble above Mixar's own windows.
+/* Keep the bubble above WebSpider 3D's own windows.
  *
  * On macOS, the addChildWindow:ordered:NSWindowAbove relationship
- * (set by Mixar_WindowSetParent) already ensures the bubble renders
+ * (set by WebSpider_WindowSetParent) already ensures the bubble renders
  * above its parent.  We intentionally do NOT use NSFloatingWindowLevel
  * because that elevates the window above ALL normal-level windows in
  * the entire system — causing the bubble to overlay other apps' windows
- * when the user drags them alongside Mixar, and to cover Blender's
+ * when the user drags them alongside WebSpider 3D, and to cover Blender's
  * own splash screen (which is at NSNormalWindowLevel).
  *
  * This function is a no-op on macOS; the child-window ordering is
  * sufficient.  On Win32, the HWND_TOP + owner relationship handles
  * the equivalent. */
-extern "C" void Mixar_WindowSetFloatingLevel(void *window_handle)
+extern "C" void WebSpider_WindowSetFloatingLevel(void *window_handle)
 {
   /* No-op: rely on addChildWindow ordering instead of window levels. */
   (void)window_handle;
@@ -825,7 +825,7 @@ extern "C" void Mixar_WindowSetFloatingLevel(void *window_handle)
  * makeKeyAndOrderFront: brings it back at the same position. Used
  * by the bubble's minimize button so the bubble can be re-shown
  * later without reconstructing it from scratch. */
-extern "C" void Mixar_WindowOrderOut(void *window_handle)
+extern "C" void WebSpider_WindowOrderOut(void *window_handle)
 {
   if (window_handle == nullptr) {
     return;
@@ -840,9 +840,9 @@ extern "C" void Mixar_WindowOrderOut(void *window_handle)
   }
 }
 
-extern "C" bool Mixar_WindowIsVisible(void *window_handle)
+extern "C" bool WebSpider_WindowIsVisible(void *window_handle)
 {
-  /* Consumed by wm_draw_update (wm_draw.cc): windows Mixar hides natively
+  /* Consumed by wm_draw_update (wm_draw.cc): windows WebSpider 3D hides natively
    * (orderOut:-ed minimised bubble, modal-suppressed floating docks) must
    * not be drawn or presented — upstream Blender never hides a GHOST
    * window, so its draw loop would keep presenting into them. A null
@@ -863,8 +863,8 @@ extern "C" bool Mixar_WindowIsVisible(void *window_handle)
 
 /* Show an NSWindow that was previously orderOut-ed and make it key.
  * Startup/modal code that must not affect focus uses
- * Mixar_WindowOrderFrontNoActivate below. */
-extern "C" void Mixar_WindowOrderFront(void *window_handle)
+ * WebSpider_WindowOrderFrontNoActivate below. */
+extern "C" void WebSpider_WindowOrderFront(void *window_handle)
 {
   if (window_handle == nullptr) {
     return;
@@ -879,7 +879,7 @@ extern "C" void Mixar_WindowOrderFront(void *window_handle)
      * is a floating dock, keep it hidden — the restore callback will
      * re-show it when the modal closes. Without this, the bubble pops
      * up on top of the splash screen during startup autoshow. */
-    if (mixar_suppress_floating_dock_if_needed(win)) {
+    if (webspider_suppress_floating_dock_if_needed(win)) {
       return;
     }
     [win makeKeyAndOrderFront:nil];
@@ -887,11 +887,11 @@ extern "C" void Mixar_WindowOrderFront(void *window_handle)
      * GHOST_kEventWindowUpdate, unlike Win32's ShowWindow which posts
      * WM_PAINT.  Post the event explicitly via the window delegate so
      * Blender redraws on the next event-loop iteration. */
-    mixar_force_window_redraw(win);
+    webspider_force_window_redraw(win);
   }
 }
 
-extern "C" void Mixar_WindowOrderFrontNoActivate(void *window_handle)
+extern "C" void WebSpider_WindowOrderFrontNoActivate(void *window_handle)
 {
   if (window_handle == nullptr) {
     return;
@@ -902,7 +902,7 @@ extern "C" void Mixar_WindowOrderFrontNoActivate(void *window_handle)
     return;
   }
   @autoreleasepool {
-    if (mixar_suppress_floating_dock_if_needed(win)) {
+    if (webspider_suppress_floating_dock_if_needed(win)) {
       return;
     }
     [win orderFrontRegardless];
@@ -912,7 +912,7 @@ extern "C" void Mixar_WindowOrderFrontNoActivate(void *window_handle)
 
 /* Make a window the key window (receives keyboard events). Used to
  * transfer focus back to the host viewport after showing the bubble. */
-extern "C" void Mixar_WindowMakeKey(void *window_handle)
+extern "C" void WebSpider_WindowMakeKey(void *window_handle)
 {
   if (window_handle == nullptr) {
     return;
@@ -931,8 +931,8 @@ extern "C" void Mixar_WindowMakeKey(void *window_handle)
 /* Detach a child window from its parent. Used before minimising
  * the bubble so the pill stays visible (otherwise AppKit would
  * orderOut the child along with the parent). The caller can later
- * re-attach via Mixar_WindowSetParent. */
-extern "C" void Mixar_WindowDetachFromParent(void *child_handle, void *parent_handle)
+ * re-attach via WebSpider_WindowSetParent. */
+extern "C" void WebSpider_WindowDetachFromParent(void *child_handle, void *parent_handle)
 {
   if (child_handle == nullptr || parent_handle == nullptr) {
     return;
@@ -945,7 +945,7 @@ extern "C" void Mixar_WindowDetachFromParent(void *child_handle, void *parent_ha
     return;
   }
   @autoreleasepool {
-    mixar_clear_parent_observers_for_child(child);
+    webspider_clear_parent_observers_for_child(child);
     [parent removeChildWindow:child];
   }
 }
@@ -966,7 +966,7 @@ extern "C" void Mixar_WindowDetachFromParent(void *child_handle, void *parent_ha
  * mechanism translates the child's origin when the parent moves,
  * but the translation isn't reliable when the parent crosses a
  * screen boundary (the user reported the pill "changed its place"
- * after dragging Mixar to another monitor — same-monitor drags were
+ * after dragging WebSpider 3D to another monitor — same-monitor drags were
  * fine). It also doesn't reposition on resize: the child's origin
  * stays put while the parent grows, and the relative offset to
  * centre-bottom drifts.
@@ -985,7 +985,7 @@ extern "C" void Mixar_WindowDetachFromParent(void *child_handle, void *parent_ha
  * when the parent window deallocates. Acceptable leak vs the
  * complexity of tracking & removing observers across the
  * minimise→restore→re-minimise lifecycle. */
-extern "C" void Mixar_WindowAnchorAtParentCentreBottom(void *child_handle,
+extern "C" void WebSpider_WindowAnchorAtParentCentreBottom(void *child_handle,
                                                         void *parent_handle,
                                                         int margin_bottom)
 {
@@ -1000,7 +1000,7 @@ extern "C" void Mixar_WindowAnchorAtParentCentreBottom(void *child_handle,
     return;
   }
   @autoreleasepool {
-    mixar_clear_parent_observers_for_child(child);
+    webspider_clear_parent_observers_for_child(child);
     [parent addChildWindow:child ordered:NSWindowAbove];
 
     const CGFloat margin_cg = (CGFloat)margin_bottom;
@@ -1049,7 +1049,7 @@ extern "C" void Mixar_WindowAnchorAtParentCentreBottom(void *child_handle,
                                               object:parent
                                                queue:[NSOperationQueue mainQueue]
                                           usingBlock:reposition];
-    mixar_store_parent_observers_for_child(child, @[ move_token, resize_token, end_resize_token ]);
+    webspider_store_parent_observers_for_child(child, @[ move_token, resize_token, end_resize_token ]);
 
     /* Apply once immediately so the child is at the right place even
      * if no move/resize event fires before the user looks. */
@@ -1058,11 +1058,11 @@ extern "C" void Mixar_WindowAnchorAtParentCentreBottom(void *child_handle,
 }
 
 
-/* Like Mixar_WindowSetParent but WITHOUT the
+/* Like WebSpider_WindowSetParent but WITHOUT the
  * NSWindowDidResizeNotification observer that pulls the child to
  * "above the parent's top-left". Kept for legacy callers that need
  * the parent-child lifecycle without any auto-positioning. */
-extern "C" void Mixar_WindowSetParentPlain(void *child_handle, void *parent_handle)
+extern "C" void WebSpider_WindowSetParentPlain(void *child_handle, void *parent_handle)
 {
   if (child_handle == nullptr || parent_handle == nullptr) {
     return;
@@ -1075,11 +1075,11 @@ extern "C" void Mixar_WindowSetParentPlain(void *child_handle, void *parent_hand
     return;
   }
   @autoreleasepool {
-    mixar_clear_parent_observers_for_child(child);
+    webspider_clear_parent_observers_for_child(child);
     [parent addChildWindow:child ordered:NSWindowAbove];
     /* addChildWindow:ordered:NSWindowAbove implicitly shows the child.
      * If a modal is active, suppress the dock immediately. */
-    mixar_suppress_floating_dock_if_needed(child);
+    webspider_suppress_floating_dock_if_needed(child);
 
     /* Maintain the child's current offset from the parent on moves and
      * resizes. Live resize updates are deferred onto the main queue so
@@ -1141,19 +1141,19 @@ extern "C" void Mixar_WindowSetParentPlain(void *child_handle, void *parent_hand
                                               object:parent
                                                queue:[NSOperationQueue mainQueue]
                                           usingBlock:reposition];
-    mixar_store_parent_observers_for_child(child, @[ move_token, resize_token, end_resize_token ]);
+    webspider_store_parent_observers_for_child(child, @[ move_token, resize_token, end_resize_token ]);
   }
 }
 
 
 /* Snap `child` to the centre-bottom of `parent`'s frame (NOT the
  * screen). Used to anchor the agent bubble's status pill inside
- * Mixar's main window when the bubble is minimised, so the pill
- * tracks Mixar's window position when the user drags it.
+ * WebSpider 3D's main window when the bubble is minimised, so the pill
+ * tracks WebSpider 3D's window position when the user drags it.
  *
  * margin_bottom is the gap (in AppKit points) between the bottom
  * of the child and the bottom of the parent's frame. */
-extern "C" void Mixar_WindowSnapToCentreBottomOfWindow(void *child_handle,
+extern "C" void WebSpider_WindowSnapToCentreBottomOfWindow(void *child_handle,
                                                         void *parent_handle,
                                                         int margin_bottom)
 {
@@ -1190,7 +1190,7 @@ extern "C" void Mixar_WindowSnapToCentreBottomOfWindow(void *child_handle,
  * on the main run loop at vsync. Animating BOTH origin and size
  * via setFrame:display: keeps the resize and the slide perfectly
  * in lockstep. */
-extern "C" void Mixar_WindowAnimateFrameToCentreBottomOfWindow(
+extern "C" void WebSpider_WindowAnimateFrameToCentreBottomOfWindow(
     void *child_handle,
     void *parent_handle,
     int new_width,
@@ -1228,7 +1228,7 @@ extern "C" void Mixar_WindowAnimateFrameToCentreBottomOfWindow(
 /* Animate `window`'s alpha to `target_alpha` over `duration` seconds.
  * Used to fade the bubble out during the minimise glide so it
  * dissolves while the pill takes its place at the centre-bottom. */
-extern "C" void Mixar_WindowAnimateAlphaTo(
+extern "C" void WebSpider_WindowAnimateAlphaTo(
     void *window_handle, float target_alpha, float duration)
 {
   if (window_handle == nullptr) {
@@ -1262,7 +1262,7 @@ extern "C" void Mixar_WindowAnimateAlphaTo(
  *
  * Returns 0 if the window or screen can't be queried — caller
  * should treat that as "no constraint, use the requested height". */
-extern "C" int Mixar_WindowGetMaxHeightToScreenTop(
+extern "C" int WebSpider_WindowGetMaxHeightToScreenTop(
     void *window_handle, int reserve_top)
 {
   if (window_handle == nullptr) {
@@ -1313,7 +1313,7 @@ extern "C" int Mixar_WindowGetMaxHeightToScreenTop(
  * Reads convertRectToBacking on the contentView's bounds, which
  * is exactly what GHOST does when reporting window dimensions to
  * Blender. */
-extern "C" void Mixar_WindowGetContentPixelSize(
+extern "C" void WebSpider_WindowGetContentPixelSize(
     void *window_handle, int *r_width, int *r_height)
 {
   if (window_handle == nullptr) {
@@ -1347,7 +1347,7 @@ extern "C" void Mixar_WindowGetContentPixelSize(
  *
  * Used by the minimise op to orderOut the bubble + anchor the pill
  * AFTER the slide-and-grow animation finishes. */
-extern "C" void Mixar_DispatchMainAfter(float delay_seconds,
+extern "C" void WebSpider_DispatchMainAfter(float delay_seconds,
                                         void (*callback)(void *),
                                         void *user_data)
 {
@@ -1365,7 +1365,7 @@ extern "C" void Mixar_DispatchMainAfter(float delay_seconds,
 /* Set a window's alpha value immediately (no animation). Used to
  * reset the bubble's alpha back to 1.0 after a fade-out + orderOut
  * sequence so the next show is fully opaque. */
-extern "C" void Mixar_WindowSetAlpha(void *window_handle, float alpha)
+extern "C" void WebSpider_WindowSetAlpha(void *window_handle, float alpha)
 {
   if (window_handle == nullptr) {
     return;
@@ -1381,7 +1381,7 @@ extern "C" void Mixar_WindowSetAlpha(void *window_handle, float alpha)
 }
 
 
-extern "C" void Mixar_WindowSnapToCentreBottom(void *window_handle, int margin_bottom)
+extern "C" void WebSpider_WindowSnapToCentreBottom(void *window_handle, int margin_bottom)
 {
   if (window_handle == nullptr) {
     return;
@@ -1415,7 +1415,7 @@ extern "C" void Mixar_WindowSnapToCentreBottom(void *window_handle, int margin_b
  * Used by the floating status pill so its content view fills the
  * entire window with no title-bar zone, no traffic lights, and no
  * separate area for the OS to render chrome materials. The earlier
- * "chromeless" treatment (Mixar_WindowSetChromeless) merely hid the
+ * "chromeless" treatment (WebSpider_WindowSetChromeless) merely hid the
  * title bar visually while leaving styleMask with TITLED — this
  * meant macOS still rendered title-bar vibrancy in that zone, which
  * showed up as a darker band across the top of the small pill
@@ -1426,7 +1426,7 @@ extern "C" void Mixar_WindowSnapToCentreBottom(void *window_handle, int margin_b
  * user-movable independently (it tracks the bubble via its
  * child-window relationship), so the loss of the OS drag region is
  * intentional. */
-extern "C" void Mixar_WindowSetBorderless(void *window_handle)
+extern "C" void WebSpider_WindowSetBorderless(void *window_handle)
 {
   if (window_handle == nullptr) {
     return;
@@ -1451,7 +1451,7 @@ extern "C" void Mixar_WindowSetBorderless(void *window_handle)
  * don't spawn a second pill on subsequent open calls (which dedup
  * the bubble itself but would otherwise create a fresh pill each
  * time). */
-extern "C" bool Mixar_WindowHasChildWindow(void *parent_handle)
+extern "C" bool WebSpider_WindowHasChildWindow(void *parent_handle)
 {
   if (parent_handle == nullptr) {
     return false;
@@ -1471,7 +1471,7 @@ extern "C" bool Mixar_WindowHasChildWindow(void *parent_handle)
  *
  * Earlier revisions tried to drive the drag from Python — modal
  * operator listening for MOUSEMOVE, computing per-event delta,
- * calling Mixar_WindowMoveBy each frame. That was unbearably laggy:
+ * calling WebSpider_WindowMoveBy each frame. That was unbearably laggy:
  * every mouse-move event paid the full bpy.ops dispatch cost
  * (Python → RNA → C++ exec → Cocoa) and stuttered visibly under
  * load. AppKit's performWindowDragWithEvent: takes a single mouse-
@@ -1482,7 +1482,7 @@ extern "C" bool Mixar_WindowHasChildWindow(void *parent_handle)
  * the mouse-down that triggered Blender's keymap dispatch into our
  * operator. If for any reason that's not the right event type, the
  * call is a no-op (AppKit ignores non-mouse-down events). */
-extern "C" void Mixar_WindowBeginDrag(void *window_handle)
+extern "C" void WebSpider_WindowBeginDrag(void *window_handle)
 {
   if (window_handle == nullptr) {
     return;
@@ -1498,7 +1498,7 @@ extern "C" void Mixar_WindowBeginDrag(void *window_handle)
     /* Inconsistency the user reported: drag worked sometimes, did
      * nothing other times. Root cause was the strict gate on
      * currentEvent being a mouse-down. By the time our Python
-     * keymap op runs (mixar.bubble_header_drag → bubble_window_begin_drag
+     * keymap op runs (webspider.bubble_header_drag → bubble_window_begin_drag
      * → here), Blender may have already pumped a MOUSEMOVE or two
      * onto NSApp, in which case [NSApp currentEvent] is a move
      * event, not the original press — and we silently bailed.
@@ -1555,7 +1555,7 @@ extern "C" void Mixar_WindowBeginDrag(void *window_handle)
  * Send) stays visible no matter how aggressively the user drags the
  * top edge — without this, native OS resize bypasses our Python
  * drag-op clamp and the input gets clipped off the bottom. */
-extern "C" void Mixar_WindowSetMinContentSize(void *window_handle, int width, int height)
+extern "C" void WebSpider_WindowSetMinContentSize(void *window_handle, int width, int height)
 {
   if (window_handle == nullptr) {
     return;
@@ -1579,7 +1579,7 @@ extern "C" void Mixar_WindowSetMinContentSize(void *window_handle, int width, in
 }
 
 
-extern "C" void Mixar_WindowSetMaxContentSize(void *window_handle, int width, int height)
+extern "C" void WebSpider_WindowSetMaxContentSize(void *window_handle, int width, int height)
 {
   if (window_handle == nullptr) {
     return;
@@ -1603,7 +1603,7 @@ extern "C" void Mixar_WindowSetMaxContentSize(void *window_handle, int width, in
 }
 
 
-extern "C" void Mixar_WindowSetCornerRadius(void *window_handle, float radius)
+extern "C" void WebSpider_WindowSetCornerRadius(void *window_handle, float radius)
 {
   if (window_handle == nullptr) {
     return;
@@ -1638,7 +1638,7 @@ extern "C" void Mixar_WindowSetCornerRadius(void *window_handle, float radius)
 }
 
 
-extern "C" void Mixar_WindowSetBlurBehind(void *window_handle, bool enable)
+extern "C" void WebSpider_WindowSetBlurBehind(void *window_handle, bool enable)
 {
   if (window_handle == nullptr) {
     return;
@@ -1665,7 +1665,7 @@ extern "C" void Mixar_WindowSetBlurBehind(void *window_handle, bool enable)
   }
 }
 
-extern "C" void Mixar_WindowSetChromeless(void *window_handle, bool chromeless)
+extern "C" void WebSpider_WindowSetChromeless(void *window_handle, bool chromeless)
 {
   if (window_handle == nullptr) {
     return;
@@ -1953,13 +1953,13 @@ GHOST_TSuccess GHOST_SystemCocoa::init()
     @autoreleasepool {
       [NSApplication sharedApplication]; /* initializes `NSApp`. */
 
-      /* Mixar: headless sandbox children (`--background`, spawned by
+      /* WebSpider 3D: headless sandbox children (`--background`, spawned by
        * sandbox_supervisor) still create a Cocoa system so off-screen GPU work
        * keeps working, but they must not show a Dock icon or app-switcher entry.
        * Demote them to an accessory (background) app. Detected via the env var
        * the supervisor sets only on child processes, so the user's GUI instance
        * (which lacks it) is unaffected. */
-      if ([[NSProcessInfo processInfo].environment objectForKey:@"MIXAR_SANDBOX_CONNECTION_ID"]) {
+      if ([[NSProcessInfo processInfo].environment objectForKey:@"WEBSPIDER_SANDBOX_CONNECTION_ID"]) {
         [NSApp setActivationPolicy:NSApplicationActivationPolicyAccessory];
       }
 
@@ -1970,14 +1970,14 @@ GHOST_TSuccess GHOST_SystemCocoa::init()
         NSMenu *appMenu;
 
         /* Create the application menu. */
-        appMenu = [[NSMenu alloc] initWithTitle:@"Mixar"];
+        appMenu = [[NSMenu alloc] initWithTitle:@"WebSpider 3D"];
 
-        [appMenu addItemWithTitle:@"About Mixar"
+        [appMenu addItemWithTitle:@"About WebSpider 3D"
                            action:@selector(orderFrontStandardAboutPanel:)
                     keyEquivalent:@""];
         [appMenu addItem:[NSMenuItem separatorItem]];
 
-        menuItem = [appMenu addItemWithTitle:@"Hide Mixar"
+        menuItem = [appMenu addItemWithTitle:@"Hide WebSpider 3D"
                                       action:@selector(hide:)
                                keyEquivalent:@"h"];
         menuItem.keyEquivalentModifierMask = NSEventModifierFlagCommand;
@@ -1992,7 +1992,7 @@ GHOST_TSuccess GHOST_SystemCocoa::init()
                            action:@selector(unhideAllApplications:)
                     keyEquivalent:@""];
 
-        menuItem = [appMenu addItemWithTitle:@"Quit Mixar"
+        menuItem = [appMenu addItemWithTitle:@"Quit WebSpider 3D"
                                       action:@selector(terminate:)
                                keyEquivalent:@"q"];
         menuItem.keyEquivalentModifierMask = NSEventModifierFlagCommand;
@@ -2467,18 +2467,18 @@ GHOST_TSuccess GHOST_SystemCocoa::handleApplicationBecomeActiveEvent()
         NSWindow *nswin = (NSWindow *)window->getViewWindow();
         const bool is_floating_dock =
             nswin != nil &&
-            [nswin.identifier isEqualToString:kMixarFloatingDockIdentifier];
+            [nswin.identifier isEqualToString:kWebSpider 3DFloatingDockIdentifier];
         if (is_floating_dock) {
           /* Auxiliary floating docks (Agent Bubble + pill) manage
            * their OWN visibility — do nothing here. Two reasons:
            *
-           * 1. Space yank-back. The docks are pinned to Mixar's Space
-           *    (Mixar_WindowBindToParentSpace). hidesOnDeactivate == YES
+           * 1. Space yank-back. The docks are pinned to WebSpider 3D's Space
+           *    (WebSpider_WindowBindToParentSpace). hidesOnDeactivate == YES
            *    docks (the open bubble, the minimised pill) are already
            *    auto-restored by AppKit on activation, and AppKit does it
            *    in a Space-aware way. Calling orderFront ourselves
            *    overrides that and force-switches the user back to
-           *    Mixar's Space the instant they swipe to another Space —
+           *    WebSpider 3D's Space the instant they swipe to another Space —
            *    the "swiped right but got yanked back to the leftmost
            *    window" bug.
            *
@@ -2553,18 +2553,18 @@ GHOST_TSuccess GHOST_SystemCocoa::handleApplicationBecomeActiveEvent()
   return GHOST_kSuccess;
 }
 
-/* Mark an NSWindow as a non-blocking Mixar floating dock (Agent Bubble
+/* Mark an NSWindow as a non-blocking WebSpider 3D floating dock (Agent Bubble
  * or pill).  The dock is opened with dialog=true to inherit Blender's
  * macOS child-window Z-order semantics, but it must NOT be treated as
  * a modal dialog — otherwise BlenderWindow.canBecomeKeyWindow refuses
  * to make the main window key while the dock is visible, and all
- * keystrokes (viewport shortcuts, mixie chat typing) get stuck on the
+ * keystrokes (viewport shortcuts, webspider_ai chat typing) get stuck on the
  * dock.
  *
  * We tag with NSWindow.identifier (unused elsewhere in Blender) so
  * hasDialogWindow() can skip these windows regardless of their
- * hidesOnDeactivate state, which Mixar toggles when minimising. */
-extern "C" void Mixar_WindowMarkAsFloatingDock(void *window_handle)
+ * hidesOnDeactivate state, which WebSpider 3D toggles when minimising. */
+extern "C" void WebSpider_WindowMarkAsFloatingDock(void *window_handle)
 {
   if (window_handle == nullptr) {
     return;
@@ -2575,63 +2575,63 @@ extern "C" void Mixar_WindowMarkAsFloatingDock(void *window_handle)
     return;
   }
   @autoreleasepool {
-    [win setIdentifier:kMixarFloatingDockIdentifier];
+    [win setIdentifier:kWebSpider 3DFloatingDockIdentifier];
     if ([win isVisible]) {
-      mixar_suppress_floating_dock_if_needed(win);
+      webspider_suppress_floating_dock_if_needed(win);
     }
   }
 }
 
-extern "C" void Mixar_FloatingDocksSuppressForModal()
+extern "C" void WebSpider_FloatingDocksSuppressForModal()
 {
   @autoreleasepool {
-    s_mixar_floating_dock_suppression_depth++;
-    if (s_mixar_floating_dock_suppression_depth > 1) {
+    s_webspider_floating_dock_suppression_depth++;
+    if (s_webspider_floating_dock_suppression_depth > 1) {
       return;
     }
 
-    if (s_mixar_suppressed_floating_docks == nil) {
-      s_mixar_suppressed_floating_docks = [[NSMutableArray alloc] init];
+    if (s_webspider_suppressed_floating_docks == nil) {
+      s_webspider_suppressed_floating_docks = [[NSMutableArray alloc] init];
     }
-    [s_mixar_suppressed_floating_docks removeAllObjects];
+    [s_webspider_suppressed_floating_docks removeAllObjects];
 
     for (NSWindow *win in [NSApp windows]) {
       if (win == nil ||
-          ![win.identifier isEqualToString:kMixarFloatingDockIdentifier] ||
+          ![win.identifier isEqualToString:kWebSpider 3DFloatingDockIdentifier] ||
           ![win isVisible] ||
           [win alphaValue] < 0.01)
       {
         continue;
       }
-      [s_mixar_suppressed_floating_docks addObject:win];
+      [s_webspider_suppressed_floating_docks addObject:win];
       [win setAlphaValue:0.0];
       [win setIgnoresMouseEvents:YES];
     }
   }
 }
 
-extern "C" void Mixar_FloatingDocksRestoreAfterModal()
+extern "C" void WebSpider_FloatingDocksRestoreAfterModal()
 {
   @autoreleasepool {
-    if (s_mixar_floating_dock_suppression_depth <= 0) {
+    if (s_webspider_floating_dock_suppression_depth <= 0) {
       return;
     }
-    s_mixar_floating_dock_suppression_depth--;
-    if (s_mixar_floating_dock_suppression_depth > 0) {
+    s_webspider_floating_dock_suppression_depth--;
+    if (s_webspider_floating_dock_suppression_depth > 0) {
       return;
     }
 
-    for (NSWindow *win in s_mixar_suppressed_floating_docks) {
+    for (NSWindow *win in s_webspider_suppressed_floating_docks) {
       if (win != nil) {
         [win setAlphaValue:1.0];
         [win setIgnoresMouseEvents:NO];
         /* Content may be stale if Blender skipped drawing while the
          * window was alpha-hidden.  Force a redraw so the user sees
          * current content the moment the window becomes visible. */
-        mixar_force_window_redraw(win);
+        webspider_force_window_redraw(win);
       }
     }
-    [s_mixar_suppressed_floating_docks removeAllObjects];
+    [s_webspider_suppressed_floating_docks removeAllObjects];
   }
 }
 
@@ -2642,14 +2642,14 @@ bool GHOST_SystemCocoa::hasDialogWindow()
     if (!window->isDialog()) {
       continue;
     }
-    /* Mixar: skip non-blocking floating docks (Agent Bubble, pill).
+    /* WebSpider 3D: skip non-blocking floating docks (Agent Bubble, pill).
      * Without this, BlenderWindow.canBecomeKeyWindow refuses to make
      * the main window key while the bubble is open — so keystrokes
-     * never reach the viewport or mixie chat on macOS. The bubble is
-     * tagged with Mixar_WindowMarkAsFloatingDock at creation time. */
+     * never reach the viewport or webspider_ai chat on macOS. The bubble is
+     * tagged with WebSpider_WindowMarkAsFloatingDock at creation time. */
     NSWindow *nswin = (NSWindow *)window->getViewWindow();
     if (nswin != nil &&
-        [nswin.identifier isEqualToString:kMixarFloatingDockIdentifier])
+        [nswin.identifier isEqualToString:kWebSpider 3DFloatingDockIdentifier])
     {
       continue;
     }

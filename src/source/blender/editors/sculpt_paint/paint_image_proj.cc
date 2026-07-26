@@ -1,5 +1,5 @@
 /* SPDX-FileCopyrightText: 2001-2002 NaN Holding BV. All rights reserved.
- * SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+ * SPDX-FileCopyrightText: 2026 WebSpider Studios
  *
  * SPDX-License-Identifier: GPL-2.0-or-later */
 
@@ -6435,7 +6435,7 @@ void PAINT_OT_image_from_view(wmOperatorType *ot)
 void ED_paint_data_warning(
     ReportList *reports, bool has_uvs, bool has_mat, bool has_tex, bool has_stencil)
 {
-  /* Mixar: Provide more helpful guidance for missing paint data */
+  /* WebSpider 3D: Provide more helpful guidance for missing paint data */
   if (!has_tex) {
     BKE_reportf(reports,
                 RPT_INFO,

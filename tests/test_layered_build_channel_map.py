@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+# SPDX-FileCopyrightText: 2026 WebSpider Studios
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -6,7 +6,7 @@ import importlib.util
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]  # repo root (tests/ is one level down)
-MANIFEST_PY = ROOT / "src/scripts/mixar/modules/paint/layered_build/manifest.py"
+MANIFEST_PY = ROOT / "src/scripts/webspider/modules/paint/layered_build/manifest.py"
 
 
 def _load(name, path):

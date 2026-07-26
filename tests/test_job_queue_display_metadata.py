@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+# SPDX-FileCopyrightText: 2026 WebSpider Studios
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -13,7 +13,7 @@ SCRIPTS = ROOT / "src" / "scripts"
 if str(SCRIPTS) not in sys.path:
     sys.path.insert(0, str(SCRIPTS))
 
-from mixar.modules.testing.mock_bpy import install_bpy_mock
+from webspider.modules.testing.mock_bpy import install_bpy_mock
 
 install_bpy_mock()
 
@@ -25,16 +25,16 @@ bpy.types.Panel.bl_rna = SimpleNamespace(
     }
 )
 
-from mixar.modules.common.api.response import APIResponse
-from mixar.modules.common.api.services import job_queue_service as JQS
-from mixar.bootstrap import generation_catalog_cache as GCC
-from mixar.modules.common.job_queue.core import enqueue as ENQUEUE
-from mixar.modules.common.job_queue.core import helpers as HELPERS
-from mixar.modules.common.job_queue.core import queue_manager as QM
-from mixar.modules.common.job_queue.core.generic_jobs import AsyncGLBJob, SyncImageJob
-from mixar.modules.common.job_queue.core.job import Job, JobState
-from mixar.modules.common.job_queue.ui.lists import queue_uilist as QUI
-from mixar.modules.common.job_queue.ui.properties import queue_properties as QP
+from webspider.modules.common.api.response import APIResponse
+from webspider.modules.common.api.services import job_queue_service as JQS
+from webspider.bootstrap import generation_catalog_cache as GCC
+from webspider.modules.common.job_queue.core import enqueue as ENQUEUE
+from webspider.modules.common.job_queue.core import helpers as HELPERS
+from webspider.modules.common.job_queue.core import queue_manager as QM
+from webspider.modules.common.job_queue.core.generic_jobs import AsyncGLBJob, SyncImageJob
+from webspider.modules.common.job_queue.core.job import Job, JobState
+from webspider.modules.common.job_queue.ui.lists import queue_uilist as QUI
+from webspider.modules.common.job_queue.ui.properties import queue_properties as QP
 
 
 class FakeQueueJob(Job):
@@ -325,7 +325,7 @@ def test_queue_mirror_projects_generation_display_metadata(monkeypatch):
     monkeypatch.setattr(
         QP.bpy.context,
         "window_manager",
-        SimpleNamespace(mixie_queue=mirror),
+        SimpleNamespace(webspider_ai_queue=mirror),
         raising=False,
     )
 

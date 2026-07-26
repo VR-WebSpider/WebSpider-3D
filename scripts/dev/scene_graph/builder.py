@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+# SPDX-FileCopyrightText: 2026 WebSpider Studios
 #
 # SPDX-License-Identifier: GPL-2.0-or-later
 
@@ -6,7 +6,7 @@
 
 from scene_graph.registry import NodeRegistry, round_vec
 
-SCHEMA = "mixar.scene_graph"
+SCHEMA = "webspider.scene_graph"
 VERSION = 3
 
 AXES_LEGEND = {

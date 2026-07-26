@@ -1,4 +1,4 @@
-REM SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+REM SPDX-FileCopyrightText: 2026 WebSpider Studios
 REM
 REM SPDX-License-Identifier: GPL-2.0-or-later
 
@@ -32,14 +32,14 @@ if NOT EXIST %BUILD_DIR%\nul (
 if "%MUST_CLEAN%"=="1" (
 	echo Cleaning %BUILD_DIR%
 	msbuild ^
-		%BUILD_DIR%\Mixar.sln ^
+		%BUILD_DIR%\WebSpider 3D.sln ^
 		/target:clean ^
 		/property:Configuration=%BUILD_TYPE% ^
 		/verbosity:minimal ^
 		/p:platform=%MSBUILD_PLATFORM%
 )
 
-if NOT EXIST %BUILD_DIR%\Mixar.sln set MUST_CONFIGURE=1
+if NOT EXIST %BUILD_DIR%\WebSpider 3D.sln set MUST_CONFIGURE=1
 if "%NOBUILD%"=="1" set MUST_CONFIGURE=1
 
 if "%MUST_CONFIGURE%"=="1" (

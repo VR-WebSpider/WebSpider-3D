@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+# SPDX-FileCopyrightText: 2026 WebSpider Studios
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -11,12 +11,12 @@ from types import SimpleNamespace
 
 
 ROOT = Path(__file__).resolve().parents[1]
-CHAT_ROOT = ROOT / "src/scripts/mixar/modules/space_mixie_chat"
+CHAT_ROOT = ROOT / "src/scripts/webspider/modules/space_webspider_chat"
 SCRIPTS = ROOT / "src" / "scripts"
 if str(SCRIPTS) not in sys.path:
     sys.path.insert(0, str(SCRIPTS))
 
-from mixar.modules.testing.mock_bpy import install_bpy_mock
+from webspider.modules.testing.mock_bpy import install_bpy_mock
 
 install_bpy_mock()
 
@@ -26,17 +26,17 @@ bpy.types.Panel.bl_rna = SimpleNamespace(
     properties={"bl_space_type": SimpleNamespace(enum_items=[])}
 )
 
-from mixar.modules.space_mixie_chat.constants import (
+from webspider.modules.space_webspider_chat.constants import (
     FEEDBACK_STATUS_FAILED,
     FEEDBACK_STATUS_RECEIVED,
     FEEDBACK_STATUS_SENDING,
 )
-from mixar.modules.space_mixie_chat.ui.operators import chat_special_ops as OPS
+from webspider.modules.space_webspider_chat.ui.operators import chat_special_ops as OPS
 
 
 def _load_feedback_policy():
     path = CHAT_ROOT / "core/feedback_policy.py"
-    spec = spec_from_file_location("mixar_feedback_policy", path)
+    spec = spec_from_file_location("webspider3d_feedback_policy", path)
     module = module_from_spec(spec)
     assert spec.loader is not None
     spec.loader.exec_module(module)
@@ -84,7 +84,7 @@ def _feedback_message(**overrides):
 
 def test_feedback_comment_failure_preserves_text_for_retry(monkeypatch):
     msg = _feedback_message()
-    scene = SimpleNamespace(mixie_chat_messages=[msg])
+    scene = SimpleNamespace(webspider_chat_messages=[msg])
     callbacks = []
     monkeypatch.setattr(
         OPS,
@@ -111,7 +111,7 @@ def test_feedback_comment_failure_preserves_text_for_retry(monkeypatch):
 
 def test_feedback_comment_success_clears_editor_only_after_acceptance(monkeypatch):
     msg = _feedback_message()
-    scene = SimpleNamespace(mixie_chat_messages=[msg])
+    scene = SimpleNamespace(webspider_chat_messages=[msg])
     callbacks = []
     monkeypatch.setattr(
         OPS,
@@ -135,7 +135,7 @@ def test_feedback_rating_callback_uses_stable_values_after_operator_returns(
     monkeypatch,
 ):
     msg = _feedback_message(feedback_rating=0, feedback_comment="")
-    scene = SimpleNamespace(mixie_chat_messages=[msg])
+    scene = SimpleNamespace(webspider_chat_messages=[msg])
     context = SimpleNamespace(scene=scene)
     callbacks = []
     payloads = []
@@ -149,7 +149,7 @@ def test_feedback_rating_callback_uses_stable_values_after_operator_returns(
     monkeypatch.setattr(OPS, "_bump_layout_epoch", lambda _scene: None)
     monkeypatch.setattr(OPS, "redraw_chat_areas", lambda: None)
 
-    operator = OPS.MIXIE_CHAT_OT_set_feedback_rating()
+    operator = OPS.WEBSPIDER_AI_CHAT_OT_set_feedback_rating()
     operator.bubble_id = "bubble-1"
     operator.rating = 4
     assert operator.execute(context) == {'FINISHED'}
@@ -175,15 +175,15 @@ def test_only_latest_agent_response_offers_feedback():
 
 
 def test_feedback_cpp_is_split_into_bounded_translation_units():
-    cpp_root = ROOT / "src/source/blender/editors/space_mixie_chat"
+    cpp_root = ROOT / "src/source/blender/editors/space_webspider_chat"
     cmake = (cpp_root / "CMakeLists.txt").read_text()
 
-    assert "mixie_chat_feedback.cc" in cmake
-    assert "mixie_chat_action_buttons.cc" in cmake
+    assert "webspider_chat_feedback.cc" in cmake
+    assert "webspider_chat_action_buttons.cc" in cmake
     for filename in (
-        "mixie_chat_feedback.cc",
-        "mixie_chat_hit_testing.cc",
-        "mixie_chat_messages_render.cc",
+        "webspider_chat_feedback.cc",
+        "webspider_chat_hit_testing.cc",
+        "webspider_chat_messages_render.cc",
     ):
         assert len((cpp_root / filename).read_text().splitlines()) <= 500
 
@@ -201,10 +201,10 @@ def test_feedback_submission_shows_inline_confirmation():
     # Submitted feedback is locked against revision, in the operator and in
     # the C++ hit-test/hover paths.
     assert "Feedback rating ignored (locked)" in ops_source
-    cpp_root = ROOT / "src/source/blender/editors/space_mixie_chat"
-    feedback_cc = (cpp_root / "mixie_chat_feedback.cc").read_text()
+    cpp_root = ROOT / "src/source/blender/editors/space_webspider_chat"
+    feedback_cc = (cpp_root / "webspider_chat_feedback.cc").read_text()
     assert "FEEDBACK_STATUS_SENDING ||" in feedback_cc
-    main_region = (cpp_root / "mixie_chat_main_region.cc").read_text()
+    main_region = (cpp_root / "webspider_chat_main_region.cc").read_text()
     assert "feedback_locked" in main_region
 
     constants_source = (CHAT_ROOT / "constants.py").read_text()
@@ -218,8 +218,8 @@ def test_feedback_submission_shows_inline_confirmation():
 
 
 def test_feedback_cpp_renders_received_state_and_submitted_comment():
-    cpp_root = ROOT / "src/source/blender/editors/space_mixie_chat"
-    feedback = (cpp_root / "mixie_chat_feedback.cc").read_text()
+    cpp_root = ROOT / "src/source/blender/editors/space_webspider_chat"
+    feedback = (cpp_root / "webspider_chat_feedback.cc").read_text()
 
     assert "Feedback received" in feedback
     assert "FEEDBACK_STATUS_RECEIVED" in feedback
@@ -227,14 +227,14 @@ def test_feedback_cpp_renders_received_state_and_submitted_comment():
 
     # Layout pass reserves height for the read-only comment block, and the
     # cache invalidation tracks status/comment changes.
-    layout = (cpp_root / "mixie_chat_messages_layout.cc").read_text()
+    layout = (cpp_root / "webspider_chat_messages_layout.cc").read_text()
     assert "feedback_submitted_comment_height" in layout
-    messages = (cpp_root / "mixie_chat_messages.cc").read_text()
+    messages = (cpp_root / "webspider_chat_messages.cc").read_text()
     assert "feedback_status" in messages
     assert "FEEDBACK_COMMENT_DISPLAY_MAX" in messages
 
     # C++ status values stay in sync with the Python constants.
-    ui_types = (cpp_root / "mixie_chat_ui_types.hh").read_text()
+    ui_types = (cpp_root / "webspider_chat_ui_types.hh").read_text()
     for name in (
         "FEEDBACK_STATUS_IDLE = 0",
         "FEEDBACK_STATUS_SENDING = 1",
@@ -247,7 +247,7 @@ def test_feedback_cpp_renders_received_state_and_submitted_comment():
 def test_feedback_row_is_positioned_below_steps_and_thinking():
     source = (
         ROOT
-        / "src/source/blender/editors/space_mixie_chat/mixie_chat_feedback.cc"
+        / "src/source/blender/editors/space_webspider_chat/webspider_chat_feedback.cc"
     ).read_text()
 
     feedback_positioning = source[source.index("float fb_y = layout.y_pos;") :]

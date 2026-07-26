@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+# SPDX-FileCopyrightText: 2026 WebSpider Studios
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -11,7 +11,7 @@ from unittest.mock import MagicMock, patch
 import pytest
 
 ROOT = Path(__file__).resolve().parents[1]
-DOWNLOAD_PY = ROOT / "src/scripts/mixar/modules/paint/layered_build/download.py"
+DOWNLOAD_PY = ROOT / "src/scripts/webspider/modules/paint/layered_build/download.py"
 
 
 def _load(name, path):

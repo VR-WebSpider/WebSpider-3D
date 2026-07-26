@@ -1,5 +1,5 @@
 # SPDX-FileCopyrightText: 2016 Blender Authors
-# SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+# SPDX-FileCopyrightText: 2026 WebSpider Studios
 #
 # SPDX-License-Identifier: GPL-2.0-or-later
 
@@ -542,16 +542,16 @@ if(PLATFORM_BUNDLED_LIBRARIES)
   list(JOIN PLATFORM_BUNDLED_LIBRARY_DIRS ":" _library_paths)
   # Intentionally double "$$" which expands into "$" when instantiated.
   set(PLATFORM_ENV_BUILD "DYLD_LIBRARY_PATH=\"${_library_paths}:$$DYLD_LIBRARY_PATH\"")
-  set(PLATFORM_ENV_INSTALL "DYLD_LIBRARY_PATH=${CMAKE_INSTALL_PREFIX_WITH_CONFIG}/Mixar.app/Contents/Resources/lib/:$$DYLD_LIBRARY_PATH")
+  set(PLATFORM_ENV_INSTALL "DYLD_LIBRARY_PATH=${CMAKE_INSTALL_PREFIX_WITH_CONFIG}/WebSpider 3D.app/Contents/Resources/lib/:$$DYLD_LIBRARY_PATH")
   unset(_library_paths)
 endif()
 
 # Same as `CFBundleIdentifier` in Info.plist.
-if(DEFINED ENV{MIXAR_VERSION})
-  string(REPLACE "." ";" _mixar_ver "$ENV{MIXAR_VERSION}")
-  list(GET _mixar_ver 0 _MIXAR_MAJOR)
-  list(GET _mixar_ver 1 _MIXAR_MINOR)
-  set(CMAKE_XCODE_ATTRIBUTE_PRODUCT_BUNDLE_IDENTIFIER "com.mixar.mixar-${_MIXAR_MAJOR}-${_MIXAR_MINOR}")
+if(DEFINED ENV{WEBSPIDER_VERSION})
+  string(REPLACE "." ";" _webspider3d_ver "$ENV{WEBSPIDER_VERSION}")
+  list(GET _webspider3d_ver 0 _WEBSPIDER_MAJOR)
+  list(GET _webspider3d_ver 1 _WEBSPIDER_MINOR)
+  set(CMAKE_XCODE_ATTRIBUTE_PRODUCT_BUNDLE_IDENTIFIER "com.webspiderstudios.webspider3d-${_WEBSPIDER_MAJOR}-${_WEBSPIDER_MINOR}")
 else()
-  set(CMAKE_XCODE_ATTRIBUTE_PRODUCT_BUNDLE_IDENTIFIER "com.mixar.mixar")
+  set(CMAKE_XCODE_ATTRIBUTE_PRODUCT_BUNDLE_IDENTIFIER "com.webspiderstudios.webspider3d")
 endif()

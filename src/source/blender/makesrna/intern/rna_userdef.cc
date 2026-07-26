@@ -1,5 +1,5 @@
 /* SPDX-FileCopyrightText: 2023 Blender Authors
- * SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+ * SPDX-FileCopyrightText: 2026 WebSpider Studios
  *
  * SPDX-License-Identifier: GPL-2.0-or-later */
 
@@ -297,7 +297,7 @@ static void rna_userdef_theme_update(Main *bmain, Scene *scene, PointerRNA *ptr)
   WM_reinit_gizmomap_all(bmain);
 
   /* Clear BLF cache to invalidate cached SVG icons with theme-dependent colors.
-   * This ensures SVG icons (like the Mixie Chat submit arrow) re-render with
+   * This ensures SVG icons (like the WebSpider Chat submit arrow) re-render with
    * updated theme colors immediately, without requiring a Blender restart. */
   BLF_cache_clear();
 
@@ -4272,16 +4272,16 @@ static void rna_def_userdef_theme_space_spreadsheet(BlenderRNA *brna)
   rna_def_userdef_theme_spaces_main(srna);
 }
 
-static void rna_def_userdef_theme_space_mixie_chat(BlenderRNA *brna)
+static void rna_def_userdef_theme_space_webspider_ai_chat(BlenderRNA *brna)
 {
   StructRNA *srna;
   PropertyRNA *prop;
 
-  /* space_mixie_chat */
+  /* space_webspider_ai_chat */
 
-  srna = RNA_def_struct(brna, "ThemeMixieChat", nullptr);
+  srna = RNA_def_struct(brna, "ThemeWebSpider AIChat", nullptr);
   RNA_def_struct_sdna(srna, "ThemeSpace");
-  RNA_def_struct_ui_text(srna, "Theme Mixie Chat", "Theme settings for Mixie Chat");
+  RNA_def_struct_ui_text(srna, "Theme WebSpider Chat", "Theme settings for WebSpider Chat");
 
   rna_def_userdef_theme_spaces_main(srna);
 
@@ -4677,16 +4677,16 @@ static void rna_def_userdef_theme_space_agent_bubble(BlenderRNA *brna)
   RNA_def_property_update(prop, 0, "rna_userdef_theme_update");
 }
 
-static void rna_def_userdef_theme_space_mixie(BlenderRNA *brna)
+static void rna_def_userdef_theme_space_webspider_ai(BlenderRNA *brna)
 {
   StructRNA *srna;
   PropertyRNA *prop;
 
-  /* space_mixie (Moodboard) */
+  /* space_webspider_ai (Moodboard) */
 
-  srna = RNA_def_struct(brna, "ThemeSpaceMixie", nullptr);
+  srna = RNA_def_struct(brna, "ThemeSpaceWebSpider AI", nullptr);
   RNA_def_struct_sdna(srna, "ThemeSpace");
-  RNA_def_struct_ui_text(srna, "Theme Mixie Space", "Theme settings for Mixie/Moodboard space");
+  RNA_def_struct_ui_text(srna, "Theme WebSpider AI Space", "Theme settings for WebSpider AI/Moodboard space");
 
   rna_def_userdef_theme_spaces_main(srna);
 
@@ -4769,57 +4769,57 @@ static void rna_def_userdef_theme_space_mixie(BlenderRNA *brna)
   static const float default_tab_highlight[4] = {1.0f, 1.0f, 1.0f, 0.18f};        /* Glass highlight */
   static const float default_tab_indicator[4] = {1.0f, 1.0f, 1.0f, 0.4f};         /* Edge bar */
 
-  prop = RNA_def_property(srna, "mixar_tab_accent", PROP_FLOAT, PROP_COLOR_GAMMA);
-  RNA_def_property_float_sdna(prop, nullptr, "mixar_tab_accent");
+  prop = RNA_def_property(srna, "webspider_tab_accent", PROP_FLOAT, PROP_COLOR_GAMMA);
+  RNA_def_property_float_sdna(prop, nullptr, "webspider_tab_accent");
   RNA_def_property_array(prop, 4);
   RNA_def_property_float_array_default(prop, default_tab_accent);
   RNA_def_property_ui_text(prop, "Tab Accent", "Active tab fill color");
   RNA_def_property_update(prop, 0, "rna_userdef_theme_update");
 
-  prop = RNA_def_property(srna, "mixar_tab_strip_background", PROP_FLOAT, PROP_COLOR_GAMMA);
-  RNA_def_property_float_sdna(prop, nullptr, "mixar_tab_strip_bg");
+  prop = RNA_def_property(srna, "webspider_tab_strip_background", PROP_FLOAT, PROP_COLOR_GAMMA);
+  RNA_def_property_float_sdna(prop, nullptr, "webspider_tab_strip_bg");
   RNA_def_property_array(prop, 4);
   RNA_def_property_float_array_default(prop, default_tab_strip_bg);
   RNA_def_property_ui_text(prop, "Tab Strip Background", "Background color for the tab strip");
   RNA_def_property_update(prop, 0, "rna_userdef_theme_update");
 
-  prop = RNA_def_property(srna, "mixar_tab_inactive", PROP_FLOAT, PROP_COLOR_GAMMA);
-  RNA_def_property_float_sdna(prop, nullptr, "mixar_tab_inactive");
+  prop = RNA_def_property(srna, "webspider_tab_inactive", PROP_FLOAT, PROP_COLOR_GAMMA);
+  RNA_def_property_float_sdna(prop, nullptr, "webspider_tab_inactive");
   RNA_def_property_array(prop, 4);
   RNA_def_property_float_array_default(prop, default_tab_inactive);
   RNA_def_property_ui_text(prop, "Tab Inactive", "Inactive tab fill color");
   RNA_def_property_update(prop, 0, "rna_userdef_theme_update");
 
-  prop = RNA_def_property(srna, "mixar_tab_text_active", PROP_FLOAT, PROP_COLOR_GAMMA);
-  RNA_def_property_float_sdna(prop, nullptr, "mixar_tab_text_active");
+  prop = RNA_def_property(srna, "webspider_tab_text_active", PROP_FLOAT, PROP_COLOR_GAMMA);
+  RNA_def_property_float_sdna(prop, nullptr, "webspider_tab_text_active");
   RNA_def_property_array(prop, 4);
   RNA_def_property_float_array_default(prop, default_tab_text_active);
   RNA_def_property_ui_text(prop, "Tab Text Active", "Text color for the active tab");
   RNA_def_property_update(prop, 0, "rna_userdef_theme_update");
 
-  prop = RNA_def_property(srna, "mixar_tab_text_inactive", PROP_FLOAT, PROP_COLOR_GAMMA);
-  RNA_def_property_float_sdna(prop, nullptr, "mixar_tab_text_inactive");
+  prop = RNA_def_property(srna, "webspider_tab_text_inactive", PROP_FLOAT, PROP_COLOR_GAMMA);
+  RNA_def_property_float_sdna(prop, nullptr, "webspider_tab_text_inactive");
   RNA_def_property_array(prop, 4);
   RNA_def_property_float_array_default(prop, default_tab_text_inactive);
   RNA_def_property_ui_text(prop, "Tab Text Inactive", "Text color for inactive tabs");
   RNA_def_property_update(prop, 0, "rna_userdef_theme_update");
 
-  prop = RNA_def_property(srna, "mixar_tab_glow", PROP_FLOAT, PROP_COLOR_GAMMA);
-  RNA_def_property_float_sdna(prop, nullptr, "mixar_tab_glow");
+  prop = RNA_def_property(srna, "webspider_tab_glow", PROP_FLOAT, PROP_COLOR_GAMMA);
+  RNA_def_property_float_sdna(prop, nullptr, "webspider_tab_glow");
   RNA_def_property_array(prop, 4);
   RNA_def_property_float_array_default(prop, default_tab_glow);
   RNA_def_property_ui_text(prop, "Tab Glow", "Outer glow color for the active tab");
   RNA_def_property_update(prop, 0, "rna_userdef_theme_update");
 
-  prop = RNA_def_property(srna, "mixar_tab_highlight", PROP_FLOAT, PROP_COLOR_GAMMA);
-  RNA_def_property_float_sdna(prop, nullptr, "mixar_tab_highlight");
+  prop = RNA_def_property(srna, "webspider_tab_highlight", PROP_FLOAT, PROP_COLOR_GAMMA);
+  RNA_def_property_float_sdna(prop, nullptr, "webspider_tab_highlight");
   RNA_def_property_array(prop, 4);
   RNA_def_property_float_array_default(prop, default_tab_highlight);
   RNA_def_property_ui_text(prop, "Tab Highlight", "Inner glass highlight on the active tab");
   RNA_def_property_update(prop, 0, "rna_userdef_theme_update");
 
-  prop = RNA_def_property(srna, "mixar_tab_indicator", PROP_FLOAT, PROP_COLOR_GAMMA);
-  RNA_def_property_float_sdna(prop, nullptr, "mixar_tab_indicator");
+  prop = RNA_def_property(srna, "webspider_tab_indicator", PROP_FLOAT, PROP_COLOR_GAMMA);
+  RNA_def_property_float_sdna(prop, nullptr, "webspider_tab_indicator");
   RNA_def_property_array(prop, 4);
   RNA_def_property_float_array_default(prop, default_tab_indicator);
   RNA_def_property_ui_text(prop, "Tab Indicator", "Edge indicator bar color on the active tab");
@@ -4829,15 +4829,15 @@ static void rna_def_userdef_theme_space_mixie(BlenderRNA *brna)
   static const float default_action_button[4] = {0.0f, 0.0f, 0.0f, 1.0f};                          /* #000000FF */
   static const float default_toggle_active[4] = {112.0f/255, 198.0f/255, 45.0f/255, 99.0f/255};   /* #70C62D63 */
 
-  prop = RNA_def_property(srna, "mixar_action_button", PROP_FLOAT, PROP_COLOR_GAMMA);
-  RNA_def_property_float_sdna(prop, nullptr, "mixar_action_button");
+  prop = RNA_def_property(srna, "webspider_action_button", PROP_FLOAT, PROP_COLOR_GAMMA);
+  RNA_def_property_float_sdna(prop, nullptr, "webspider_action_button");
   RNA_def_property_array(prop, 4);
   RNA_def_property_float_array_default(prop, default_action_button);
   RNA_def_property_ui_text(prop, "Action Button", "Background color for Generate / action buttons");
   RNA_def_property_update(prop, 0, "rna_userdef_theme_update");
 
-  prop = RNA_def_property(srna, "mixar_toggle_active", PROP_FLOAT, PROP_COLOR_GAMMA);
-  RNA_def_property_float_sdna(prop, nullptr, "mixar_toggle_active");
+  prop = RNA_def_property(srna, "webspider_toggle_active", PROP_FLOAT, PROP_COLOR_GAMMA);
+  RNA_def_property_float_sdna(prop, nullptr, "webspider_toggle_active");
   RNA_def_property_array(prop, 4);
   RNA_def_property_float_array_default(prop, default_toggle_active);
   RNA_def_property_ui_text(prop, "Toggle Active", "Track color for toggles when checked");
@@ -4887,8 +4887,8 @@ static void rna_def_userdef_themes(BlenderRNA *brna)
       {8, "TEXT_EDITOR", ICON_TEXT, "Text Editor", ""},
       {21, "TOPBAR", ICON_TOPBAR, "Top Bar", ""},
       {7, "SEQUENCE_EDITOR", ICON_SEQUENCE, "Video Sequencer", ""},
-      {24, "MIXIE_CHAT", ICON_CONSOLE, "Mixie Chat", ""},
-      {28, "MIXIE", ICON_NONE, "Moodboard", ""},
+      {24, "WEBSPIDER_AI_CHAT", ICON_CONSOLE, "WebSpider Chat", ""},
+      {28, "WEBSPIDER_AI", ICON_NONE, "Moodboard", ""},
       {27, "AGENT_BUBBLE", ICON_CONSOLE, "Agent Bubble", ""},
       {18, "BONE_COLOR_SETS", ICON_COLOR, "Bone Color Sets", ""},
       {0, nullptr, 0, nullptr, nullptr},
@@ -5044,17 +5044,17 @@ static void rna_def_userdef_themes(BlenderRNA *brna)
   RNA_def_property_struct_type(prop, "ThemeSpreadsheet");
   RNA_def_property_ui_text(prop, "Spreadsheet", "");
 
-  prop = RNA_def_property(srna, "mixie_chat", PROP_POINTER, PROP_NONE);
+  prop = RNA_def_property(srna, "webspider_ai_chat", PROP_POINTER, PROP_NONE);
   RNA_def_property_flag(prop, PROP_NEVER_NULL);
-  RNA_def_property_pointer_sdna(prop, nullptr, "space_mixie_chat");
-  RNA_def_property_struct_type(prop, "ThemeMixieChat");
-  RNA_def_property_ui_text(prop, "Mixie Chat", "");
+  RNA_def_property_pointer_sdna(prop, nullptr, "space_webspider_ai_chat");
+  RNA_def_property_struct_type(prop, "ThemeWebSpider AIChat");
+  RNA_def_property_ui_text(prop, "WebSpider Chat", "");
 
-  prop = RNA_def_property(srna, "mixie", PROP_POINTER, PROP_NONE);
+  prop = RNA_def_property(srna, "webspider_ai", PROP_POINTER, PROP_NONE);
   RNA_def_property_flag(prop, PROP_NEVER_NULL);
-  RNA_def_property_pointer_sdna(prop, nullptr, "space_mixie");
-  RNA_def_property_struct_type(prop, "ThemeSpaceMixie");
-  RNA_def_property_ui_text(prop, "Mixie Space", "Theme settings for Mixie/Moodboard space");
+  RNA_def_property_pointer_sdna(prop, nullptr, "space_webspider_ai");
+  RNA_def_property_struct_type(prop, "ThemeSpaceWebSpider AI");
+  RNA_def_property_ui_text(prop, "WebSpider AI Space", "Theme settings for WebSpider AI/Moodboard space");
 
   prop = RNA_def_property(srna, "agent_bubble", PROP_POINTER, PROP_NONE);
   RNA_def_property_flag(prop, PROP_NEVER_NULL);
@@ -5300,8 +5300,8 @@ static void rna_def_userdef_dothemes(BlenderRNA *brna)
   rna_def_userdef_theme_space_topbar(brna);
   rna_def_userdef_theme_space_statusbar(brna);
   rna_def_userdef_theme_space_spreadsheet(brna);
-  rna_def_userdef_theme_space_mixie_chat(brna);
-  rna_def_userdef_theme_space_mixie(brna);
+  rna_def_userdef_theme_space_webspider_ai_chat(brna);
+  rna_def_userdef_theme_space_webspider_ai(brna);
   rna_def_userdef_theme_space_agent_bubble(brna);
   rna_def_userdef_theme_colorset(brna);
   rna_def_userdef_theme_collection_color(brna);

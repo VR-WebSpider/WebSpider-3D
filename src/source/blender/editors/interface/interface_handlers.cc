@@ -1,5 +1,5 @@
 /* SPDX-FileCopyrightText: 2008 Blender Authors
- * SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+ * SPDX-FileCopyrightText: 2026 WebSpider Studios
  *
  * SPDX-License-Identifier: GPL-2.0-or-later */
 
@@ -3715,39 +3715,39 @@ const wmIMEData *ui_but_ime_data_get(uiBut *but)
 #endif /* WITH_INPUT_IME */
 
 /* -------------------------------------------------------------------- */
-/** \name Mixar: '@' Mention Autocomplete Bridge
+/** \name WebSpider 3D: '@' Mention Autocomplete Bridge
  *
- * The Mixie chat composer (scene.mixie_chat_input, drawn by
- * editors/space_mixie_chat/mixie_chat_footer.cc) shows a suggestion
+ * The WebSpider AI chat composer (scene.webspider_ai_chat_input, drawn by
+ * editors/space_webspider_ai_chat/webspider_ai_chat_footer.cc) shows a suggestion
  * dropdown for "@token" text at the cursor. C++ owns detection and the
  * key/mouse interactions in ui_do_but_textedit; Python owns the candidate
- * search (see space_mixie_chat/core/mention_registry.py), bridged through
+ * search (see space_webspider_ai_chat/core/mention_registry.py), bridged through
  * scene RNA properties. Implementations live in
- * editors/space_mixie_chat/mixie_chat_mention.cc — extern-declared here and
+ * editors/space_webspider_ai_chat/webspider_ai_chat_mention.cc — extern-declared here and
  * resolved at final link, same pattern as g_multiline_scroll_offset.
  * \{ */
 
-bool mixie_chat_mention_detect(const char *text,
+bool webspider_ai_chat_mention_detect(const char *text,
                                int cursor_bytes,
                                int *r_tok_start,
                                int *r_tok_end,
                                char *r_query,
                                int query_maxncpy);
-void mixie_chat_mention_publish(bContext *C, Scene *scene, const char *query);
-bool mixie_chat_mention_is_open(Scene *scene);
-void mixie_chat_mention_step(Scene *scene, int dir);
-void mixie_chat_mention_active_set(Scene *scene, int index);
-int mixie_chat_mention_active_get(Scene *scene);
-int mixie_chat_mention_insert_text_get(Scene *scene, char *r_buf, int buf_maxncpy);
-int mixie_chat_mention_row_hit(Scene *scene, const ARegion *region, const int xy[2]);
+void webspider_ai_chat_mention_publish(bContext *C, Scene *scene, const char *query);
+bool webspider_ai_chat_mention_is_open(Scene *scene);
+void webspider_ai_chat_mention_step(Scene *scene, int dir);
+void webspider_ai_chat_mention_active_set(Scene *scene, int index);
+int webspider_ai_chat_mention_active_get(Scene *scene);
+int webspider_ai_chat_mention_insert_text_get(Scene *scene, char *r_buf, int buf_maxncpy);
+int webspider_ai_chat_mention_row_hit(Scene *scene, const ARegion *region, const int xy[2]);
 
 /* Keep in sync with MENTION_QUERY_MAX / the insert_text maxlen in
- * mixie_chat_footer_constants.hh + mention_props.py. */
-#define MIXIE_MENTION_QUERY_SIZE 104
-#define MIXIE_MENTION_INSERT_SIZE 320
+ * webspider_ai_chat_footer_constants.hh + mention_props.py. */
+#define WEBSPIDER_AI_MENTION_QUERY_SIZE 104
+#define WEBSPIDER_AI_MENTION_INSERT_SIZE 320
 
-/** The scene that owns `but` when it is the Mixie chat composer, else null. */
-static Scene *ui_but_mixie_mention_scene(const uiBut *but)
+/** The scene that owns `but` when it is the WebSpider AI chat composer, else null. */
+static Scene *ui_but_webspider_ai_mention_scene(const uiBut *but)
 {
   if (!but || !but->rnaprop || !but->rnapoin.owner_id) {
     return nullptr;
@@ -3755,7 +3755,7 @@ static Scene *ui_but_mixie_mention_scene(const uiBut *but)
   if (GS(but->rnapoin.owner_id->name) != ID_SCE) {
     return nullptr;
   }
-  if (!STREQ(RNA_property_identifier(but->rnaprop), "mixie_chat_input")) {
+  if (!STREQ(RNA_property_identifier(but->rnaprop), "webspider_ai_chat_input")) {
     return nullptr;
   }
   return reinterpret_cast<Scene *>(but->rnapoin.owner_id);
@@ -3775,12 +3775,12 @@ static bool ui_textedit_mention_accept(bContext *C,
                                        uiTextEdit &text_edit,
                                        Scene *scene)
 {
-  char insert_buf[MIXIE_MENTION_INSERT_SIZE];
-  const int insert_len = mixie_chat_mention_insert_text_get(scene, insert_buf, sizeof(insert_buf));
+  char insert_buf[WEBSPIDER_AI_MENTION_INSERT_SIZE];
+  const int insert_len = webspider_ai_chat_mention_insert_text_get(scene, insert_buf, sizeof(insert_buf));
 
   int tok_start = 0, tok_end = 0;
-  char query[MIXIE_MENTION_QUERY_SIZE];
-  if (insert_len == 0 || !mixie_chat_mention_detect(text_edit.edit_string,
+  char query[WEBSPIDER_AI_MENTION_QUERY_SIZE];
+  if (insert_len == 0 || !webspider_ai_chat_mention_detect(text_edit.edit_string,
                                                     but->pos,
                                                     &tok_start,
                                                     &tok_end,
@@ -3789,7 +3789,7 @@ static bool ui_textedit_mention_accept(bContext *C,
   {
     /* Stale dropdown (token no longer at the cursor): close instead of
      * splicing into the wrong place. */
-    mixie_chat_mention_publish(C, scene, "");
+    webspider_ai_chat_mention_publish(C, scene, "");
     return false;
   }
 
@@ -3952,11 +3952,11 @@ static void ui_textedit_end(bContext *C, uiBut *but, uiHandleButtonData *data)
   ED_workspace_status_text(C, nullptr);
 
   if (but) {
-    /* Mixar: leaving the chat composer closes the @-mention dropdown and
+    /* WebSpider 3D: leaving the chat composer closes the @-mention dropdown and
      * clears the published query (covers Esc, click-outside, Enter-submit
      * and focus loss). */
-    if (Scene *mention_scene = ui_but_mixie_mention_scene(but)) {
-      mixie_chat_mention_publish(C, mention_scene, "");
+    if (Scene *mention_scene = ui_but_webspider_ai_mention_scene(but)) {
+      webspider_ai_chat_mention_publish(C, mention_scene, "");
     }
     if (UI_but_is_utf8(but)) {
       const int strip = BLI_str_utf8_invalid_strip(but->editstr, strlen(but->editstr));
@@ -4161,14 +4161,14 @@ static int ui_do_but_textedit(
           break;
         }
       }
-      /* Mixar: hovering a @-mention suggestion row moves the highlight
+      /* WebSpider 3D: hovering a @-mention suggestion row moves the highlight
        * (keyboard navigation and hover share the active index). */
       if (event->type == MOUSEMOVE) {
-        if (Scene *mention_scene = ui_but_mixie_mention_scene(but)) {
-          if (mixie_chat_mention_is_open(mention_scene)) {
-            const int row = mixie_chat_mention_row_hit(mention_scene, data->region, event->xy);
-            if (row >= 0 && row != mixie_chat_mention_active_get(mention_scene)) {
-              mixie_chat_mention_active_set(mention_scene, row);
+        if (Scene *mention_scene = ui_but_webspider_ai_mention_scene(but)) {
+          if (webspider_ai_chat_mention_is_open(mention_scene)) {
+            const int row = webspider_ai_chat_mention_row_hit(mention_scene, data->region, event->xy);
+            if (row >= 0 && row != webspider_ai_chat_mention_active_get(mention_scene)) {
+              webspider_ai_chat_mention_active_set(mention_scene, row);
               ED_region_tag_redraw(data->region);
             }
           }
@@ -4198,12 +4198,12 @@ static int ui_do_but_textedit(
         break;
       }
       if (event->val == KM_PRESS) {
-        /* Mixar: first Esc only closes the @-mention dropdown; editing
+        /* WebSpider 3D: first Esc only closes the @-mention dropdown; editing
          * continues. A second Esc cancels text editing as usual. */
         if (event->type == EVT_ESCKEY) {
-          if (Scene *mention_scene = ui_but_mixie_mention_scene(but)) {
-            if (mixie_chat_mention_is_open(mention_scene)) {
-              mixie_chat_mention_publish(C, mention_scene, "");
+          if (Scene *mention_scene = ui_but_webspider_ai_mention_scene(but)) {
+            if (webspider_ai_chat_mention_is_open(mention_scene)) {
+              webspider_ai_chat_mention_publish(C, mention_scene, "");
               ED_region_tag_redraw(data->region);
               retval = WM_UI_HANDLER_BREAK;
               break;
@@ -4234,16 +4234,16 @@ static int ui_do_but_textedit(
       }
       break;
     case LEFTMOUSE: {
-      /* Mixar: a click on a @-mention suggestion row accepts it in a single
+      /* WebSpider 3D: a click on a @-mention suggestion row accepts it in a single
        * click while editing continues (mirrors the searchbox behaviour —
        * without this, the press would only exit text editing and the row
        * would need a second click). */
       if (ELEM(event->val, KM_PRESS, KM_DBL_CLICK)) {
-        if (Scene *mention_scene = ui_but_mixie_mention_scene(but)) {
-          if (mixie_chat_mention_is_open(mention_scene)) {
-            const int row = mixie_chat_mention_row_hit(mention_scene, data->region, event->xy);
+        if (Scene *mention_scene = ui_but_webspider_ai_mention_scene(but)) {
+          if (webspider_ai_chat_mention_is_open(mention_scene)) {
+            const int row = webspider_ai_chat_mention_row_hit(mention_scene, data->region, event->xy);
             if (row >= 0) {
-              mixie_chat_mention_active_set(mention_scene, row);
+              webspider_ai_chat_mention_active_set(mention_scene, row);
               changed = ui_textedit_mention_accept(C, but, text_edit, mention_scene);
               retval = WM_UI_HANDLER_BREAK;
               break;
@@ -4354,8 +4354,8 @@ static int ui_do_but_textedit(
         {
           if (event->type == EVT_VKEY) {
             const ScrArea *area = CTX_wm_area(C);
-            if (area && ELEM(area->spacetype, SPACE_MIXIE_CHAT, SPACE_AGENT_BUBBLE)) {
-              /* In Mixie Chat / Agent Bubble, try the Python image-paste
+            if (area && ELEM(area->spacetype, SPACE_WEBSPIDER_CHAT, SPACE_AGENT_BUBBLE)) {
+              /* In WebSpider Chat / Agent Bubble, try the Python image-paste
                * operator first. If it finds image data on the clipboard it
                * attaches the image and returns OPERATOR_FINISHED — we skip
                * text paste so the image filename doesn't leak into the input
@@ -4363,7 +4363,7 @@ static int ui_do_but_textedit(
                * and we fall back to the normal C++ text paste. */
               int op_result = WM_operator_name_call(
                   C,
-                  "MIXIE_CHAT_OT_paste_image",
+                  "WEBSPIDER_AI_CHAT_OT_paste_image",
                   blender::wm::OpCallContext::ExecDefault,
                   nullptr,
                   nullptr);
@@ -4406,12 +4406,12 @@ static int ui_do_but_textedit(
           ui_searchbox_event(C, data->searchbox, but, data->region, event);
           break;
         }
-        /* Mixar: with the @-mention dropdown open, Down navigates the
+        /* WebSpider 3D: with the @-mention dropdown open, Down navigates the
          * suggestions instead of moving the text cursor. */
         if (event->type == EVT_DOWNARROWKEY) {
-          if (Scene *mention_scene = ui_but_mixie_mention_scene(but)) {
-            if (mixie_chat_mention_is_open(mention_scene)) {
-              mixie_chat_mention_step(mention_scene, +1);
+          if (Scene *mention_scene = ui_but_webspider_ai_mention_scene(but)) {
+            if (webspider_ai_chat_mention_is_open(mention_scene)) {
+              webspider_ai_chat_mention_step(mention_scene, +1);
               ED_region_tag_redraw(data->region);
               retval = WM_UI_HANDLER_BREAK;
               break;
@@ -4449,12 +4449,12 @@ static int ui_do_but_textedit(
           ui_searchbox_event(C, data->searchbox, but, data->region, event);
           break;
         }
-        /* Mixar: with the @-mention dropdown open, Up navigates the
+        /* WebSpider 3D: with the @-mention dropdown open, Up navigates the
          * suggestions instead of moving the text cursor. */
         if (event->type == EVT_UPARROWKEY) {
-          if (Scene *mention_scene = ui_but_mixie_mention_scene(but)) {
-            if (mixie_chat_mention_is_open(mention_scene)) {
-              mixie_chat_mention_step(mention_scene, -1);
+          if (Scene *mention_scene = ui_but_webspider_ai_mention_scene(but)) {
+            if (webspider_ai_chat_mention_is_open(mention_scene)) {
+              webspider_ai_chat_mention_step(mention_scene, -1);
               ED_region_tag_redraw(data->region);
               retval = WM_UI_HANDLER_BREAK;
               break;
@@ -4489,14 +4489,14 @@ static int ui_do_but_textedit(
          * floating-overlay editor variant of the chat — same input
          * field, same backend, just a smaller UI — so Enter should
          * submit there too. */
-        bool is_space_chat = (area && (area->spacetype == SPACE_MIXIE_CHAT ||
+        bool is_space_chat = (area && (area->spacetype == SPACE_WEBSPIDER_CHAT ||
                                         area->spacetype == SPACE_AGENT_BUBBLE));
 
         /* Also check for Quick Prompt property (works in popup dialogs from any space) */
         bool is_quick_prompt = false;
         if (but->rnaprop) {
           const char *prop_id = RNA_property_identifier(but->rnaprop);
-          is_quick_prompt = (prop_id && STREQ(prop_id, "mixie_chat_quick_prompt_input"));
+          is_quick_prompt = (prop_id && STREQ(prop_id, "webspider_ai_chat_quick_prompt_input"));
         }
 
         if (ui_but_is_multiline_text(but) && (event->modifier & KM_SHIFT)) {
@@ -4515,7 +4515,7 @@ static int ui_do_but_textedit(
              * starting at min_lines=1 fails that check, so Shift+Enter
              * was falling through to this submit branch and sending
              * the prompt instead of inserting a newline. Catching it
-             * here ensures the agent-bubble + mixie-chat single-line
+             * here ensures the agent-bubble + webspider_ai-chat single-line
              * default behaves correctly: Enter submits, Shift+Enter
              * grows the input. The Python wrapper
              * (draw_multiline_text_input) re-estimates the visual
@@ -4527,11 +4527,11 @@ static int ui_do_but_textedit(
                 retval = WM_UI_HANDLER_BREAK;
                 break;
             }
-            /* Mixar: with the @-mention dropdown open, plain Enter accepts
+            /* WebSpider 3D: with the @-mention dropdown open, plain Enter accepts
              * the highlighted suggestion instead of submitting; editing
              * continues with the cursor after the inserted mention. */
-            if (Scene *mention_scene = ui_but_mixie_mention_scene(but)) {
-              if (mixie_chat_mention_is_open(mention_scene)) {
+            if (Scene *mention_scene = ui_but_webspider_ai_mention_scene(but)) {
+              if (webspider_ai_chat_mention_is_open(mention_scene)) {
                 changed = ui_textedit_mention_accept(C, but, text_edit, mention_scene);
                 retval = WM_UI_HANDLER_BREAK;
                 break;
@@ -4575,10 +4575,10 @@ static int ui_do_but_textedit(
         break;
 
       case EVT_TABKEY:
-        /* Mixar: Tab also accepts the highlighted @-mention suggestion. */
+        /* WebSpider 3D: Tab also accepts the highlighted @-mention suggestion. */
         if ((event->modifier & ~KM_SHIFT) == 0) {
-          if (Scene *mention_scene = ui_but_mixie_mention_scene(but)) {
-            if (mixie_chat_mention_is_open(mention_scene)) {
+          if (Scene *mention_scene = ui_but_webspider_ai_mention_scene(but)) {
+            if (webspider_ai_chat_mention_is_open(mention_scene)) {
               changed = ui_textedit_mention_accept(C, but, text_edit, mention_scene);
               retval = WM_UI_HANDLER_BREAK;
               break;
@@ -4711,14 +4711,14 @@ static int ui_do_but_textedit(
     }
     but->changed = true;
 
-    /* Mixar: every text change re-detects the "@token" at the cursor and
+    /* WebSpider 3D: every text change re-detects the "@token" at the cursor and
      * publishes it — the Python update callback fills the suggestion list
      * synchronously, and the footer redraw below shows/hides the dropdown. */
     if (!is_ime_composing) {
-      if (Scene *mention_scene = ui_but_mixie_mention_scene(but)) {
-        char mention_query[MIXIE_MENTION_QUERY_SIZE];
+      if (Scene *mention_scene = ui_but_webspider_ai_mention_scene(but)) {
+        char mention_query[WEBSPIDER_AI_MENTION_QUERY_SIZE];
         int tok_start, tok_end;
-        if (!mixie_chat_mention_detect(text_edit.edit_string,
+        if (!webspider_ai_chat_mention_detect(text_edit.edit_string,
                                        but->pos,
                                        &tok_start,
                                        &tok_end,
@@ -4727,7 +4727,7 @@ static int ui_do_but_textedit(
         {
           mention_query[0] = '\0';
         }
-        mixie_chat_mention_publish(C, mention_scene, mention_query);
+        webspider_ai_chat_mention_publish(C, mention_scene, mention_query);
       }
     }
 
@@ -11811,15 +11811,15 @@ static int ui_handle_menu_event(bContext *C,
         }
 
         if (ELEM(event->type, LEFTMOUSE, MIDDLEMOUSE, RIGHTMOUSE)) {
-          /* Mixar: the floating agent bubble is meant to stay visible
+          /* WebSpider 3D: the floating agent bubble is meant to stay visible
            * across outside clicks. The user dismisses it explicitly via
            * ESC; clicks elsewhere pass through to the underlying editor.
            * The status pill is drawn inside this same popup so it
            * inherits the same behavior automatically. See:
-           *   src/source/blender/editors/space_mixie_chat/
-           *     mixie_chat_agent_bubble.cc */
-          const bool is_mixar_persistent_block = (block->name == "agent_bubble");
-          if (is_mixar_persistent_block) {
+           *   src/source/blender/editors/space_webspider_ai_chat/
+           *     webspider_ai_chat_agent_bubble.cc */
+          const bool is_webspider_persistent_block = (block->name == "agent_bubble");
+          if (is_webspider_persistent_block) {
             /* Fall through — don't set menuretval, leave the popup alive. */
           }
           else if (ELEM(event->val, KM_PRESS, KM_DBL_CLICK)) {
@@ -11939,7 +11939,7 @@ static int ui_handle_menu_event(bContext *C,
 
           /* strict check, and include the parent rect */
           if (!menu->dotowards && !saferct && ((U.flag & USER_MENU_CLOSE_LEAVE) || level > 0)) {
-            /* Mixar: skip mouse-leave dismiss for the persistent agent
+            /* WebSpider 3D: skip mouse-leave dismiss for the persistent agent
              * bubble (see matching check in the click branch above). */
             if (block->name == "agent_bubble") {
               /* keep popup alive */
@@ -12823,7 +12823,7 @@ static int ui_popup_handler(bContext *C, const wmEvent *event, void *userdata)
 
   ui_handle_menus_recursive(C, event, menu, 0, false, false, true);
 
-  /* Mixar: the floating agent bubble is a non-modal overlay — events that
+  /* WebSpider 3D: the floating agent bubble is a non-modal overlay — events that
    * fall OUTSIDE the popup's rect should pass through to the editor below
    * (3D viewport, panels, etc.) so the user can keep working with the
    * background while the bubble stays visible. Default popup behavior

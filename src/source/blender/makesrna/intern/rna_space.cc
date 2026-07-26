@@ -1,5 +1,5 @@
 /* SPDX-FileCopyrightText: 2023 Blender Authors
- * SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+ * SPDX-FileCopyrightText: 2026 WebSpider Studios
  *
  * SPDX-License-Identifier: GPL-2.0-or-later */
 
@@ -87,37 +87,37 @@ const EnumPropertyItem rna_enum_space_type_items[] = {
      ICON_IMAGE,
      "UV/Image Editor",
      "View and edit images and UV Maps"},
-    {SPACE_MIXIE,
-     "MIXIE",
+    {SPACE_WEBSPIDER_AI,
+     "WEBSPIDER_AI",
      ICON_IMAGE_PLANE,
      "Moodboard",
      "Moodboard for your style context"},
-    {SPACE_MIXIE_CHAT,
-     "MIXIE_CHAT",
+    {SPACE_WEBSPIDER_CHAT,
+     "WEBSPIDER_AI_CHAT",
      ICON_WORDWRAP_ON,
-     "Mixie Chat",
-     "Chat interface for Mixar"},
+     "WebSpider Chat",
+     "Chat interface for WebSpider 3D"},
     {SPACE_AGENT_BUBBLE,
      "AGENT_BUBBLE",
      ICON_OUTLINER_OB_LIGHT,
      "Agent Bubble",
-     "Floating agent chat overlay (small variant of Mixie Chat)"},
-    {SPACE_MIXAR_LAYERS,
-     "MIXAR_LAYERS",
+     "Floating agent chat overlay (small variant of WebSpider Chat)"},
+    {SPACE_WEBSPIDER_LAYERS,
+     "WEBSPIDER_LAYERS",
      ICON_RENDERLAYERS,
      "Texturing Layers",
      "Texture layer stack management"},
-    {SPACE_MIXAR_PROPERTIES,
-     "MIXAR_PROPERTIES",
+    {SPACE_WEBSPIDER_PROPERTIES,
+     "WEBSPIDER_PROPERTIES",
      ICON_PROPERTIES,
      "Texturing Properties",
      "Layer and texture properties"},
-    {SPACE_MIXAR_ASSETS,
-     "MIXAR_ASSETS",
+    {SPACE_WEBSPIDER_ASSETS,
+     "WEBSPIDER_ASSETS",
      ICON_ASSET_MANAGER,
      "Texturing Assets",
      "Smart materials, brushes, and textures library"},
-    /* SPACE_MIXAR_UV_PROPERTIES removed: merged into IMAGE_EDITOR sidebar */
+    /* SPACE_WEBSPIDER_UV_PROPERTIES removed: merged into IMAGE_EDITOR sidebar */
     {SPACE_BAKING,
      "BAKING",
      ICON_RENDER_RESULT,
@@ -327,14 +327,14 @@ const EnumPropertyItem rna_enum_space_action_mode_items[] = {
 #define SI_ITEM_VIEW(identifier, name, icon) \
   {SI_MODE_VIEW, identifier, icon, name, "Inspect images or render results"}
 #define SI_ITEM_UV {SI_MODE_UV, "UV", ICON_UV, "UV Editor", "View and edit UVs"}
-#define SI_ITEM_MIXAR_UV {SI_MODE_MIXAR_UV, "MIXAR_UV", ICON_UV, "Mixar UV Editor", "Mixar UV editing mode"}
+#define SI_ITEM_WEBSPIDER_UV {SI_MODE_WEBSPIDER_UV, "WEBSPIDER_UV", ICON_UV, "WebSpider 3D UV Editor", "WebSpider 3D UV editing mode"}
 #define SI_ITEM_PAINT {SI_MODE_PAINT, "PAINT", ICON_TPAINT_HLT, "Paint", "Paint images in 2D"}
 #define SI_ITEM_MASK {SI_MODE_MASK, "MASK", ICON_MOD_MASK, "Mask", "View and edit masks"}
 
 const EnumPropertyItem rna_enum_space_image_mode_all_items[] = {
     SI_ITEM_VIEW("VIEW", "View", ICON_FILE_IMAGE),
     SI_ITEM_UV,
-    SI_ITEM_MIXAR_UV,
+    SI_ITEM_WEBSPIDER_UV,
     SI_ITEM_PAINT,
     SI_ITEM_MASK,
     {0, nullptr, 0, nullptr, nullptr},
@@ -350,13 +350,13 @@ static const EnumPropertyItem rna_enum_space_image_mode_ui_items[] = {
 const EnumPropertyItem rna_enum_space_image_mode_items[] = {
     SI_ITEM_VIEW("IMAGE_EDITOR", "Image Editor", ICON_IMAGE),
     SI_ITEM_UV,
-    SI_ITEM_MIXAR_UV,
+    SI_ITEM_WEBSPIDER_UV,
     {0, nullptr, 0, nullptr, nullptr},
 };
 
 #undef SI_ITEM_VIEW
 #undef SI_ITEM_UV
-#undef SI_ITEM_MIXAR_UV
+#undef SI_ITEM_WEBSPIDER_UV
 #undef SI_ITEM_PAINT
 #undef SI_ITEM_MASK
 
@@ -597,7 +597,7 @@ const EnumPropertyItem buttons_context_items[] = {
     {BCONTEXT_PHYSICS, "PHYSICS", ICON_PHYSICS, "Physics", "Physics Properties"},
     {BCONTEXT_SHADERFX, "SHADERFX", ICON_SHADERFX, "Effects", "Visual Effects Properties"},
     {BCONTEXT_STRIP, "STRIP", ICON_SEQ_SEQUENCER, "Strip", "Strip Properties"},
-    {BCONTEXT_LAYERS, "LAYERS", ICON_OUTLINER, "Layers", "Mixar Layers Properties"},
+    {BCONTEXT_LAYERS, "LAYERS", ICON_OUTLINER, "Layers", "WebSpider 3D Layers Properties"},
     {BCONTEXT_STRIP_MODIFIER,
      "STRIP_MODIFIER",
      ICON_SEQ_STRIP_MODIFIER,
@@ -780,19 +780,19 @@ static StructRNA *rna_Space_refine(PointerRNA *ptr)
       return &RNA_SpaceClipEditor;
     case SPACE_SPREADSHEET:
       return &RNA_SpaceSpreadsheet;
-    case SPACE_MIXIE:
-      return &RNA_SpaceMixie;
-    case SPACE_MIXIE_CHAT:
-      return &RNA_SpaceMixieChat;
+    case SPACE_WEBSPIDER_AI:
+      return &RNA_SpaceWebSpider AI;
+    case SPACE_WEBSPIDER_CHAT:
+      return &RNA_SpaceWebSpider AIChat;
     case SPACE_AGENT_BUBBLE:
       return &RNA_SpaceAgentBubble;
-    case SPACE_MIXAR_LAYERS:
-      return &RNA_SpaceMixarLayers;
-    case SPACE_MIXAR_PROPERTIES:
-      return &RNA_SpaceMixarProperties;
-    case SPACE_MIXAR_ASSETS:
-      return &RNA_SpaceMixarAssets;
-    /* SPACE_MIXAR_UV_PROPERTIES removed */
+    case SPACE_WEBSPIDER_LAYERS:
+      return &RNA_SpaceWebSpider 3DLayers;
+    case SPACE_WEBSPIDER_PROPERTIES:
+      return &RNA_SpaceWebSpider 3DProperties;
+    case SPACE_WEBSPIDER_ASSETS:
+      return &RNA_SpaceWebSpider 3DAssets;
+    /* SPACE_WEBSPIDER_UV_PROPERTIES removed */
     case SPACE_BAKING:
       return &RNA_SpaceBaking;
     case SPACE_TEXTURE_SETS:
@@ -3855,7 +3855,7 @@ static const EnumPropertyItem *rna_FileAssetSelectParams_import_method_itemf(
   return items;
 }
 
-static void rna_SpaceMixie_mode_update(Main * /*bmain*/, Scene * /*scene*/, PointerRNA *ptr)
+static void rna_SpaceWebSpiderAI_mode_update(Main * /*bmain*/, Scene * /*scene*/, PointerRNA *ptr)
 {
   ScrArea *area = rna_area_from_space(ptr);
   ED_area_tag_redraw(area);
@@ -9198,35 +9198,35 @@ static void rna_def_space_spreadsheet(BlenderRNA *brna)
   RNA_def_property_update(prop, NC_SPACE | ND_SPACE_SPREADSHEET, nullptr);
 }
 
-static const EnumPropertyItem mixie_mode_items[] = {
+static const EnumPropertyItem webspider_ai_mode_items[] = {
     {0, "MOODBOARD", 0, "Moodboard", "Reference image board like PureRef"},
     {0, nullptr, 0, nullptr, nullptr},
 };
 
-static void rna_def_space_mixie(BlenderRNA *brna)
+static void rna_def_space_webspider_ai(BlenderRNA *brna)
 {
   StructRNA *srna;
   PropertyRNA *prop;
 
-  srna = RNA_def_struct(brna, "SpaceMixie", "Space");
-  RNA_def_struct_sdna(srna, "SpaceMixie");
-  RNA_def_struct_ui_text(srna, "Mixie Space", "Mixie editor for Mixar");
+  srna = RNA_def_struct(brna, "SpaceWebSpider AI", "Space");
+  RNA_def_struct_sdna(srna, "SpaceWebSpider AI");
+  RNA_def_struct_ui_text(srna, "WebSpider AI Space", "WebSpider AI editor for WebSpider 3D");
 
   /* Mode */
-  prop = RNA_def_property(srna, "mixie_mode", PROP_ENUM, PROP_NONE);
+  prop = RNA_def_property(srna, "webspider_ai_mode", PROP_ENUM, PROP_NONE);
   RNA_def_property_enum_sdna(prop, nullptr, "mode");
-  RNA_def_property_enum_items(prop, mixie_mode_items);
-  RNA_def_property_ui_text(prop, "Mode", "Mixie editor mode");
-  RNA_def_property_update(prop, NC_SPACE | ND_SPACE_MIXIE, "rna_SpaceMixie_mode_update");
+  RNA_def_property_enum_items(prop, webspider_ai_mode_items);
+  RNA_def_property_ui_text(prop, "Mode", "WebSpider AI editor mode");
+  RNA_def_property_update(prop, NC_SPACE | ND_SPACE_WEBSPIDER_AI, "rna_SpaceWebSpiderAI_mode_update");
 }
 
-static void rna_def_space_mixie_chat(BlenderRNA *brna)
+static void rna_def_space_webspider_ai_chat(BlenderRNA *brna)
 {
   StructRNA *srna;
 
-  srna = RNA_def_struct(brna, "SpaceMixieChat", "Space");
-  RNA_def_struct_sdna(srna, "SpaceMixieChat");
-  RNA_def_struct_ui_text(srna, "Mixie Chat Space", "Chat interface for Mixar");
+  srna = RNA_def_struct(brna, "SpaceWebSpider AIChat", "Space");
+  RNA_def_struct_sdna(srna, "SpaceWebSpider AIChat");
+  RNA_def_struct_ui_text(srna, "WebSpider Chat Space", "Chat interface for WebSpider 3D");
 }
 
 static void rna_def_space_agent_bubble(BlenderRNA *brna)
@@ -9238,13 +9238,13 @@ static void rna_def_space_agent_bubble(BlenderRNA *brna)
   RNA_def_struct_ui_text(
       srna,
       "Agent Bubble Space",
-      "Floating agent chat overlay editor for Mixar (small variant of Mixie Chat)");
+      "Floating agent chat overlay editor for WebSpider 3D (small variant of WebSpider Chat)");
 }
 
-/* Mixar: expose SpaceTopBar to Python so addons / Mixar's onboarding can
+/* WebSpider 3D: expose SpaceTopBar to Python so addons / WebSpider 3D's onboarding can
  * attach POST_PIXEL draw handlers to the topbar's regions. Upstream
  * Blender intentionally omits this — the topbar is a "global" space and
- * was never meant to host overlays — but Mixar's onboarding tour needs
+ * was never meant to host overlays — but WebSpider 3D's onboarding tour needs
  * to paint a highlight border around the workspace tabs + the Zen /
  * Engine menu items, both of which live in the topbar.
  *
@@ -9263,35 +9263,35 @@ static void rna_def_space_topbar(BlenderRNA *brna)
       "Top bar containing the workspace tab strip and the editor menus");
 }
 
-static void rna_def_space_mixar_layers(BlenderRNA *brna)
+static void rna_def_space_webspider_layers(BlenderRNA *brna)
 {
   StructRNA *srna;
 
-  srna = RNA_def_struct(brna, "SpaceMixarLayers", "Space");
-  RNA_def_struct_sdna(srna, "SpaceMixarLayers");
-  RNA_def_struct_ui_text(srna, "Mixar Layers Space", "Mixar texture layer stack management");
+  srna = RNA_def_struct(brna, "SpaceWebSpider 3DLayers", "Space");
+  RNA_def_struct_sdna(srna, "SpaceWebSpider 3DLayers");
+  RNA_def_struct_ui_text(srna, "WebSpider 3D Layers Space", "WebSpider 3D texture layer stack management");
 }
 
-static void rna_def_space_mixar_properties(BlenderRNA *brna)
+static void rna_def_space_webspider_properties(BlenderRNA *brna)
 {
   StructRNA *srna;
 
-  srna = RNA_def_struct(brna, "SpaceMixarProperties", "Space");
-  RNA_def_struct_sdna(srna, "SpaceMixarProperties");
-  RNA_def_struct_ui_text(srna, "Mixar Properties Space", "Mixar layer and texture properties");
+  srna = RNA_def_struct(brna, "SpaceWebSpider 3DProperties", "Space");
+  RNA_def_struct_sdna(srna, "SpaceWebSpider 3DProperties");
+  RNA_def_struct_ui_text(srna, "WebSpider 3D Properties Space", "WebSpider 3D layer and texture properties");
 }
 
-static void rna_def_space_mixar_assets(BlenderRNA *brna)
+static void rna_def_space_webspider_assets(BlenderRNA *brna)
 {
   StructRNA *srna;
 
-  srna = RNA_def_struct(brna, "SpaceMixarAssets", "Space");
-  RNA_def_struct_sdna(srna, "SpaceMixarAssets");
+  srna = RNA_def_struct(brna, "SpaceWebSpider 3DAssets", "Space");
+  RNA_def_struct_sdna(srna, "SpaceWebSpider 3DAssets");
   RNA_def_struct_ui_text(
-      srna, "Mixar Assets Space", "Mixar smart materials, brushes, and textures library");
+      srna, "WebSpider 3D Assets Space", "WebSpider 3D smart materials, brushes, and textures library");
 }
 
-/* rna_def_space_mixar_uv_properties removed: merged into IMAGE_EDITOR sidebar */
+/* rna_def_space_webspider_uv_properties removed: merged into IMAGE_EDITOR sidebar */
 
 static void rna_def_space_baking(BlenderRNA *brna)
 {
@@ -9339,13 +9339,13 @@ void RNA_def_space(BlenderRNA *brna)
   rna_def_space_node(brna);
   rna_def_space_clip(brna);
   rna_def_space_spreadsheet(brna);
-  rna_def_space_mixie(brna);
-  rna_def_space_mixie_chat(brna);
+  rna_def_space_webspider_ai(brna);
+  rna_def_space_webspider_ai_chat(brna);
   rna_def_space_agent_bubble(brna);
   rna_def_space_topbar(brna);
-  rna_def_space_mixar_layers(brna);
-  rna_def_space_mixar_properties(brna);
-  rna_def_space_mixar_assets(brna);
+  rna_def_space_webspider_layers(brna);
+  rna_def_space_webspider_properties(brna);
+  rna_def_space_webspider_assets(brna);
 
   rna_def_space_baking(brna);
   rna_def_space_texture_sets(brna);

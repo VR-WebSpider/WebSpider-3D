@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+# SPDX-FileCopyrightText: 2026 WebSpider Studios
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -20,19 +20,19 @@ SCRIPTS = ROOT / "src" / "scripts"
 if str(SCRIPTS) not in sys.path:
     sys.path.insert(0, str(SCRIPTS))
 
-from mixar.modules.testing.mock_bpy import install_bpy_mock
+from webspider.modules.testing.mock_bpy import install_bpy_mock
 
 install_bpy_mock()
 
-from mixar.modules.common.job_queue.constants import (
+from webspider.modules.common.job_queue.constants import (
     ENQUEUE_TOAST_ID,
     ENQUEUE_TOAST_TTL_MS,
 )
-from mixar.modules.common.job_queue.core import enqueue_toast as ET
-from mixar.modules.common.job_queue.core import queue_manager as QM
-from mixar.modules.common.job_queue.core.job import Job
-from mixar.modules.common.job_queue.ui.operators import queue_ops as QO
-from mixar.modules.common.notifications.store import get_notification_store
+from webspider.modules.common.job_queue.core import enqueue_toast as ET
+from webspider.modules.common.job_queue.core import queue_manager as QM
+from webspider.modules.common.job_queue.core.job import Job
+from webspider.modules.common.job_queue.ui.operators import queue_ops as QO
+from webspider.modules.common.notifications.store import get_notification_store
 
 
 class _Clock:
@@ -76,7 +76,7 @@ def test_single_enqueue_shows_transient_toast(monkeypatch):
     assert len(item.actions) == 1
     action = item.actions[0]
     assert action.label == "View Queue"
-    assert action.operator == "mixie.queue_view"
+    assert action.operator == "webspider_ai.queue_view"
     assert action.style == "primary"
 
 
@@ -161,7 +161,7 @@ def test_feature_queue_submit_raises_toast_once_per_accepted_job(monkeypatch):
 
 def _fake_area(area_type=None, width=100, height=100):
     # Default to the space type the Queue panel actually registers in
-    # (MIXIE when the Mixar space exists, VIEW_3D otherwise).
+    # (WEBSPIDER_AI when the WebSpider 3D space exists, VIEW_3D otherwise).
     if area_type is None:
         area_type = QO.QUEUE_AREA_TYPE
     return SimpleNamespace(
@@ -197,7 +197,7 @@ def test_find_largest_queue_area_picks_biggest_of_right_type():
 def test_queue_view_falls_back_when_no_area_context():
     area = _fake_area()
     ctx = _fake_context(None, [[area]])
-    result = QO.MIXIE_OT_queue_view.execute(SimpleNamespace(), ctx)
+    result = QO.WEBSPIDER_AI_OT_queue_view.execute(SimpleNamespace(), ctx)
     assert result == {'FINISHED'}
     assert area.spaces.active.show_region_ui is True
     assert area.regions[0].active_panel_category == "Queue"
@@ -209,7 +209,7 @@ def test_queue_view_redirects_wrong_area_type_to_queue_area():
     clicked = _fake_area(area_type="OTHER_SPACE")
     target = _fake_area()
     ctx = _fake_context(clicked, [[clicked, target]])
-    result = QO.MIXIE_OT_queue_view.execute(SimpleNamespace(), ctx)
+    result = QO.WEBSPIDER_AI_OT_queue_view.execute(SimpleNamespace(), ctx)
     assert result == {'FINISHED'}
     assert clicked.regions[0].active_panel_category == ""
     assert target.regions[0].active_panel_category == "Queue"
@@ -219,7 +219,7 @@ def test_queue_view_uses_context_area_when_already_right_type():
     area = _fake_area()
     bigger_elsewhere = _fake_area(width=999, height=999)
     ctx = _fake_context(area, [[area, bigger_elsewhere]])
-    result = QO.MIXIE_OT_queue_view.execute(SimpleNamespace(), ctx)
+    result = QO.WEBSPIDER_AI_OT_queue_view.execute(SimpleNamespace(), ctx)
     assert result == {'FINISHED'}
     assert area.regions[0].active_panel_category == "Queue"
     assert bigger_elsewhere.regions[0].active_panel_category == ""
@@ -227,5 +227,5 @@ def test_queue_view_uses_context_area_when_already_right_type():
 
 def test_queue_view_cancels_when_no_queue_area_anywhere():
     ctx = _fake_context(None, [[]])
-    result = QO.MIXIE_OT_queue_view.execute(SimpleNamespace(), ctx)
+    result = QO.WEBSPIDER_AI_OT_queue_view.execute(SimpleNamespace(), ctx)
     assert result == {'CANCELLED'}

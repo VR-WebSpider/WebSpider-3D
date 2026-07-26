@@ -1,9 +1,9 @@
-// SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+// SPDX-FileCopyrightText: 2026 WebSpider Studios
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "creator_startup.h"
-#include "mixar_env_config.h"
+#include "webspider_env_config.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -67,8 +67,8 @@ void cleanup_auth_system(void) {
 }
 #endif
 
-const char* get_mixar_base_url() {
-    return MIXAR_BASE_URL;
+const char* get_webspider_base_url() {
+    return WEBSPIDER_BASE_URL;
 }
 
 static char* get_app_icon_path() {
@@ -89,7 +89,7 @@ static char* get_app_icon_path() {
     // macOS - use CFBundle
     CFBundleRef mainBundle = CFBundleGetMainBundle();
     if (mainBundle) {
-        CFURLRef iconURL = CFBundleCopyResourceURL(mainBundle, CFSTR("mixar_icon"), CFSTR("icns"), NULL);
+        CFURLRef iconURL = CFBundleCopyResourceURL(mainBundle, CFSTR("webspider_icon"), CFSTR("icns"), NULL);
         if (iconURL) {
             CFStringRef iconPathRef = CFURLCopyFileSystemPath(iconURL, kCFURLPOSIXPathStyle);
             CFStringGetCString(iconPathRef, iconPath, sizeof(iconPath), kCFStringEncodingUTF8);
@@ -100,7 +100,7 @@ static char* get_app_icon_path() {
     }
 
     // Fallback
-    strcpy(iconPath, "./mixar_icon.icns");
+    strcpy(iconPath, "./webspider_icon.icns");
 
 #else
     // Linux
@@ -120,7 +120,7 @@ static char* get_app_icon_path() {
     return iconPath;
 }
 
-#include "mixar_local_auth_server.h"
+#include "webspider_local_auth_server.h"
 #include "creator_auth.h"
 
 // ---------------------------------------------------------------------------
@@ -409,10 +409,10 @@ static bool exchange_desktop_code(const char* code, const char* code_verifier) {
              "{\"code\":\"%s\",\"code_verifier\":\"%s\"}", escaped_code, escaped_verifier);
 
     char url[512];
-    snprintf(url, sizeof(url), "%s/api/v1/auth/desktop/token", get_mixar_base_url());
+    snprintf(url, sizeof(url), "%s/api/v1/auth/desktop/token", get_webspider_base_url());
 
     // Refuse non-HTTPS schemes. Loopback is intentionally NOT excepted —
-    // Mixar's backend is always remote in every shipped configuration, and
+    // WebSpider 3D's backend is always remote in every shipped configuration, and
     // an OAuth token-exchange endpoint should never be reached over plain
     // HTTP, even in development.
     if (strncmp(url, "https://", 8) != 0) {
@@ -442,7 +442,7 @@ static bool exchange_desktop_code(const char* code, const char* code_verifier) {
         return false;
     }
 
-    HINTERNET hSession = WinHttpOpen(L"MixarDesktop/1.0",
+    HINTERNET hSession = WinHttpOpen(L"WebSpider 3DDesktop/1.0",
                                      WINHTTP_ACCESS_TYPE_DEFAULT_PROXY,
                                      WINHTTP_NO_PROXY_NAME,
                                      WINHTTP_NO_PROXY_BYPASS, 0);
@@ -795,7 +795,7 @@ LRESULT CALLBACK LoginWindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM 
                     char url[512];
                     snprintf(url, sizeof(url),
                              "%s/app/desktop-login?port=%d&code_challenge=%s&code_challenge_method=S256&state=%s",
-                             MIXAR_FRONTEND_BASE_URL, actual_port, code_challenge, state);
+                             WEBSPIDER_FRONTEND_BASE_URL, actual_port, code_challenge, state);
                     open_browser_url(url);
 
                     // Show waiting message
@@ -880,9 +880,9 @@ LRESULT CALLBACK LoginWindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM 
 }
 
 bool show_startup_dialog(void) {
-#ifdef MIXAR_ENV_DEV
+#ifdef WEBSPIDER_ENV_DEV
     // Dev bypass: skip the startup SSO gate entirely.
-    // The Mixar panel login button handles auth via username/password.
+    // The WebSpider 3D panel login button handles auth via username/password.
     return true;
 #endif
 
@@ -911,7 +911,7 @@ bool show_startup_dialog(void) {
     }
 
     // Register window class
-    const char* className = "MixarLoginDialog";
+    const char* className = "WebSpider 3DLoginDialog";
     WNDCLASSEX wc = {0};
     wc.cbSize = sizeof(WNDCLASSEX);
     wc.style = CS_HREDRAW | CS_VREDRAW;
@@ -944,7 +944,7 @@ bool show_startup_dialog(void) {
     HWND hDlg = CreateWindowEx(
         WS_EX_DLGMODALFRAME,
         className,
-        "Mixar Login",
+        "WebSpider 3D Login",
         WS_POPUP | WS_CAPTION | WS_SYSMENU,
         x, y, dialogWidth, dialogHeight,
         NULL, NULL, GetModuleHandle(NULL), &loginData
@@ -980,9 +980,9 @@ bool show_startup_dialog(void) {
 #elif defined(__APPLE__)
 #include <CoreFoundation/CoreFoundation.h>
 bool show_startup_dialog(void) {
-#ifdef MIXAR_ENV_DEV
+#ifdef WEBSPIDER_ENV_DEV
     // Dev bypass: skip the startup SSO gate entirely.
-    // The Mixar panel login button handles auth via username/password.
+    // The WebSpider 3D panel login button handles auth via username/password.
     return true;
 #endif
 
@@ -1019,7 +1019,7 @@ bool show_startup_dialog(void) {
     char url[512];
     snprintf(url, sizeof(url),
              "%s/app/desktop-login?port=%d&code_challenge=%s&code_challenge_method=S256&state=%s",
-             MIXAR_FRONTEND_BASE_URL, actual_port, code_challenge, state);
+             WEBSPIDER_FRONTEND_BASE_URL, actual_port, code_challenge, state);
     open_browser_url(url);
 
     // Wait for auth code from localhost callback (validates state)
@@ -1076,9 +1076,9 @@ bool show_startup_dialog(void) {
 
 // Alternative implementation using zenity for linux
 bool show_startup_dialog(void) {
-#ifdef MIXAR_ENV_DEV
+#ifdef WEBSPIDER_ENV_DEV
     // Dev bypass: skip the startup SSO gate entirely.
-    // The Mixar panel login button handles auth via username/password.
+    // The WebSpider 3D panel login button handles auth via username/password.
     return true;
 #endif
 
@@ -1112,7 +1112,7 @@ bool show_startup_dialog(void) {
     char url[512];
     snprintf(url, sizeof(url),
              "%s/app/desktop-login?port=%d&code_challenge=%s&code_challenge_method=S256&state=%s",
-             MIXAR_FRONTEND_BASE_URL, actual_port, code_challenge, state);
+             WEBSPIDER_FRONTEND_BASE_URL, actual_port, code_challenge, state);
     open_browser_url(url);
 
     // Wait for auth code from localhost callback

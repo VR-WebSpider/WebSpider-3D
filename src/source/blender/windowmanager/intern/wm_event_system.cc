@@ -1,5 +1,5 @@
 /* SPDX-FileCopyrightText: 2007 Blender Authors
- * SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+ * SPDX-FileCopyrightText: 2026 WebSpider Studios
  *
  * SPDX-License-Identifier: GPL-2.0-or-later */
 
@@ -2840,7 +2840,7 @@ static eHandlerActionFlag wm_handler_fileselect_do(bContext *C,
   switch (val) {
     case EVT_FILESELECT_FULL_OPEN: {
       ScrArea *area = ED_screen_temp_space_open(
-          C, IFACE_("Mixar File View"), SPACE_FILE, U.filebrowser_display_type, true);
+          C, IFACE_("WebSpider 3D File View"), SPACE_FILE, U.filebrowser_display_type, true);
       if (!area) {
         BKE_report(&wm->runtime->reports, RPT_ERROR, "Failed to open file browser!");
         return WM_HANDLER_BREAK;
@@ -3977,9 +3977,9 @@ static void wm_event_free_and_remove_from_queue_if_valid(wmEvent *event)
 }
 
 /**
- * Mixar: detect that a handler closed (and freed) the window whose event is
+ * WebSpider 3D: detect that a handler closed (and freed) the window whose event is
  * being processed. Upstream only signals this by null-ing the context window
- * in #wm_window_free, but Mixar code that closes windows mid-handler (e.g.
+ * in #wm_window_free, but WebSpider 3D code that closes windows mid-handler (e.g.
  * the agent-bubble purge in `save_pre`) may restore a surviving window into
  * the context afterwards, so the null check alone is not sufficient. Both
  * `win` and the events in its queue are dangling once this returns false.
@@ -4315,7 +4315,7 @@ void wm_event_do_handlers(bContext *C)
               wm_region_mouse_co(C, event); /* Only invalidates `event->mval` in this case. */
               action |= wm_handlers_do(C, event, &area->handlers);
 
-              /* Mixar: a handler may close `win` itself, invalidating `win`,
+              /* WebSpider 3D: a handler may close `win` itself, invalidating `win`,
                * `area` and `event` (see #wm_window_is_alive). */
               if (!wm_window_is_alive(wm, win)) {
                 wm_event_free_and_remove_from_queue_if_valid(event);

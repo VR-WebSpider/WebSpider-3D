@@ -1,5 +1,5 @@
 /* SPDX-FileCopyrightText: 2025 Blender Authors
- * SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+ * SPDX-FileCopyrightText: 2026 WebSpider Studios
  *
  * SPDX-License-Identifier: GPL-2.0-or-later */
 
@@ -86,7 +86,7 @@
 #include "readfile.hh"
 
 #include "versioning_common.hh"
-#include "versioning_mixar_200.hh"
+#include "versioning_webspider_200.hh"
 
 // #include "CLG_log.h"
 // static CLG_LogRef LOG = {"blend.doversion"};
@@ -4399,8 +4399,8 @@ void blo_do_versions_500(FileData *fd, Library * /*lib*/, Main *bmain)
     }
   }
 
-  /* Mixar versioning (MIXIE space TOOLS region, etc.) */
-  blo_do_versions_mixar(bmain);
+  /* WebSpider 3D versioning (WEBSPIDER_AI space TOOLS region, etc.) */
+  blo_do_versions_webspider(bmain);
 
   /**
    * Always bump subversion in BKE_blender_version.h when adding versioning

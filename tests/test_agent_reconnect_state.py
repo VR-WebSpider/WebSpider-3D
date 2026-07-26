@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+# SPDX-FileCopyrightText: 2026 WebSpider Studios
 #
 # SPDX-License-Identifier: GPL-2.0-or-later
 
@@ -10,15 +10,15 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 MANAGER = (
     ROOT
-    / "src/scripts/mixar/modules/space_mixie_chat/core/connection_manager.py"
+    / "src/scripts/webspider/modules/space_webspider_chat/core/connection_manager.py"
 )
 SSE_HANDLER = (
     ROOT
-    / "src/scripts/mixar/modules/space_mixie_chat/core/sse_handler.py"
+    / "src/scripts/webspider/modules/space_webspider_chat/core/sse_handler.py"
 )
 CONSTANTS = (
     ROOT
-    / "src/scripts/mixar/modules/space_mixie_chat/constants.py"
+    / "src/scripts/webspider/modules/space_webspider_chat/constants.py"
 )
 
 
@@ -72,11 +72,11 @@ def test_ambiguous_stream_failures_are_not_automatically_retried():
 
 JSONRPC_CLIENT = (
     ROOT
-    / "src/scripts/mixar/modules/space_mixie_chat/core/jsonrpc_client.py"
+    / "src/scripts/webspider/modules/space_webspider_chat/core/jsonrpc_client.py"
 )
 BUBBLE_HEADER = (
     ROOT
-    / "src/scripts/mixar/modules/agent_bubble/ui/header.py"
+    / "src/scripts/webspider/modules/agent_bubble/ui/header.py"
 )
 
 

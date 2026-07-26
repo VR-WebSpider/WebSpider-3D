@@ -1,5 +1,5 @@
 /* SPDX-FileCopyrightText: 2001-2002 NaN Holding BV. All rights reserved.
- * SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+ * SPDX-FileCopyrightText: 2026 WebSpider Studios
  *
  * SPDX-License-Identifier: GPL-2.0-or-later */
 
@@ -328,7 +328,7 @@ GHOST_IContext *GHOST_SystemWin32::createOffscreenContext(GHOST_GPUSettings gpu_
 
       /* OpenGL needs a dummy window to create a context on windows. */
       HWND wnd = CreateWindowA("STATIC",
-                               "MixarGLEW",
+                               "WebSpider 3DGLEW",
                                WS_OVERLAPPEDWINDOW | WS_CLIPSIBLINGS | WS_CLIPCHILDREN,
                                0,
                                0,
@@ -393,7 +393,7 @@ GHOST_ContextD3D *GHOST_SystemWin32::createOffscreenContextD3D()
   /* NOTE: the `gpu_settings` could be passed in here, as it is with similar functions. */
   const GHOST_ContextParams context_params_offscreen = GHOST_CONTEXT_PARAMS_NONE;
   HWND wnd = CreateWindowA("STATIC",
-                           "Mixar XR",
+                           "WebSpider 3D XR",
                            WS_OVERLAPPEDWINDOW | WS_CLIPSIBLINGS | WS_CLIPCHILDREN,
                            0,
                            0,
@@ -2862,7 +2862,7 @@ GHOST_TSuccess GHOST_SystemWin32::showMessageBox(const char *title,
   config.pszMainIcon = (dialog_options & GHOST_DialogError   ? TD_ERROR_ICON :
                         dialog_options & GHOST_DialogWarning ? TD_WARNING_ICON :
                                                                TD_INFORMATION_ICON);
-  config.pszWindowTitle = L"Mixar";
+  config.pszWindowTitle = L"WebSpider 3D";
   config.pszMainInstruction = title_16;
   config.pszContent = message_16;
   const bool has_link = link && strlen(link);
@@ -2940,7 +2940,7 @@ static bool isStartedFromCommandPrompt()
     if (getProcessName(ppid, parent_name, sizeof(parent_name))) {
       char *filename = strrchr(parent_name, '\\');
       if (filename != nullptr) {
-        start_from_launcher = strstr(filename, "mixar.exe") != nullptr;
+        start_from_launcher = strstr(filename, "webspider3d.exe") != nullptr;
       }
     }
 
@@ -2954,9 +2954,9 @@ static bool isStartedFromCommandPrompt()
 }
 
 /* -------------------------------------------------------------------- */
-/* Mixar Window Helpers — Win32 implementations.
+/* WebSpider 3D Window Helpers — Win32 implementations.
  *
- * Mirror the macOS Mixar_Window* functions defined in
+ * Mirror the macOS WebSpider 3D_Window* functions defined in
  * GHOST_SystemCocoa.mm.  Each function takes a void* that is really
  * a GHOST_WindowWin32* (the same ghostwin pointer Blender stores on
  * wmWindow).  We cast to GHOST_WindowWin32, pull the HWND, and call
@@ -2967,7 +2967,7 @@ static bool isStartedFromCommandPrompt()
 #include <unordered_set>
 #include <utility>
 
-static HWND mixar_get_hwnd(void *window_handle)
+static HWND webspider3d_get_hwnd(void *window_handle)
 {
   if (!window_handle) {
     return NULL;
@@ -2985,32 +2985,32 @@ static HWND mixar_get_hwnd(void *window_handle)
 /* ---- parent-tracking via WinEventHook -------------------------------- */
 
 /* Tracking modes for child-window repositioning. */
-enum MixarTrackMode {
-  MIXAR_TRACK_ABOVE_TOP_LEFT,   /* pill above bubble's top-left */
-  MIXAR_TRACK_CENTRE_BOTTOM,    /* pill at host centre-bottom (minimised) */
-  MIXAR_TRACK_RELATIVE_OFFSET,  /* maintain current offset from parent (bubble→host) */
+enum WebSpider 3DTrackMode {
+  WEBSPIDER_TRACK_ABOVE_TOP_LEFT,   /* pill above bubble's top-left */
+  WEBSPIDER_TRACK_CENTRE_BOTTOM,    /* pill at host centre-bottom (minimised) */
+  WEBSPIDER_TRACK_RELATIVE_OFFSET,  /* maintain current offset from parent (bubble→host) */
 };
 
-struct MixarParentTrackInfo {
+struct WebSpider 3DParentTrackInfo {
   HWND child;
   HWND parent;
-  MixarTrackMode mode;
+  WebSpider 3DTrackMode mode;
   int offset_x;       /* pixels — meaning depends on mode */
   int offset_y;       /* pixels */
   int margin_bottom;  /* only used when mode == CENTRE_BOTTOM */
 };
 
 /* keyed by child HWND */
-static std::unordered_map<HWND, MixarParentTrackInfo> s_parent_tracks;
+static std::unordered_map<HWND, WebSpider 3DParentTrackInfo> s_parent_tracks;
 
 /* Set of child HWNDs attached (conceptual child-window relationship). */
 static std::unordered_set<HWND> s_child_windows;
 static std::unordered_set<HWND> s_parent_track_pending;
 
 /* Arbitrary offset within WM_APP range to avoid collision with other WM_APP users. */
-static constexpr UINT MIXAR_WM_PARENT_TRACK_REPOSITION = WM_APP + 0x4D2;
+static constexpr UINT WEBSPIDER_WM_PARENT_TRACK_REPOSITION = WM_APP + 0x4D2;
 
-static void mixar_reposition_child(MixarParentTrackInfo &info)
+static void webspider3d_reposition_child(WebSpider 3DParentTrackInfo &info)
 {
   /* Skip repositioning while the parent is minimised to the taskbar —
    * Windows reports offscreen coordinates (~-32000) for iconic windows
@@ -3031,13 +3031,13 @@ static void mixar_reposition_child(MixarParentTrackInfo &info)
 
   int x, y;
   switch (info.mode) {
-    case MIXAR_TRACK_CENTRE_BOTTOM: {
+    case WEBSPIDER_TRACK_CENTRE_BOTTOM: {
       int pw = pr.right - pr.left;
       x = pr.left + (pw - cw) / 2;
       y = pr.bottom - info.margin_bottom - ch;
       break;
     }
-    case MIXAR_TRACK_RELATIVE_OFFSET:
+    case WEBSPIDER_TRACK_RELATIVE_OFFSET:
       /* Maintain fixed offset from parent's top-left. */
       x = pr.left + info.offset_x;
       y = pr.top + info.offset_y;
@@ -3051,7 +3051,7 @@ static void mixar_reposition_child(MixarParentTrackInfo &info)
       info.offset_x = x - pr.left;
       info.offset_y = y - pr.top;
       break;
-    case MIXAR_TRACK_ABOVE_TOP_LEFT:
+    case WEBSPIDER_TRACK_ABOVE_TOP_LEFT:
     default:
       /* Above parent top-left. Win32 Y is top-down. */
       x = pr.left + info.offset_x;
@@ -3067,22 +3067,22 @@ static void mixar_reposition_child(MixarParentTrackInfo &info)
                SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE | SWP_NOOWNERZORDER);
 }
 
-static void mixar_reposition_children_for_parent(HWND parent)
+static void webspider3d_reposition_children_for_parent(HWND parent)
 {
   for (auto &pair : s_parent_tracks) {
     if (pair.second.parent == parent) {
-      mixar_reposition_child(pair.second);
+      webspider3d_reposition_child(pair.second);
     }
   }
 }
 
-static void mixar_schedule_parent_reposition(HWND parent)
+static void webspider3d_schedule_parent_reposition(HWND parent)
 {
   if (!parent || !IsWindow(parent)) {
     return;
   }
   if (s_parent_track_pending.insert(parent).second) {
-    PostMessage(parent, MIXAR_WM_PARENT_TRACK_REPOSITION, 0, 0);
+    PostMessage(parent, WEBSPIDER_WM_PARENT_TRACK_REPOSITION, 0, 0);
   }
 }
 
@@ -3090,13 +3090,13 @@ static void mixar_schedule_parent_reposition(HWND parent)
  * WM_WINDOWPOSCHANGED synchronously — fires inline during Windows'
  * native move/size modal loop, so child windows follow without any
  * async callback delay (unlike WINEVENT_OUTOFCONTEXT hooks). */
-static LRESULT CALLBACK mixar_parent_track_subclass_proc(
+static LRESULT CALLBACK webspider3d_parent_track_subclass_proc(
     HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam,
     UINT_PTR /*uIdSubclass*/, DWORD_PTR /*dwRefData*/)
 {
-  if (uMsg == MIXAR_WM_PARENT_TRACK_REPOSITION) {
+  if (uMsg == WEBSPIDER_WM_PARENT_TRACK_REPOSITION) {
     s_parent_track_pending.erase(hwnd);
-    mixar_reposition_children_for_parent(hwnd);
+    webspider3d_reposition_children_for_parent(hwnd);
     return 0;
   }
   if (uMsg == WM_WINDOWPOSCHANGED) {
@@ -3109,7 +3109,7 @@ static LRESULT CALLBACK mixar_parent_track_subclass_proc(
      * drags the parent's top edge upward the origin stays put but the
      * height grows, so a centre-bottom-anchored child must shift. */
     if (wp && ((wp->flags & (SWP_NOMOVE | SWP_NOSIZE)) != (SWP_NOMOVE | SWP_NOSIZE))) {
-      mixar_schedule_parent_reposition(hwnd);
+      webspider3d_schedule_parent_reposition(hwnd);
     }
   }
   else if (uMsg == WM_NCDESTROY) {
@@ -3123,13 +3123,13 @@ static LRESULT CALLBACK mixar_parent_track_subclass_proc(
       }
     }
     s_parent_track_pending.erase(hwnd);
-    RemoveWindowSubclass(hwnd, mixar_parent_track_subclass_proc, 2);
+    RemoveWindowSubclass(hwnd, webspider3d_parent_track_subclass_proc, 2);
   }
   return DefSubclassProc(hwnd, uMsg, wParam, lParam);
 }
 
-static void mixar_install_parent_hook(HWND child, HWND parent,
-                                      MixarTrackMode mode, int margin_bottom,
+static void webspider3d_install_parent_hook(HWND child, HWND parent,
+                                      WebSpider 3DTrackMode mode, int margin_bottom,
                                       int offset_x, int offset_y)
 {
   /* Remove existing tracking for this child if any. */
@@ -3140,9 +3140,9 @@ static void mixar_install_parent_hook(HWND child, HWND parent,
 
   /* Install a subclass on the parent window (idempotent — calling
    * SetWindowSubclass with the same proc + ID replaces the entry). */
-  SetWindowSubclass(parent, mixar_parent_track_subclass_proc, 2, 0);
+  SetWindowSubclass(parent, webspider3d_parent_track_subclass_proc, 2, 0);
 
-  MixarParentTrackInfo info;
+  WebSpider 3DParentTrackInfo info;
   info.child = child;
   info.parent = parent;
   info.mode = mode;
@@ -3152,7 +3152,7 @@ static void mixar_install_parent_hook(HWND child, HWND parent,
   s_parent_tracks[child] = info;
 }
 
-static void mixar_remove_parent_hook(HWND child)
+static void webspider3d_remove_parent_hook(HWND child)
 {
   auto it = s_parent_tracks.find(child);
   if (it != s_parent_tracks.end()) {
@@ -3168,7 +3168,7 @@ static void mixar_remove_parent_hook(HWND child)
       }
     }
     if (!parent_still_tracked) {
-      RemoveWindowSubclass(parent, mixar_parent_track_subclass_proc, 2);
+      RemoveWindowSubclass(parent, webspider3d_parent_track_subclass_proc, 2);
     }
   }
 }
@@ -3177,7 +3177,7 @@ static void mixar_remove_parent_hook(HWND child)
 
 static std::unordered_map<HWND, std::pair<int, int>> s_min_sizes;
 
-/* HWNDs that Mixar_WindowSetChromeless made borderless.  GHOST's
+/* HWNDs that WebSpider 3D_WindowSetChromeless made borderless.  GHOST's
  * setState() unconditionally adds WS_CAPTION back (line ~539 in
  * GHOST_WindowWin32.cc), which re-adds the title bar and makes the
  * window appear in Alt+Tab.  We track chromeless HWNDs so OrderFront
@@ -3189,15 +3189,15 @@ static std::unordered_set<HWND> s_suppressed_floating_docks;
 static int s_floating_dock_suppression_depth = 0;
 
 /* Per-HWND drag state — stores the initial cursor and window position
- * so Mixar_WindowUpdateDrag can compute the delta on each call.
+ * so WebSpider 3D_WindowUpdateDrag can compute the delta on each call.
  * Driven by the Python modal operator (MOUSEMOVE events). */
-struct MixarDragState {
+struct WebSpider 3DDragState {
   int start_cursor_x, start_cursor_y;
   int start_window_x, start_window_y;
 };
-static std::unordered_map<HWND, MixarDragState> s_drag_states;
+static std::unordered_map<HWND, WebSpider 3DDragState> s_drag_states;
 
-static int mixar_resize_border_px(HWND hwnd)
+static int webspider3d_resize_border_px(HWND hwnd)
 {
   UINT dpi = 96;
   HMODULE user32 = GetModuleHandleA("user32.dll");
@@ -3213,7 +3213,7 @@ static int mixar_resize_border_px(HWND hwnd)
   return (scaled_border > 8) ? scaled_border : 8;
 }
 
-static LRESULT CALLBACK mixar_min_size_subclass_proc(
+static LRESULT CALLBACK webspider3d_min_size_subclass_proc(
     HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam,
     UINT_PTR /*uIdSubclass*/, DWORD_PTR /*dwRefData*/)
 {
@@ -3231,7 +3231,7 @@ static LRESULT CALLBACK mixar_min_size_subclass_proc(
     if (GetWindowRect(hwnd, &rect)) {
       const int x = GET_X_LPARAM(lParam);
       const int y = GET_Y_LPARAM(lParam);
-      const int border = mixar_resize_border_px(hwnd);
+      const int border = webspider3d_resize_border_px(hwnd);
       const bool left = x >= rect.left && x < rect.left + border;
       const bool right = x <= rect.right && x > rect.right - border;
       const bool top = y >= rect.top && y < rect.top + border;
@@ -3286,27 +3286,27 @@ static LRESULT CALLBACK mixar_min_size_subclass_proc(
     s_resizable_chromeless_windows.erase(hwnd);
     s_floating_dock_windows.erase(hwnd);
     s_suppressed_floating_docks.erase(hwnd);
-    RemoveWindowSubclass(hwnd, mixar_min_size_subclass_proc, 1);
+    RemoveWindowSubclass(hwnd, webspider3d_min_size_subclass_proc, 1);
   }
   return DefSubclassProc(hwnd, uMsg, wParam, lParam);
 }
 
 /* ---- DispatchMainAfter via SetTimer ---------------------------------- */
 
-struct MixarTimerCallback {
+struct WebSpider 3DTimerCallback {
   void (*callback)(void *);
   void *user_data;
 };
-static std::unordered_map<UINT_PTR, MixarTimerCallback> s_timer_callbacks;
+static std::unordered_map<UINT_PTR, WebSpider 3DTimerCallback> s_timer_callbacks;
 static UINT_PTR s_next_timer_id = 40000;
 
-static void CALLBACK mixar_timer_proc(HWND /*hwnd*/, UINT /*uMsg*/,
+static void CALLBACK webspider3d_timer_proc(HWND /*hwnd*/, UINT /*uMsg*/,
                                        UINT_PTR idEvent, DWORD /*dwTime*/)
 {
   KillTimer(NULL, idEvent);
   auto it = s_timer_callbacks.find(idEvent);
   if (it != s_timer_callbacks.end()) {
-    MixarTimerCallback cb = it->second;
+    WebSpider 3DTimerCallback cb = it->second;
     s_timer_callbacks.erase(it);
     cb.callback(cb.user_data);
   }
@@ -3318,7 +3318,7 @@ static void CALLBACK mixar_timer_proc(HWND /*hwnd*/, UINT /*uMsg*/,
  * Uses GHOST_WindowWin32::getDPIHint() which dynamically loads
  * GetDpiForWindow via GetProcAddress (the function isn't in the SDK
  * headers used by this build). */
-static float mixar_get_dpi_scale_from_ghost(void *window_handle)
+static float webspider3d_get_dpi_scale_from_ghost(void *window_handle)
 {
   if (!window_handle) {
     return 1.0f;
@@ -3328,14 +3328,14 @@ static float mixar_get_dpi_scale_from_ghost(void *window_handle)
   return (dpi > 0) ? (float)dpi / 96.0f : 1.0f;
 }
 
-extern "C" void Mixar_WindowForceSize(void *window_handle, int width, int height)
+extern "C" void WebSpider 3D_WindowForceSize(void *window_handle, int width, int height)
 {
-  HWND hwnd = mixar_get_hwnd(window_handle);
+  HWND hwnd = webspider3d_get_hwnd(window_handle);
   if (!hwnd) return;
 
   /* The caller passes logical (96-DPI) sizes — same convention as
    * macOS points. Scale to physical pixels for the current monitor. */
-  float scale = mixar_get_dpi_scale_from_ghost(window_handle);
+  float scale = webspider3d_get_dpi_scale_from_ghost(window_handle);
   int phys_w = (int)(width * scale);
   int phys_h = (int)(height * scale);
 
@@ -3359,9 +3359,9 @@ extern "C" void Mixar_WindowForceSize(void *window_handle, int width, int height
   SetWindowPos(hwnd, NULL, x, y, w, h, SWP_NOZORDER | SWP_NOACTIVATE);
 }
 
-extern "C" void Mixar_WindowSetChromeless(void *window_handle, bool chromeless)
+extern "C" void WebSpider 3D_WindowSetChromeless(void *window_handle, bool chromeless)
 {
-  HWND hwnd = mixar_get_hwnd(window_handle);
+  HWND hwnd = webspider3d_get_hwnd(window_handle);
   if (!hwnd) return;
 
   LONG_PTR style = GetWindowLongPtr(hwnd, GWL_STYLE);
@@ -3378,7 +3378,7 @@ extern "C" void Mixar_WindowSetChromeless(void *window_handle, bool chromeless)
     s_resizable_chromeless_windows.insert(hwnd);
     /* Install subclass to intercept WM_STYLECHANGING — prevents GHOST
      * or other code from re-adding WS_CAPTION / stripping TOOLWINDOW. */
-    SetWindowSubclass(hwnd, mixar_min_size_subclass_proc, 1, 0);
+    SetWindowSubclass(hwnd, webspider3d_min_size_subclass_proc, 1, 0);
   }
   else {
     style |= WS_CAPTION | WS_THICKFRAME | WS_SYSMENU;
@@ -3394,9 +3394,9 @@ extern "C" void Mixar_WindowSetChromeless(void *window_handle, bool chromeless)
                SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE | SWP_FRAMECHANGED);
 }
 
-extern "C" void Mixar_WindowSetBorderless(void *window_handle)
+extern "C" void WebSpider 3D_WindowSetBorderless(void *window_handle)
 {
-  HWND hwnd = mixar_get_hwnd(window_handle);
+  HWND hwnd = webspider3d_get_hwnd(window_handle);
   if (!hwnd) return;
 
   SetWindowLongPtr(hwnd, GWL_STYLE, WS_POPUP | WS_VISIBLE);
@@ -3409,12 +3409,12 @@ extern "C" void Mixar_WindowSetBorderless(void *window_handle)
                SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE | SWP_FRAMECHANGED);
   s_chromeless_windows.insert(hwnd);
   s_resizable_chromeless_windows.erase(hwnd);
-  SetWindowSubclass(hwnd, mixar_min_size_subclass_proc, 1, 0);
+  SetWindowSubclass(hwnd, webspider3d_min_size_subclass_proc, 1, 0);
 }
 
-extern "C" void Mixar_WindowSetCornerRadius(void *window_handle, float radius)
+extern "C" void WebSpider 3D_WindowSetCornerRadius(void *window_handle, float radius)
 {
-  HWND hwnd = mixar_get_hwnd(window_handle);
+  HWND hwnd = webspider3d_get_hwnd(window_handle);
   if (!hwnd) return;
 
   /* Win11 22H2+ supports DWMWA_WINDOW_CORNER_PREFERENCE (attr 33).
@@ -3424,9 +3424,9 @@ extern "C" void Mixar_WindowSetCornerRadius(void *window_handle, float radius)
   DwmSetWindowAttribute(hwnd, 33 /*DWMWA_WINDOW_CORNER_PREFERENCE*/, &pref, sizeof(pref));
 }
 
-extern "C" void Mixar_WindowSetBlurBehind(void *window_handle, bool enable)
+extern "C" void WebSpider 3D_WindowSetBlurBehind(void *window_handle, bool enable)
 {
-  HWND hwnd = mixar_get_hwnd(window_handle);
+  HWND hwnd = webspider3d_get_hwnd(window_handle);
   if (!hwnd) return;
 
   /* Extend the DWM frame into the entire client area so the DWM
@@ -3454,9 +3454,9 @@ extern "C" void Mixar_WindowSetBlurBehind(void *window_handle, bool enable)
   DeleteObject(rgn);
 }
 
-extern "C" void Mixar_WindowMakeKey(void *window_handle)
+extern "C" void WebSpider 3D_WindowMakeKey(void *window_handle)
 {
-  HWND hwnd = mixar_get_hwnd(window_handle);
+  HWND hwnd = webspider3d_get_hwnd(window_handle);
   if (!hwnd) return;
 
   /* SetForegroundWindow silently fails when the calling process has
@@ -3479,9 +3479,9 @@ extern "C" void Mixar_WindowMakeKey(void *window_handle)
   SetForegroundWindow(hwnd);
 }
 
-extern "C" void Mixar_WindowSetFloatingLevel(void *window_handle)
+extern "C" void WebSpider 3D_WindowSetFloatingLevel(void *window_handle)
 {
-  HWND hwnd = mixar_get_hwnd(window_handle);
+  HWND hwnd = webspider3d_get_hwnd(window_handle);
   if (!hwnd) return;
   s_floating_dock_windows.insert(hwnd);
   if (s_floating_dock_suppression_depth > 0) {
@@ -3491,14 +3491,14 @@ extern "C" void Mixar_WindowSetFloatingLevel(void *window_handle)
     }
     return;
   }
-  /* Use HWND_TOP (not HWND_TOPMOST) so the bubble floats above Mixar
+  /* Use HWND_TOP (not HWND_TOPMOST) so the bubble floats above WebSpider 3D
    * but NOT above other apps.  The GWLP_HWNDPARENT owner relationship
    * already keeps the bubble above its host in Z-order. */
   SetWindowPos(hwnd, HWND_TOP, 0, 0, 0, 0,
                SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
 }
 
-extern "C" void Mixar_FloatingDocksSuppressForModal()
+extern "C" void WebSpider 3D_FloatingDocksSuppressForModal()
 {
   s_floating_dock_suppression_depth++;
   if (s_floating_dock_suppression_depth > 1) {
@@ -3520,7 +3520,7 @@ extern "C" void Mixar_FloatingDocksSuppressForModal()
   }
 }
 
-extern "C" void Mixar_FloatingDocksRestoreAfterModal()
+extern "C" void WebSpider 3D_FloatingDocksRestoreAfterModal()
 {
   if (s_floating_dock_suppression_depth <= 0) {
     return;
@@ -3541,7 +3541,7 @@ extern "C" void Mixar_FloatingDocksRestoreAfterModal()
   s_suppressed_floating_docks.clear();
 }
 
-extern "C" void Mixar_WindowSetHidesOnDeactivate(void *window_handle, bool hides)
+extern "C" void WebSpider 3D_WindowSetHidesOnDeactivate(void *window_handle, bool hides)
 {
   /* On Win32, TOPMOST windows stay visible across app activation.
    * We toggle TOPMOST off when hiding (order-out) and back on when
@@ -3551,7 +3551,7 @@ extern "C" void Mixar_WindowSetHidesOnDeactivate(void *window_handle, bool hides
   (void)hides;
 }
 
-extern "C" void Mixar_WindowBindToParentSpace(void *window_handle)
+extern "C" void WebSpider 3D_WindowBindToParentSpace(void *window_handle)
 {
   /* No-op on Win32: "Spaces" (per-monitor virtual desktops that a
    * floating child can leak across) are a macOS concept. Windows'
@@ -3560,30 +3560,30 @@ extern "C" void Mixar_WindowBindToParentSpace(void *window_handle)
   (void)window_handle;
 }
 
-extern "C" void Mixar_WindowOrderOut(void *window_handle)
+extern "C" void WebSpider 3D_WindowOrderOut(void *window_handle)
 {
-  HWND hwnd = mixar_get_hwnd(window_handle);
+  HWND hwnd = webspider3d_get_hwnd(window_handle);
   if (!hwnd) return;
   ShowWindow(hwnd, SW_HIDE);
 }
 
-extern "C" bool Mixar_WindowIsVisible(void *window_handle)
+extern "C" bool WebSpider 3D_WindowIsVisible(void *window_handle)
 {
-  /* Consumed by wm_draw_update (wm_draw.cc): windows Mixar hides natively
+  /* Consumed by wm_draw_update (wm_draw.cc): windows WebSpider 3D hides natively
    * (minimised bubble, modal-suppressed floating docks) must not be drawn
    * or presented — upstream Blender never hides a GHOST window, so its
    * draw loop happily calls SwapBuffers on them, and NVIDIA's GL driver
    * intermittently faults on such presents right after resume-from-sleep
    * (access violation in DrvPresentBuffers). A dead/stale handle counts as
    * not visible for the same reason: never present into it. */
-  HWND hwnd = mixar_get_hwnd(window_handle);
+  HWND hwnd = webspider3d_get_hwnd(window_handle);
   if (!hwnd) return false;
   return ::IsWindowVisible(hwnd) != FALSE;
 }
 
-extern "C" void Mixar_WindowOrderFront(void *window_handle)
+extern "C" void WebSpider 3D_WindowOrderFront(void *window_handle)
 {
-  HWND hwnd = mixar_get_hwnd(window_handle);
+  HWND hwnd = webspider3d_get_hwnd(window_handle);
   if (!hwnd) return;
   ShowWindow(hwnd, SW_SHOWNOACTIVATE);
 
@@ -3606,9 +3606,9 @@ extern "C" void Mixar_WindowOrderFront(void *window_handle)
                SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE | SWP_FRAMECHANGED);
 }
 
-extern "C" void Mixar_WindowOrderFrontNoActivate(void *window_handle)
+extern "C" void WebSpider 3D_WindowOrderFrontNoActivate(void *window_handle)
 {
-  HWND hwnd = mixar_get_hwnd(window_handle);
+  HWND hwnd = webspider3d_get_hwnd(window_handle);
   if (!hwnd) return;
   ShowWindow(hwnd, SW_SHOWNOACTIVATE);
 
@@ -3628,10 +3628,10 @@ extern "C" void Mixar_WindowOrderFrontNoActivate(void *window_handle)
                SWP_NOMOVE | SWP_NOSIZE | SWP_FRAMECHANGED | SWP_NOACTIVATE);
 }
 
-extern "C" void Mixar_WindowSetParent(void *child_handle, void *parent_handle)
+extern "C" void WebSpider 3D_WindowSetParent(void *child_handle, void *parent_handle)
 {
-  HWND child = mixar_get_hwnd(child_handle);
-  HWND parent = mixar_get_hwnd(parent_handle);
+  HWND child = webspider3d_get_hwnd(child_handle);
+  HWND parent = webspider3d_get_hwnd(parent_handle);
   if (!child || !parent) return;
 
   /* Conceptual owner — keeps child above parent in Z-order. */
@@ -3640,35 +3640,35 @@ extern "C" void Mixar_WindowSetParent(void *child_handle, void *parent_handle)
 
   /* Install position-tracking hook (above top-left mode).
    * 6 = AGENT_BUBBLE_PILL_GAP — scale to physical pixels. */
-  float scale = mixar_get_dpi_scale_from_ghost(child_handle);
+  float scale = webspider3d_get_dpi_scale_from_ghost(child_handle);
   int phys_gap = (int)(6 * scale);
-  mixar_install_parent_hook(child, parent, MIXAR_TRACK_ABOVE_TOP_LEFT, 0, 0, phys_gap);
+  webspider3d_install_parent_hook(child, parent, WEBSPIDER_TRACK_ABOVE_TOP_LEFT, 0, 0, phys_gap);
 
   /* Apply position immediately. */
   auto it = s_parent_tracks.find(child);
   if (it != s_parent_tracks.end()) {
-    mixar_reposition_child(it->second);
+    webspider3d_reposition_child(it->second);
   }
 }
 
-extern "C" void Mixar_WindowSetParentPlain(void *child_handle, void *parent_handle)
+extern "C" void WebSpider 3D_WindowSetParentPlain(void *child_handle, void *parent_handle)
 {
-  HWND child = mixar_get_hwnd(child_handle);
-  HWND parent = mixar_get_hwnd(parent_handle);
+  HWND child = webspider3d_get_hwnd(child_handle);
+  HWND parent = webspider3d_get_hwnd(parent_handle);
   if (!child || !parent) return;
 
   SetWindowLongPtr(child, GWLP_HWNDPARENT, (LONG_PTR)parent);
   s_child_windows.insert(child);
 }
 
-extern "C" void Mixar_WindowSetParentTracked(void *child_handle, void *parent_handle)
+extern "C" void WebSpider 3D_WindowSetParentTracked(void *child_handle, void *parent_handle)
 {
   /* Like SetParentPlain but also installs a position-tracking hook
    * that keeps the child at its current offset from the parent.
    * Mirrors macOS addChildWindow:ordered: behaviour where the child
    * follows the parent's frame automatically. */
-  HWND child = mixar_get_hwnd(child_handle);
-  HWND parent = mixar_get_hwnd(parent_handle);
+  HWND child = webspider3d_get_hwnd(child_handle);
+  HWND parent = webspider3d_get_hwnd(parent_handle);
   if (!child || !parent) return;
 
   SetWindowLongPtr(child, GWLP_HWNDPARENT, (LONG_PTR)parent);
@@ -3679,29 +3679,29 @@ extern "C" void Mixar_WindowSetParentTracked(void *child_handle, void *parent_ha
   if (!GetWindowRect(parent, &pr) || !GetWindowRect(child, &cr)) return;
   int dx = cr.left - pr.left;
   int dy = cr.top - pr.top;
-  mixar_install_parent_hook(child, parent, MIXAR_TRACK_RELATIVE_OFFSET, 0, dx, dy);
+  webspider3d_install_parent_hook(child, parent, WEBSPIDER_TRACK_RELATIVE_OFFSET, 0, dx, dy);
 }
 
-extern "C" void Mixar_WindowDetachFromParent(void *child_handle, void * /*parent_handle*/)
+extern "C" void WebSpider 3D_WindowDetachFromParent(void *child_handle, void * /*parent_handle*/)
 {
-  HWND child = mixar_get_hwnd(child_handle);
+  HWND child = webspider3d_get_hwnd(child_handle);
   if (!child) return;
 
   SetWindowLongPtr(child, GWLP_HWNDPARENT, (LONG_PTR)NULL);
-  mixar_remove_parent_hook(child);
+  webspider3d_remove_parent_hook(child);
   s_child_windows.erase(child);
 }
 
-extern "C" void Mixar_WindowPositionAboveParent(void *child_handle,
+extern "C" void WebSpider 3D_WindowPositionAboveParent(void *child_handle,
                                                 void *parent_handle,
                                                 int offset_x,
                                                 int offset_y)
 {
-  HWND child = mixar_get_hwnd(child_handle);
-  HWND parent = mixar_get_hwnd(parent_handle);
+  HWND child = webspider3d_get_hwnd(child_handle);
+  HWND parent = webspider3d_get_hwnd(parent_handle);
   if (!child || !parent) return;
 
-  float scale = mixar_get_dpi_scale_from_ghost(child_handle);
+  float scale = webspider3d_get_dpi_scale_from_ghost(child_handle);
 
   RECT pr;
   if (!GetWindowRect(parent, &pr)) return;
@@ -3715,12 +3715,12 @@ extern "C" void Mixar_WindowPositionAboveParent(void *child_handle,
                SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE);
 }
 
-extern "C" void Mixar_WindowSnapToCentreBottom(void *window_handle, int margin_bottom)
+extern "C" void WebSpider 3D_WindowSnapToCentreBottom(void *window_handle, int margin_bottom)
 {
-  HWND hwnd = mixar_get_hwnd(window_handle);
+  HWND hwnd = webspider3d_get_hwnd(window_handle);
   if (!hwnd) return;
 
-  float scale = mixar_get_dpi_scale_from_ghost(window_handle);
+  float scale = webspider3d_get_dpi_scale_from_ghost(window_handle);
   int phys_margin = (int)(margin_bottom * scale);
 
   HMONITOR hmon = MonitorFromWindow(hwnd, MONITOR_DEFAULTTONEAREST);
@@ -3739,15 +3739,15 @@ extern "C" void Mixar_WindowSnapToCentreBottom(void *window_handle, int margin_b
                SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE);
 }
 
-extern "C" void Mixar_WindowSnapToCentreBottomOfWindow(void *child_handle,
+extern "C" void WebSpider 3D_WindowSnapToCentreBottomOfWindow(void *child_handle,
                                                        void *parent_handle,
                                                        int margin_bottom)
 {
-  HWND child = mixar_get_hwnd(child_handle);
-  HWND parent = mixar_get_hwnd(parent_handle);
+  HWND child = webspider3d_get_hwnd(child_handle);
+  HWND parent = webspider3d_get_hwnd(parent_handle);
   if (!child || !parent) return;
 
-  float scale = mixar_get_dpi_scale_from_ghost(child_handle);
+  float scale = webspider3d_get_dpi_scale_from_ghost(child_handle);
   int phys_margin = (int)(margin_bottom * scale);
 
   RECT pr, cr;
@@ -3764,26 +3764,26 @@ extern "C" void Mixar_WindowSnapToCentreBottomOfWindow(void *child_handle,
                SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE);
 }
 
-extern "C" void Mixar_WindowAnchorAtParentCentreBottom(void *child_handle,
+extern "C" void WebSpider 3D_WindowAnchorAtParentCentreBottom(void *child_handle,
                                                        void *parent_handle,
                                                        int margin_bottom)
 {
-  HWND child = mixar_get_hwnd(child_handle);
-  HWND parent = mixar_get_hwnd(parent_handle);
+  HWND child = webspider3d_get_hwnd(child_handle);
+  HWND parent = webspider3d_get_hwnd(parent_handle);
   if (!child || !parent) return;
 
   /* Scale the logical margin to physical pixels. */
-  float scale = mixar_get_dpi_scale_from_ghost(child_handle);
+  float scale = webspider3d_get_dpi_scale_from_ghost(child_handle);
   int phys_margin = (int)(margin_bottom * scale);
 
   SetWindowLongPtr(child, GWLP_HWNDPARENT, (LONG_PTR)parent);
   s_child_windows.insert(child);
-  mixar_install_parent_hook(child, parent, MIXAR_TRACK_CENTRE_BOTTOM, phys_margin, 0, 0);
+  webspider3d_install_parent_hook(child, parent, WEBSPIDER_TRACK_CENTRE_BOTTOM, phys_margin, 0, 0);
 
   /* Position immediately. */
   auto it = s_parent_tracks.find(child);
   if (it != s_parent_tracks.end()) {
-    mixar_reposition_child(it->second);
+    webspider3d_reposition_child(it->second);
   }
 
   /* Ensure the pill is above the host after re-parenting.  Without
@@ -3795,7 +3795,7 @@ extern "C" void Mixar_WindowAnchorAtParentCentreBottom(void *child_handle,
 /* ---- Win32 animation engine ----------------------------------------- */
 
 /* Ease-out cubic: fast start, smooth deceleration. */
-static float mixar_ease_out(float t)
+static float webspider3d_ease_out(float t)
 {
   float t1 = 1.0f - t;
   return 1.0f - t1 * t1 * t1;
@@ -3803,7 +3803,7 @@ static float mixar_ease_out(float t)
 
 /* Per-HWND animation state.  Both alpha and frame animations share the
  * same struct; unused fields are simply zero/ignored. */
-struct MixarAnimState {
+struct WebSpider 3DAnimState {
   UINT_PTR timer_id;
   ULONGLONG start_tick;  /* GetTickCount64 at animation start */
   DWORD duration_ms;
@@ -3818,10 +3818,10 @@ struct MixarAnimState {
   bool animating_frame;
 };
 
-static std::unordered_map<HWND, MixarAnimState> s_anim_states;
+static std::unordered_map<HWND, WebSpider 3DAnimState> s_anim_states;
 static UINT_PTR s_next_anim_timer_id = 50000;
 
-static void mixar_apply_alpha(HWND hwnd, float alpha)
+static void webspider3d_apply_alpha(HWND hwnd, float alpha)
 {
   LONG_PTR exStyle = GetWindowLongPtr(hwnd, GWL_EXSTYLE);
   BYTE a = (BYTE)(alpha * 255.0f);
@@ -3836,7 +3836,7 @@ static void mixar_apply_alpha(HWND hwnd, float alpha)
   }
 }
 
-static void CALLBACK mixar_anim_timer_proc(HWND /*hwnd*/, UINT /*uMsg*/,
+static void CALLBACK webspider3d_anim_timer_proc(HWND /*hwnd*/, UINT /*uMsg*/,
                                             UINT_PTR idEvent, DWORD /*dwTime*/)
 {
   /* Find which HWND owns this timer. */
@@ -3856,11 +3856,11 @@ static void CALLBACK mixar_anim_timer_proc(HWND /*hwnd*/, UINT /*uMsg*/,
   ULONGLONG now = GetTickCount64();
   float t = (float)(now - st.start_tick) / (float)st.duration_ms;
   if (t >= 1.0f) t = 1.0f;
-  float e = mixar_ease_out(t);
+  float e = webspider3d_ease_out(t);
 
   if (st.animating_alpha) {
     float a = st.start_alpha + (st.end_alpha - st.start_alpha) * e;
-    mixar_apply_alpha(target, a);
+    webspider3d_apply_alpha(target, a);
   }
   if (st.animating_frame) {
     int x = st.start_x + (int)((st.end_x - st.start_x) * e);
@@ -3877,7 +3877,7 @@ static void CALLBACK mixar_anim_timer_proc(HWND /*hwnd*/, UINT /*uMsg*/,
 }
 
 /* Cancel any running animation for this HWND. */
-static void mixar_cancel_anim(HWND hwnd)
+static void webspider3d_cancel_anim(HWND hwnd)
 {
   auto it = s_anim_states.find(hwnd);
   if (it != s_anim_states.end()) {
@@ -3888,15 +3888,15 @@ static void mixar_cancel_anim(HWND hwnd)
 
 /* ---- end animation engine ------------------------------------------- */
 
-extern "C" void Mixar_WindowAnimateFrameToCentreBottomOfWindow(
+extern "C" void WebSpider 3D_WindowAnimateFrameToCentreBottomOfWindow(
     void *child_handle, void *parent_handle,
     int new_width, int new_height, int margin_bottom, float duration)
 {
-  HWND child = mixar_get_hwnd(child_handle);
-  HWND parent = mixar_get_hwnd(parent_handle);
+  HWND child = webspider3d_get_hwnd(child_handle);
+  HWND parent = webspider3d_get_hwnd(parent_handle);
   if (!child || !parent) return;
 
-  float scale = mixar_get_dpi_scale_from_ghost(child_handle);
+  float scale = webspider3d_get_dpi_scale_from_ghost(child_handle);
   int phys_margin = (int)(margin_bottom * scale);
   int phys_w = (int)(new_width * scale);
   int phys_h = (int)(new_height * scale);
@@ -3915,9 +3915,9 @@ extern "C" void Mixar_WindowAnimateFrameToCentreBottomOfWindow(
     return;
   }
 
-  mixar_cancel_anim(child);
+  webspider3d_cancel_anim(child);
 
-  MixarAnimState st = {};
+  WebSpider 3DAnimState st = {};
   st.timer_id = s_next_anim_timer_id++;
   st.start_tick = GetTickCount64();
   st.duration_ms = dur_ms;
@@ -3932,26 +3932,26 @@ extern "C" void Mixar_WindowAnimateFrameToCentreBottomOfWindow(
   st.end_h = phys_h;
   s_anim_states[child] = st;
 
-  SetTimer(NULL, st.timer_id, 16, mixar_anim_timer_proc);
+  SetTimer(NULL, st.timer_id, 16, webspider3d_anim_timer_proc);
 }
 
-extern "C" void Mixar_WindowSetAlpha(void *window_handle, float alpha)
+extern "C" void WebSpider 3D_WindowSetAlpha(void *window_handle, float alpha)
 {
-  HWND hwnd = mixar_get_hwnd(window_handle);
+  HWND hwnd = webspider3d_get_hwnd(window_handle);
   if (!hwnd) return;
-  mixar_cancel_anim(hwnd);  /* stop any running alpha animation */
-  mixar_apply_alpha(hwnd, alpha);
+  webspider3d_cancel_anim(hwnd);  /* stop any running alpha animation */
+  webspider3d_apply_alpha(hwnd, alpha);
 }
 
-extern "C" void Mixar_WindowAnimateAlphaTo(
+extern "C" void WebSpider 3D_WindowAnimateAlphaTo(
     void *window_handle, float target_alpha, float duration)
 {
-  HWND hwnd = mixar_get_hwnd(window_handle);
+  HWND hwnd = webspider3d_get_hwnd(window_handle);
   if (!hwnd) return;
 
   DWORD dur_ms = (DWORD)(duration * 1000.0f);
   if (dur_ms < 16) {
-    mixar_apply_alpha(hwnd, target_alpha);
+    webspider3d_apply_alpha(hwnd, target_alpha);
     return;
   }
 
@@ -3966,9 +3966,9 @@ extern "C" void Mixar_WindowAnimateAlphaTo(
     }
   }
 
-  mixar_cancel_anim(hwnd);
+  webspider3d_cancel_anim(hwnd);
 
-  MixarAnimState st = {};
+  WebSpider 3DAnimState st = {};
   st.timer_id = s_next_anim_timer_id++;
   st.start_tick = GetTickCount64();
   st.duration_ms = dur_ms;
@@ -3977,16 +3977,16 @@ extern "C" void Mixar_WindowAnimateAlphaTo(
   st.end_alpha = target_alpha;
   s_anim_states[hwnd] = st;
 
-  SetTimer(NULL, st.timer_id, 16, mixar_anim_timer_proc);
+  SetTimer(NULL, st.timer_id, 16, webspider3d_anim_timer_proc);
 }
 
-extern "C" void Mixar_WindowBeginDrag(void *window_handle)
+extern "C" void WebSpider 3D_WindowBeginDrag(void *window_handle)
 {
-  HWND hwnd = mixar_get_hwnd(window_handle);
+  HWND hwnd = webspider3d_get_hwnd(window_handle);
   if (!hwnd) return;
 
   /* Store the initial cursor + window positions.  The Python modal
-   * operator calls Mixar_WindowUpdateDrag on every MOUSEMOVE to
+   * operator calls WebSpider 3D_WindowUpdateDrag on every MOUSEMOVE to
    * reposition the window by the delta.  Using GetCursorPos (screen
    * coords) instead of Blender's window-relative event coords avoids
    * the coordinate-system-moves-with-the-window problem. */
@@ -3995,7 +3995,7 @@ extern "C" void Mixar_WindowBeginDrag(void *window_handle)
   RECT wr;
   GetWindowRect(hwnd, &wr);
 
-  MixarDragState ds;
+  WebSpider 3DDragState ds;
   ds.start_cursor_x = pt.x;
   ds.start_cursor_y = pt.y;
   ds.start_window_x = wr.left;
@@ -4003,9 +4003,9 @@ extern "C" void Mixar_WindowBeginDrag(void *window_handle)
   s_drag_states[hwnd] = ds;
 }
 
-extern "C" void Mixar_WindowUpdateDrag(void *window_handle)
+extern "C" void WebSpider 3D_WindowUpdateDrag(void *window_handle)
 {
-  HWND hwnd = mixar_get_hwnd(window_handle);
+  HWND hwnd = webspider3d_get_hwnd(window_handle);
   if (!hwnd) return;
 
   auto it = s_drag_states.find(hwnd);
@@ -4017,7 +4017,7 @@ extern "C" void Mixar_WindowUpdateDrag(void *window_handle)
   int new_y = it->second.start_window_y + (pt.y - it->second.start_cursor_y);
 
   /* Clamp the bubble within its parent (host) window bounds so it
-   * can never be dragged outside the Mixar app frame. */
+   * can never be dragged outside the WebSpider 3D app frame. */
   auto track_it = s_parent_tracks.find(hwnd);
   if (track_it != s_parent_tracks.end()) {
     RECT pr, cr;
@@ -4035,9 +4035,9 @@ extern "C" void Mixar_WindowUpdateDrag(void *window_handle)
                SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE);
 }
 
-extern "C" void Mixar_WindowEndDrag(void *window_handle)
+extern "C" void WebSpider 3D_WindowEndDrag(void *window_handle)
 {
-  HWND hwnd = mixar_get_hwnd(window_handle);
+  HWND hwnd = webspider3d_get_hwnd(window_handle);
   if (!hwnd) return;
   s_drag_states.erase(hwnd);
 
@@ -4045,7 +4045,7 @@ extern "C" void Mixar_WindowEndDrag(void *window_handle)
    * stored offset in any RELATIVE_OFFSET tracking entry so the bubble
    * follows the host from its NEW position, not the old one. */
   auto it = s_parent_tracks.find(hwnd);
-  if (it != s_parent_tracks.end() && it->second.mode == MIXAR_TRACK_RELATIVE_OFFSET) {
+  if (it != s_parent_tracks.end() && it->second.mode == WEBSPIDER_TRACK_RELATIVE_OFFSET) {
     RECT pr, cr;
     if (GetWindowRect(it->second.parent, &pr) && GetWindowRect(hwnd, &cr)) {
       it->second.offset_x = cr.left - pr.left;
@@ -4054,13 +4054,13 @@ extern "C" void Mixar_WindowEndDrag(void *window_handle)
   }
 }
 
-extern "C" void Mixar_WindowSetMinContentSize(void *window_handle, int width, int height)
+extern "C" void WebSpider 3D_WindowSetMinContentSize(void *window_handle, int width, int height)
 {
-  HWND hwnd = mixar_get_hwnd(window_handle);
+  HWND hwnd = webspider3d_get_hwnd(window_handle);
   if (!hwnd) return;
 
   /* Scale logical sizes to physical pixels. */
-  float scale = mixar_get_dpi_scale_from_ghost(window_handle);
+  float scale = webspider3d_get_dpi_scale_from_ghost(window_handle);
   int phys_w = (int)(width * scale);
   int phys_h = (int)(height * scale);
 
@@ -4071,12 +4071,12 @@ extern "C" void Mixar_WindowSetMinContentSize(void *window_handle, int width, in
   AdjustWindowRectEx(&rc, style, FALSE, exStyle);
 
   s_min_sizes[hwnd] = {rc.right - rc.left, rc.bottom - rc.top};
-  SetWindowSubclass(hwnd, mixar_min_size_subclass_proc, 1, 0);
+  SetWindowSubclass(hwnd, webspider3d_min_size_subclass_proc, 1, 0);
 }
 
-extern "C" bool Mixar_WindowHasChildWindow(void *parent_handle)
+extern "C" bool WebSpider 3D_WindowHasChildWindow(void *parent_handle)
 {
-  HWND parent = mixar_get_hwnd(parent_handle);
+  HWND parent = webspider3d_get_hwnd(parent_handle);
   if (!parent) return false;
 
   /* Check if any tracked child references this parent. */
@@ -4088,10 +4088,10 @@ extern "C" bool Mixar_WindowHasChildWindow(void *parent_handle)
   return false;
 }
 
-extern "C" void Mixar_WindowGetContentPixelSize(
+extern "C" void WebSpider 3D_WindowGetContentPixelSize(
     void *window_handle, int *r_width, int *r_height)
 {
-  HWND hwnd = mixar_get_hwnd(window_handle);
+  HWND hwnd = webspider3d_get_hwnd(window_handle);
   if (!hwnd) {
     if (r_width) *r_width = 0;
     if (r_height) *r_height = 0;
@@ -4104,13 +4104,13 @@ extern "C" void Mixar_WindowGetContentPixelSize(
   if (r_height) *r_height = rc.bottom - rc.top;
 }
 
-extern "C" int Mixar_WindowGetMaxHeightToScreenTop(
+extern "C" int WebSpider 3D_WindowGetMaxHeightToScreenTop(
     void *window_handle, int reserve_top)
 {
-  HWND hwnd = mixar_get_hwnd(window_handle);
+  HWND hwnd = webspider3d_get_hwnd(window_handle);
   if (!hwnd) return 0;
 
-  float scale = mixar_get_dpi_scale_from_ghost(window_handle);
+  float scale = webspider3d_get_dpi_scale_from_ghost(window_handle);
   int phys_reserve = (int)(reserve_top * scale);
 
   HMONITOR hmon = MonitorFromWindow(hwnd, MONITOR_DEFAULTTONEAREST);
@@ -4131,7 +4131,7 @@ extern "C" int Mixar_WindowGetMaxHeightToScreenTop(
   return (logical_max > 0) ? logical_max : 0;
 }
 
-extern "C" void Mixar_DispatchMainAfter(float delay_seconds,
+extern "C" void WebSpider 3D_DispatchMainAfter(float delay_seconds,
                                         void (*callback)(void *),
                                         void *user_data)
 {
@@ -4139,10 +4139,10 @@ extern "C" void Mixar_DispatchMainAfter(float delay_seconds,
 
   UINT_PTR id = s_next_timer_id++;
   s_timer_callbacks[id] = {callback, user_data};
-  SetTimer(NULL, id, (UINT)(delay_seconds * 1000.0f), mixar_timer_proc);
+  SetTimer(NULL, id, (UINT)(delay_seconds * 1000.0f), webspider3d_timer_proc);
 }
 
-/* ---- end Mixar Window Helpers ---------------------------------------- */
+/* ---- end WebSpider 3D Window Helpers ---------------------------------------- */
 
 bool GHOST_SystemWin32::setConsoleWindowState(GHOST_TConsoleWindowState action)
 {

@@ -1,10 +1,10 @@
-# SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+# SPDX-FileCopyrightText: 2026 WebSpider Studios
 #
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-"""Entry point: build the live spatial scene graph inside Mixar and exercise it.
+"""Entry point: build the live spatial scene graph inside WebSpider 3D and exercise it.
 
-Run THIS file from Mixar's Text Editor / Python console. It:
+Run THIS file from WebSpider 3D's Text Editor / Python console. It:
   1. registers the depsgraph watcher (so the graph auto-updates on edits),
   2. builds the layered graph (spatial layer) and reports build time,
   3. saves it to scene_graph.json (next to the .blend, else temp dir),

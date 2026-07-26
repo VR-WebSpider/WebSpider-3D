@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+# SPDX-FileCopyrightText: 2026 WebSpider Studios
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -18,7 +18,7 @@ path = [
   "src/build_files/windows/*.cmd",
 ]
 precedence = "closest"
-SPDX-FileCopyrightText = "2026 Adeveda Enterprises Private Limited"
+SPDX-FileCopyrightText = "2026 WebSpider Studios"
 SPDX-License-Identifier = "GPL-2.0-or-later"
 
 [[annotations]]
@@ -29,11 +29,11 @@ SPDX-License-Identifier = "GPL-2.0-or-later"
 
 [[annotations]]
 path = [
-  "src/scripts/mixar/modules/onboarding/assets/**",
-  "src/scripts/mixar/modules/paint/procedural_materials/**/*.json",
-  "src/scripts/mixar/modules/paint/procedural_materials/**/*.png",
-  "src/scripts/mixar/modules/testing/*.json",
-  "src/scripts/mixar/modules/texel_density/texel/*.json",
+  "src/scripts/webspider3d/modules/onboarding/assets/**",
+  "src/scripts/webspider3d/modules/paint/procedural_materials/**/*.json",
+  "src/scripts/webspider3d/modules/paint/procedural_materials/**/*.png",
+  "src/scripts/webspider3d/modules/testing/*.json",
+  "src/scripts/webspider3d/modules/texel_density/texel/*.json",
   "src/scripts/startup/bl_app_templates_system/**/*.blend",
 ]
 precedence = "closest"
@@ -47,45 +47,45 @@ SPDX-License-Identifier = "GPL-2.0-or-later"
 # license. See NOTICE.md and SOURCE_CORRESPONDENCE.md for full attribution.
 [[annotations]]
 path = [
-  "src/scripts/mixar/modules/paint/core/lib/lib.blend",
-  "src/scripts/mixar/modules/paint/core/io/connections/layer_connections_blend.py",
-  "src/scripts/mixar/modules/paint/core/io/connections/layer_connections_height.py",
-  "src/scripts/mixar/modules/paint/core/io/connections/layer_connections_main.py",
-  "src/scripts/mixar/modules/paint/core/io/connections/layer_connections_normal.py",
-  "src/scripts/mixar/modules/paint/core/io/connections/layer_connections_normal_height.py",
-  "src/scripts/mixar/modules/paint/core/layer/create_channels.py",
-  "src/scripts/mixar/modules/paint/ui/lists/channel_uilist.py",
-  "src/scripts/mixar/modules/paint/ui/utils/ui_helpers_texture_sets_channels.py",
+  "src/scripts/webspider3d/modules/paint/core/lib/lib.blend",
+  "src/scripts/webspider3d/modules/paint/core/io/connections/layer_connections_blend.py",
+  "src/scripts/webspider3d/modules/paint/core/io/connections/layer_connections_height.py",
+  "src/scripts/webspider3d/modules/paint/core/io/connections/layer_connections_main.py",
+  "src/scripts/webspider3d/modules/paint/core/io/connections/layer_connections_normal.py",
+  "src/scripts/webspider3d/modules/paint/core/io/connections/layer_connections_normal_height.py",
+  "src/scripts/webspider3d/modules/paint/core/layer/create_channels.py",
+  "src/scripts/webspider3d/modules/paint/ui/lists/channel_uilist.py",
+  "src/scripts/webspider3d/modules/paint/ui/utils/ui_helpers_texture_sets_channels.py",
 ]
 precedence = "override"
 SPDX-FileCopyrightText = [
   "ucupumar (https://github.com/ucupumar)",
-  "2026 Adeveda Enterprises Private Limited",
+  "2026 WebSpider Studios",
 ]
 SPDX-License-Identifier = "GPL-3.0-or-later"
 
-# Mixar brand assets (logos, icons, wordmarks). These are NOT under the
+# WebSpider 3D brand assets (logos, icons, wordmarks). These are NOT under the
 # GPL-3.0-or-later source license. They are governed by the separate
-# LicenseRef-Mixar-Brand terms in LICENSES/LicenseRef-Mixar-Brand.txt.
-# Forks redistributing Mixar App source must remove or replace these
+# LicenseRef-WebSpider-Brand terms in LICENSES/LicenseRef-WebSpider-Brand.txt.
+# Forks redistributing WebSpider 3D App source must remove or replace these
 # assets in any built artifacts. See TRADEMARKS.md.
 [[annotations]]
 path = [
-  "src/release/darwin/Mixar.app/Contents/Resources/Mixar_Legacy_Document_Icon.icns",
-  "src/release/darwin/Mixar.app/Contents/Resources/mixar_icon.icns",
-  "src/release/datafiles/blender_icons16/icon16_mixar_icon.dat",
-  "src/release/datafiles/blender_icons32/icon32_mixar_icon.dat",
-  "src/release/datafiles/icons_svg/mixar_icon.svg",
-  "src/release/datafiles/mixar_icons.svg",
-  "src/release/freedesktop/icons/scalable/apps/mixar.svg",
-  "src/release/freedesktop/icons/symbolic/apps/mixar-symbolic.svg",
-  "src/release/windows/icons/winmixar.ico",
-  "src/release/windows/icons/winmixarfile.ico",
-  "src/scripts/mixar/modules/onboarding/assets/mixar_logo.png",
+  "src/release/darwin/WebSpider 3D.app/Contents/Resources/WebSpider 3D_Legacy_Document_Icon.icns",
+  "src/release/darwin/WebSpider 3D.app/Contents/Resources/webspider3d_icon.icns",
+  "src/release/datafiles/blender_icons16/icon16_webspider3d_icon.dat",
+  "src/release/datafiles/blender_icons32/icon32_webspider3d_icon.dat",
+  "src/release/datafiles/icons_svg/webspider_icon.svg",
+  "src/release/datafiles/webspider_icons.svg",
+  "src/release/freedesktop/icons/scalable/apps/webspider3d.svg",
+  "src/release/freedesktop/icons/symbolic/apps/webspider3d-symbolic.svg",
+  "src/release/windows/icons/winwebspider.ico",
+  "src/release/windows/icons/winwebspiderfile.ico",
+  "src/scripts/webspider3d/modules/onboarding/assets/webspider_logo.png",
 ]
 precedence = "override"
-SPDX-FileCopyrightText = "2026 Adeveda Enterprises Private Limited"
-SPDX-License-Identifier = "LicenseRef-Mixar-Brand"
+SPDX-FileCopyrightText = "2026 WebSpider Studios"
+SPDX-License-Identifier = "LicenseRef-WebSpider-Brand"
 
 [[annotations]]
 path = [
@@ -93,5 +93,5 @@ path = [
   "docs/open-source/audit/**",
 ]
 precedence = "override"
-SPDX-FileCopyrightText = "2026 Adeveda Enterprises Private Limited"
+SPDX-FileCopyrightText = "2026 WebSpider Studios"
 SPDX-License-Identifier = "GPL-3.0-or-later"

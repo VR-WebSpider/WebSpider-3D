@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+# SPDX-FileCopyrightText: 2026 WebSpider Studios
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -11,7 +11,7 @@ from types import SimpleNamespace
 
 import pytest
 
-from mixar.modules.testing.mock_bpy import install_bpy_mock
+from webspider.modules.testing.mock_bpy import install_bpy_mock
 
 install_bpy_mock()
 
@@ -21,12 +21,12 @@ bpy.types.Panel.bl_rna = SimpleNamespace(
     properties={"bl_space_type": SimpleNamespace(enum_items=[])}
 )
 
-from mixar.bootstrap import chat_generate_options_cache as CHAT_CACHE
-from mixar.bootstrap import generation_catalog_cache as CATALOG_CACHE
-from mixar.bootstrap.generation_catalog import storage as CATALOG_STORAGE
-from mixar.modules.auth.core import auth as AUTH
-from mixar.modules.common.api.response import APIResponse
-from mixar.modules.common.api.services import generation_catalog_service as SERVICE
+from webspider.bootstrap import chat_generate_options_cache as CHAT_CACHE
+from webspider.bootstrap import generation_catalog_cache as CATALOG_CACHE
+from webspider.bootstrap.generation_catalog import storage as CATALOG_STORAGE
+from webspider.modules.auth.core import auth as AUTH
+from webspider.modules.common.api.response import APIResponse
+from webspider.modules.common.api.services import generation_catalog_service as SERVICE
 
 
 @pytest.fixture(autouse=True)

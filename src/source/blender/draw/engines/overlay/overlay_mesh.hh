@@ -1,5 +1,5 @@
 /* SPDX-FileCopyrightText: 2024 Blender Authors
- * SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+ * SPDX-FileCopyrightText: 2026 WebSpider Studios
  *
  * SPDX-License-Identifier: GPL-2.0-or-later */
 
@@ -559,7 +559,7 @@ class MeshUVs : Overlay {
     ::Image *image = space_image->image;
     const bool space_mode_is_paint = space_image->mode == SI_MODE_PAINT;
     const bool space_mode_is_mask = space_image->mode == SI_MODE_MASK;
-    const bool space_mode_is_uv = ELEM(space_image->mode, SI_MODE_UV, SI_MODE_MIXAR_UV);
+    const bool space_mode_is_uv = ELEM(space_image->mode, SI_MODE_UV, SI_MODE_WEBSPIDER_UV);
 
     const bool object_mode_is_edit = state.object_mode & OB_MODE_EDIT;
 
@@ -816,7 +816,7 @@ class MeshUVs : Overlay {
 
     const SpaceImage *space_image = reinterpret_cast<const SpaceImage *>(state.space_data);
     const bool is_edit_object = DRW_object_is_in_edit_mode(&ob);
-    const bool is_uv_editable = is_edit_object && ELEM(space_image->mode, SI_MODE_UV, SI_MODE_MIXAR_UV);
+    const bool is_uv_editable = is_edit_object && ELEM(space_image->mode, SI_MODE_UV, SI_MODE_WEBSPIDER_UV);
     /* Sculpt is left out here because selection does not exist in it. */
     const bool is_paint_mode = ELEM(
         state.ctx_mode, CTX_MODE_PAINT_TEXTURE, CTX_MODE_PAINT_VERTEX, CTX_MODE_PAINT_WEIGHT);
@@ -1082,7 +1082,7 @@ class MeshUVs : Overlay {
  private:
   static OVERLAY_UVLineStyle edit_uv_line_style_from_space_image(const SpaceImage *sima)
   {
-    const bool is_uv_editor = ELEM(sima->mode, SI_MODE_UV, SI_MODE_MIXAR_UV);
+    const bool is_uv_editor = ELEM(sima->mode, SI_MODE_UV, SI_MODE_WEBSPIDER_UV);
     if (is_uv_editor) {
       switch (sima->dt_uv) {
         case SI_UVDT_OUTLINE:

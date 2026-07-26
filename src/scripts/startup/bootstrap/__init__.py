@@ -1,12 +1,12 @@
-# SPDX-FileCopyrightText: 2024 Mixar Authors
-# SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+# SPDX-FileCopyrightText: 2024 WebSpider 3D Authors
+# SPDX-FileCopyrightText: 2026 WebSpider Studios
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 """
-Mixar - Modular Blender Extension System
+WebSpider 3D - Modular Blender Extension System
 
-📁 LOCATION: src/scripts/startup/mixar/
+📁 LOCATION: src/scripts/startup/webspider3d/
 
 New modular structure with automatic registration:
 - bootstrap: Automatically registers all .py files with register/unregister functions
@@ -27,7 +27,7 @@ import traceback
 # Import logging configuration
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
-from mixar.config.logging_config import get_logger
+from webspider.config.logging_config import get_logger
 
 # Get logger for this module
 logger = get_logger(__name__)
@@ -44,16 +44,16 @@ _ui_modules_path = None
 _ui_loading_complete = False
 # 4 ms per frame keeps main-thread blocking well below the 16 ms frame budget
 # at 60 fps, eliminating the loading spinner while still loading ~415 UI
-# modules in well under two seconds.  Configurable via config/mixar.json
+# modules in well under two seconds.  Configurable via config/webspider.json
 # performance.ui_batch_budget_ms.
 _UI_BATCH_BUDGET_MS = 4
 _DISPLAY_KEYWORDS = ('panel', 'header', 'toolbar', 'menu')
 
 
-def _get_mixar_path():
-    """Get the path to the mixar directory"""
-    # This file is in startup/bootstrap/__init__.py, we need to go to scripts/mixar
-    return Path(__file__).parent.parent.parent / "mixar"
+def _get_webspider3d_path():
+    """Get the path to the webspider3d directory"""
+    # This file is in startup/bootstrap/__init__.py, we need to go to scripts/webspider3d
+    return Path(__file__).parent.parent.parent / "webspider3d"
 
 
 def _register_package(module_name, dir_path):
@@ -121,24 +121,24 @@ def _discover_and_register_subpackages(base_path, base_module_name, max_depth=5)
         )
 
 
-def _setup_mixar_packages():
-    """Set up mixar parent packages in sys.modules for relative imports to work."""
-    mixar_path = _get_mixar_path()
-    modules_path = mixar_path / "modules"
-    bootstrap_path = mixar_path / "bootstrap"
-    config_path = mixar_path / "config"
+def _setup_webspider3d_packages():
+    """Set up webspider3d parent packages in sys.modules for relative imports to work."""
+    webspider3d_path = _get_webspider3d_path()
+    modules_path = webspider3d_path / "modules"
+    bootstrap_path = webspider3d_path / "bootstrap"
+    config_path = webspider3d_path / "config"
 
-    # Add mixar path to sys.path so imports work
-    mixar_base = mixar_path.parent
-    if str(mixar_base) not in sys.path:
-        sys.path.insert(0, str(mixar_base))
-        logger.debug("Added to sys.path: %s", mixar_base)
+    # Add webspider3d path to sys.path so imports work
+    webspider3d_base = webspider3d_path.parent
+    if str(webspider3d_base) not in sys.path:
+        sys.path.insert(0, str(webspider3d_base))
+        logger.debug("Added to sys.path: %s", webspider3d_base)
 
-    # Register top-level mixar packages
-    _register_package('mixar', mixar_path)
-    _register_package('mixar.modules', modules_path)
-    _register_package('mixar.bootstrap', bootstrap_path)
-    _register_package('mixar.config', config_path)
+    # Register top-level webspider3d packages
+    _register_package('webspider3d', webspider3d_path)
+    _register_package('webspider.modules', modules_path)
+    _register_package('webspider.bootstrap', bootstrap_path)
+    _register_package('webspider.config', config_path)
 
     # Auto-discover and register all module subpackages
     if modules_path.exists():
@@ -155,13 +155,13 @@ def _setup_mixar_packages():
         for entry in module_dirs:
             _discover_and_register_subpackages(
                 Path(entry.path),
-                f'mixar.modules.{entry.name}',
+                f'webspider.modules.{entry.name}',
             )
 
 
 def _load_bootstrap_modules():
     """Automatically load and register all bootstrap modules with register functions"""
-    bootstrap_path = _get_mixar_path() / "bootstrap"
+    bootstrap_path = _get_webspider3d_path() / "bootstrap"
 
     logger.debug("Looking for bootstrap modules in: %s", bootstrap_path)
 
@@ -192,16 +192,16 @@ def _load_bootstrap_modules():
         logger.debug("Loading bootstrap module: %s", module_name)
 
         try:
-            full_module_name = f"mixar.bootstrap.{module_name}"
+            full_module_name = f"webspider.bootstrap.{module_name}"
             spec = importlib.util.spec_from_file_location(
                 full_module_name,
                 py_file
             )
             module = importlib.util.module_from_spec(spec)
-            module.__mixar_module_name__ = module_name
-            module.__mixar_file_path__ = str(py_file)
+            module.__webspider3d_module_name__ = module_name
+            module.__webspider3d_file_path__ = str(py_file)
             # Register in sys.modules BEFORE executing so subsequent
-            # `from mixar.bootstrap import <name>` calls (e.g. from
+            # `from webspider.bootstrap import <name>` calls (e.g. from
             # other bootstrap modules) resolve to this same instance.
             # Without this, Python re-imports the file from disk on
             # demand, creating a second module instance with its own
@@ -234,13 +234,13 @@ def _load_bootstrap_modules():
         for py_file, original_error in failed_modules:
             module_name = py_file.stem
             try:
-                full_module_name = f"mixar.bootstrap.{module_name}"
+                full_module_name = f"webspider.bootstrap.{module_name}"
                 spec = importlib.util.spec_from_file_location(
                     full_module_name, py_file
                 )
                 module = importlib.util.module_from_spec(spec)
-                module.__mixar_module_name__ = module_name
-                module.__mixar_file_path__ = str(py_file)
+                module.__webspider3d_module_name__ = module_name
+                module.__webspider3d_file_path__ = str(py_file)
                 sys.modules[full_module_name] = module
                 spec.loader.exec_module(module)
 
@@ -315,11 +315,11 @@ def _register_single_ui_module(ui_file, modules_path):
     module_name = ".".join(module_parts)
 
     try:
-        full_module_name = f"mixar.modules.{module_name}"
+        full_module_name = f"webspider.modules.{module_name}"
 
         module = sys.modules.get(full_module_name)
         if module is not None:
-            # Already imported — either synchronously by a mixar.bootstrap
+            # Already imported — either synchronously by a webspider.bootstrap
             # module (agent_bubble, workflow, ...) or as a dependency of a
             # previously loaded UI file (e.g. moodboard's ui/operators/
             # __init__.py imports every sibling ops file). Re-executing the
@@ -329,8 +329,8 @@ def _register_single_ui_module(ui_file, modules_path):
             # buttons still point at them — hovering such a button segfaults
             # in tooltip creation (but->optype->idname use-after-free).
             # Reuse the live module and only register what's missing.
-            module.__mixar_module_name__ = module_name
-            module.__mixar_file_path__ = str(ui_file)
+            module.__webspider3d_module_name__ = module_name
+            module.__webspider3d_file_path__ = str(ui_file)
             existing_classes = getattr(module, 'classes', None)
             if isinstance(existing_classes, (list, tuple)) and existing_classes and all(
                 getattr(cls, 'is_registered', False) for cls in existing_classes
@@ -341,8 +341,8 @@ def _register_single_ui_module(ui_file, modules_path):
             spec = importlib.util.spec_from_file_location(full_module_name, ui_file)
             module = importlib.util.module_from_spec(spec)
 
-            module.__mixar_module_name__ = module_name
-            module.__mixar_file_path__ = str(ui_file)
+            module.__webspider3d_module_name__ = module_name
+            module.__webspider3d_file_path__ = str(ui_file)
 
             # Add to sys.modules BEFORE executing so relative imports work
             sys.modules[full_module_name] = module
@@ -449,23 +449,23 @@ def _load_ui_batch_tick():
 
 
 def _initialize_theme_defaults():
-    """Initialize default theme colors for Mixie Chat"""
+    """Initialize default theme colors for WebSpider Chat"""
     import bpy
     try:
         theme = bpy.context.preferences.themes[0]
-        theme.space_mixie_chat.chat_bubble_hover = (0.3, 0.85, 0.95, 0.95)
+        theme.space_webspider_chat.chat_bubble_hover = (0.3, 0.85, 0.95, 0.95)
         # Past-chats overlay row hover. Seeded every launch (like
         # chat_bubble_hover) so prefs saved before the field existed —
         # which load it as zero — still get a sensible value. Tune the
-        # look here or via theme.space_mixie_chat.chat_history_row_hover.
-        theme.space_mixie_chat.chat_history_row_hover = (1.0, 1.0, 1.0, 0.07)
-        logger.debug("Initialized mixie chat theme colors")
+        # look here or via theme.space_webspider_chat.chat_history_row_hover.
+        theme.space_webspider_chat.chat_history_row_hover = (1.0, 1.0, 1.0, 0.07)
+        logger.debug("Initialized webspider_ai chat theme colors")
     except Exception as e:
         logger.debug("Could not initialize theme defaults: %s", e)
 
 
 def register():
-    """Register all Mixar modules automatically.
+    """Register all WebSpider 3D modules automatically.
 
     Bootstrap modules (property groups, core systems) are loaded synchronously
     since they're few and needed immediately. UI modules (~415 files) are loaded
@@ -473,39 +473,39 @@ def register():
     milliseconds per frame so Blender's event loop stays responsive throughout.
     """
     global _ui_modules_path, _ui_queue_index, _ui_loading_complete, _UI_BATCH_BUDGET_MS
-    logger.debug("Registering Mixar modular system")
+    logger.debug("Registering WebSpider 3D modular system")
 
     try:
         import bpy
         import json as _json
 
-        # Read tunable parameters from config (per CLAUDE.md: env vars go in mixar.json).
+        # Read tunable parameters from config (per CLAUDE.md: env vars go in webspider.json).
         # Path is relative to __file__ (startup/bootstrap/__init__.py); 4 parents reaches
         # the directory that contains both scripts/ and config/ in the Blender install.
         # bpy.utils.resource_path('LOCAL') is the user data dir and would never find this file.
         try:
-            _cfg_path = Path(__file__).parent.parent.parent.parent / 'config' / 'mixar.json'
+            _cfg_path = Path(__file__).parent.parent.parent.parent / 'config' / 'webspider.json'
             with open(_cfg_path, 'r') as _f:
                 _cfg = _json.load(_f)
             _UI_BATCH_BUDGET_MS = _cfg.get('performance', {}).get('ui_batch_budget_ms', 4)
         except Exception:
             pass  # Keep module-level default
 
-        # 0. Set up mixar packages in sys.modules first (required for relative imports)
-        _setup_mixar_packages()
+        # 0. Set up webspider3d packages in sys.modules first (required for relative imports)
+        _setup_webspider3d_packages()
 
         # 1. Load and register bootstrap modules first (synchronous, only ~5 files)
         _load_bootstrap_modules()
 
         # 1b. Register versioning handlers (must be before UI so migrations run early)
         try:
-            from mixar.modules.common.versioning.handlers import register as register_versioning
+            from webspider.modules.common.versioning.handlers import register as register_versioning
             register_versioning()
         except Exception as e:
             logger.warning("Failed to register versioning handlers: %s", e)
 
         # 2. Discover UI files (fast os.walk, no loading yet)
-        _ui_modules_path = _get_mixar_path() / "modules"
+        _ui_modules_path = _get_webspider3d_path() / "modules"
 
         if not _ui_modules_path.exists():
             logger.warning("Modules directory not found at %s", _ui_modules_path)
@@ -534,23 +534,23 @@ def register():
 
         # 4. Start API background infrastructure
         try:
-            from mixar.modules.common.api import start_executor, start_api_processor
+            from webspider.modules.common.api import start_executor, start_api_processor
             start_executor()
             start_api_processor()
             logger.debug("API background infrastructure started")
         except Exception as e:
             logger.warning("Failed to start API infrastructure: %s", e)
 
-        logger.debug("Mixar registration started (UI loading deferred)")
+        logger.debug("WebSpider 3D registration started (UI loading deferred)")
 
     except Exception as e:
-        logger.error("Failed to register Mixar system: %s", e, exc_info=True)
+        logger.error("Failed to register WebSpider 3D system: %s", e, exc_info=True)
 
 
 def unregister():
-    """Unregister all Mixar modules"""
+    """Unregister all WebSpider 3D modules"""
     global _ui_loading_complete, _ui_queue_index
-    logger.debug("Unregistering Mixar modular system")
+    logger.debug("Unregistering WebSpider 3D modular system")
 
     try:
         # 0a. Cancel deferred UI loading timer if still running
@@ -571,14 +571,14 @@ def unregister():
 
         # 0b. Unregister versioning handlers
         try:
-            from mixar.modules.common.versioning.handlers import unregister as unregister_versioning
+            from webspider.modules.common.versioning.handlers import unregister as unregister_versioning
             unregister_versioning()
         except Exception as e:
             logger.warning("Failed to unregister versioning handlers: %s", e)
 
         # 0c. Stop API background infrastructure first
         try:
-            from mixar.modules.common.api import stop_api_processor, stop_executor
+            from webspider.modules.common.api import stop_api_processor, stop_executor
             stop_api_processor()
             stop_executor()
             logger.debug("API background infrastructure stopped")
@@ -589,7 +589,7 @@ def unregister():
         if _loaded_ui_modules:
             logger.debug("Unregistering %d UI modules...", len(_loaded_ui_modules))
             for module in reversed(_loaded_ui_modules):
-                module_name = getattr(module, '__mixar_module_name__', getattr(module, '__name__', 'unknown'))
+                module_name = getattr(module, '__webspider3d_module_name__', getattr(module, '__name__', 'unknown'))
                 if hasattr(module, 'unregister') and callable(module.unregister):
                     try:
                         logger.debug("Calling unregister() for UI module: %s", module_name)
@@ -628,7 +628,7 @@ def unregister():
         if _loaded_bootstrap_modules:
             logger.debug("Unregistering %d bootstrap modules...", len(_loaded_bootstrap_modules))
             for module in reversed(_loaded_bootstrap_modules):
-                module_name = getattr(module, '__mixar_module_name__', getattr(module, '__name__', 'unknown'))
+                module_name = getattr(module, '__webspider3d_module_name__', getattr(module, '__name__', 'unknown'))
                 if hasattr(module, 'unregister') and callable(module.unregister):
                     try:
                         logger.debug("Calling unregister() for bootstrap module: %s", module_name)
@@ -643,10 +643,10 @@ def unregister():
         _loaded_bootstrap_modules.clear()
         _loaded_ui_modules.clear()
 
-        logger.debug("Mixar modular system unregistration completed")
+        logger.debug("WebSpider 3D modular system unregistration completed")
 
     except Exception as e:
-        logger.error("Error during Mixar system unregistration: %s", e)
+        logger.error("Error during WebSpider 3D system unregistration: %s", e)
 
 
 # Export classes for Blender registration system

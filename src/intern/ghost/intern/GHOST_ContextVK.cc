@@ -1,5 +1,5 @@
 /* SPDX-FileCopyrightText: 2022-2023 Blender Authors
- * SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+ * SPDX-FileCopyrightText: 2026 WebSpider Studios
  *
  * SPDX-License-Identifier: GPL-2.0-or-later */
 
@@ -392,9 +392,9 @@ struct GHOST_InstanceVK {
   {
     VkApplicationInfo vk_application_info = {VK_STRUCTURE_TYPE_APPLICATION_INFO,
                                              nullptr,
-                                             "Mixar",
+                                             "WebSpider 3D",
                                              VK_MAKE_VERSION(1, 0, 0),
-                                             "Mixar",
+                                             "WebSpider 3D",
                                              VK_MAKE_VERSION(1, 0, 0),
                                              vulkan_api_version};
     VkInstanceCreateInfo vk_instance_create_info = {VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO,

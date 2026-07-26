@@ -1,5 +1,5 @@
 /* SPDX-FileCopyrightText: 2025 Blender Authors
- * SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+ * SPDX-FileCopyrightText: 2026 WebSpider Studios
  *
  * SPDX-License-Identifier: GPL-3.0-or-later */
 
@@ -34,7 +34,7 @@
 
 /* Set by the Python toast timer (toast_timer.py) while any toast is visible.
  * Must stay in sync with TOASTS_VISIBLE_WM_PROP in notifications/constants.py. */
-static const char *TOASTS_VISIBLE_WM_PROP = "mixar_toasts_visible";
+static const char *TOASTS_VISIBLE_WM_PROP = "webspider_toasts_visible";
 
 static bool toast_any_visible(const bContext *C)
 {

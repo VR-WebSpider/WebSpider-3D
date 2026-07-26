@@ -1,5 +1,5 @@
 # SPDX-FileCopyrightText: 2016 Blender Authors
-# SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+# SPDX-FileCopyrightText: 2026 WebSpider Studios
 #
 # SPDX-License-Identifier: GPL-2.0-or-later
 
@@ -74,7 +74,7 @@ if(CMAKE_SYSTEM_PROCESSOR STREQUAL "ARM64")
 endif()
 
 if(WITH_BLENDER AND NOT WITH_PYTHON_MODULE)
-  set_property(DIRECTORY PROPERTY VS_STARTUP_PROJECT mixar)
+  set_property(DIRECTORY PROPERTY VS_STARTUP_PROJECT webspider3d)
 endif()
 
 macro(warn_hardcoded_paths package_name)
@@ -145,7 +145,7 @@ add_definitions(-D_WIN32_WINNT=0x603)
 
 # First generate the manifest for tests since it will not need the dependency on the CRT.
 configure_file(
-  ${CMAKE_SOURCE_DIR}/release/windows/manifest/mixar.exe.manifest.in
+  ${CMAKE_SOURCE_DIR}/release/windows/manifest/webspider3d.exe.manifest.in
   ${CMAKE_CURRENT_BINARY_DIR}/tests.exe.manifest
   @ONLY
 )
@@ -166,23 +166,23 @@ if(WITH_WINDOWS_BUNDLE_CRT)
     endif()
   endforeach()
   # Install the CRT to the blender.crt Sub folder.
-  install(FILES ${CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS} DESTINATION mixar.crt COMPONENT Libraries)
+  install(FILES ${CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS} DESTINATION webspider3d.crt COMPONENT Libraries)
 
   windows_generate_manifest(
     FILES "${CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS}"
-    OUTPUT "${CMAKE_BINARY_DIR}/mixar.crt.manifest"
-    NAME "mixar.crt"
+    OUTPUT "${CMAKE_BINARY_DIR}/webspider3d.crt.manifest"
+    NAME "webspider3d.crt"
   )
 
-  install(FILES ${CMAKE_BINARY_DIR}/mixar.crt.manifest DESTINATION mixar.crt)
-  set(BUNDLECRT "<dependency><dependentAssembly><assemblyIdentity type=\"win32\" name=\"mixar.crt\" version=\"1.0.0.0\" /></dependentAssembly></dependency>")
+  install(FILES ${CMAKE_BINARY_DIR}/webspider3d.crt.manifest DESTINATION webspider3d.crt)
+  set(BUNDLECRT "<dependency><dependentAssembly><assemblyIdentity type=\"win32\" name=\"webspider3d.crt\" version=\"1.0.0.0\" /></dependentAssembly></dependency>")
 endif()
 if(NOT WITH_PYTHON_MODULE)
-  set(BUNDLECRT "${BUNDLECRT}<dependency><dependentAssembly><assemblyIdentity type=\"win32\" name=\"mixar.shared\" version=\"1.0.0.0\" /></dependentAssembly></dependency>")
+  set(BUNDLECRT "${BUNDLECRT}<dependency><dependentAssembly><assemblyIdentity type=\"win32\" name=\"webspider3d.shared\" version=\"1.0.0.0\" /></dependentAssembly></dependency>")
 endif()
 configure_file(
-  ${CMAKE_SOURCE_DIR}/release/windows/manifest/mixar.exe.manifest.in
-  ${CMAKE_CURRENT_BINARY_DIR}/mixar.exe.manifest
+  ${CMAKE_SOURCE_DIR}/release/windows/manifest/webspider3d.exe.manifest.in
+  ${CMAKE_CURRENT_BINARY_DIR}/webspider3d.exe.manifest
   @ONLY
 )
 
@@ -1194,7 +1194,7 @@ if(WINDOWS_PYTHON_DEBUG)
   else()
     message(STATUS "Including user scripts from the profile folder")
     # Include the user scripts from the profile folder in the blender_python_user_scripts project.
-    set(USER_SCRIPTS_ROOT "$ENV{appdata}/mixar/mixar/${BLENDER_VERSION}/scripts")
+    set(USER_SCRIPTS_ROOT "$ENV{appdata}/webspider3d/webspider3d/${BLENDER_VERSION}/scripts")
   endif()
 
   file(TO_CMAKE_PATH ${USER_SCRIPTS_ROOT} USER_SCRIPTS_ROOT)
@@ -1210,7 +1210,7 @@ if(WINDOWS_PYTHON_DEBUG)
   set_target_properties(blender_python_user_scripts PROPERTIES FOLDER "scripts")
   # Set the default debugging options for the project, only write this file once so the user
   # is free to override them at their own perril.
-  set(USER_PROPS_FILE "${CMAKE_CURRENT_BINARY_DIR}/source/creator/mixar.Cpp.user.props")
+  set(USER_PROPS_FILE "${CMAKE_CURRENT_BINARY_DIR}/source/creator/webspider3d.Cpp.user.props")
   if(NOT EXISTS ${USER_PROPS_FILE})
     # Layout below is messy, because otherwise the generated file will look messy.
     file(WRITE ${USER_PROPS_FILE} "<?xml version=\"1.0\" encoding=\"utf-8\"?>
@@ -1369,6 +1369,6 @@ set(PLATFORM_ENV_BUILD "PATH=${PLATFORM_ENV_BUILD_DIRS}")
 # `idiff` and `abcls` use the release mode dlls.
 # Escape semicolons, since in cmake they denote elements in a list if surrounded by square brackets
 string(REPLACE ";" "\\;" ESCAPED_PATH "$ENV{PATH}")
-set(PLATFORM_ENV_INSTALL "PATH=${CMAKE_INSTALL_PREFIX_WITH_CONFIG}/mixar.shared/\;${PLATFORM_ENV_BUILD_DIRS}\;${ESCAPED_PATH}")
+set(PLATFORM_ENV_INSTALL "PATH=${CMAKE_INSTALL_PREFIX_WITH_CONFIG}/webspider3d.shared/\;${PLATFORM_ENV_BUILD_DIRS}\;${ESCAPED_PATH}")
 unset(_library_paths)
 unset(_msvc_path)

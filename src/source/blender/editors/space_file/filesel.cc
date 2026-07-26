@@ -1,5 +1,5 @@
 /* SPDX-FileCopyrightText: 2008 Blender Authors
- * SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+ * SPDX-FileCopyrightText: 2026 WebSpider Studios
  *
  * SPDX-License-Identifier: GPL-2.0-or-later */
 
@@ -227,8 +227,8 @@ static FileSelectParams *fileselect_ensure_updated_file_params(SpaceFile *sfile)
     }
 
     params->filter = 0;
-    if ((prop = RNA_struct_find_property(op->ptr, "filter_mixar"))) {
-      params->filter |= RNA_property_boolean_get(op->ptr, prop) ? int(FILE_TYPE_MIXAR) : 0;
+    if ((prop = RNA_struct_find_property(op->ptr, "filter_webspider"))) {
+      params->filter |= RNA_property_boolean_get(op->ptr, prop) ? int(FILE_TYPE_WEBSPIDER) : 0;
     }
     if ((prop = RNA_struct_find_property(op->ptr, "filter_blender"))) {
       params->filter |= RNA_property_boolean_get(op->ptr, prop) ? int(FILE_TYPE_BLENDER) : 0;
@@ -284,8 +284,8 @@ static FileSelectParams *fileselect_ensure_updated_file_params(SpaceFile *sfile)
     if ((prop = RNA_struct_find_property(op->ptr, "file_extension"))) {
       int file_ext_enum = RNA_property_enum_get(op->ptr, prop);
       if (file_ext_enum == 1) { // BLEND enum value
-        /* Remove MIXAR filter and add BLENDER filter for blend operations */
-        params->filter &= ~FILE_TYPE_MIXAR;
+        /* Remove WEBSPIDER filter and add BLENDER filter for blend operations */
+        params->filter &= ~FILE_TYPE_WEBSPIDER;
         params->filter |= FILE_TYPE_BLENDER;
       }
     }

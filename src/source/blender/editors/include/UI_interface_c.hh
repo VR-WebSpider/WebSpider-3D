@@ -290,7 +290,7 @@ enum {
 };
 
 /** Default font size for normal text. */
-/* Mixar: bumped 11 -> 12 for a slightly larger, more legible UI font. */
+/* WebSpider 3D: bumped 11 -> 12 for a slightly larger, more legible UI font. */
 #define UI_DEFAULT_TEXT_POINTS 12.0f
 
 /** Larger size used for title text. */

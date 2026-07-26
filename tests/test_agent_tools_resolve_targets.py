@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+# SPDX-FileCopyrightText: 2026 WebSpider Studios
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -11,7 +11,7 @@ from pathlib import Path
 from unittest.mock import MagicMock
 
 ROOT = Path(__file__).resolve().parents[1]
-COMMON_PY = ROOT / "src/scripts/mixar/modules/paint/core/agent_tools/_common.py"
+COMMON_PY = ROOT / "src/scripts/webspider/modules/paint/core/agent_tools/_common.py"
 
 
 def _mesh(name):
@@ -44,19 +44,19 @@ def _load_common(monkeypatch, *, selected=None, active=None, scene_objs=None, da
     monkeypatch.setitem(sys.modules, "bpy", fake_bpy)
 
     for name in (
-        "mixar",
-        "mixar.config",
-        "mixar.modules",
-        "mixar.modules.paint",
-        "mixar.modules.paint.utils",
+        "webspider3d",
+        "webspider.config",
+        "webspider.modules",
+        "webspider.modules.paint",
+        "webspider.modules.paint.utils",
     ):
         monkeypatch.setitem(sys.modules, name, types.ModuleType(name))
-    log_mod = types.ModuleType("mixar.config.logging_config")
+    log_mod = types.ModuleType("webspider.config.logging_config")
     log_mod.get_logger = lambda *a, **k: MagicMock()
-    monkeypatch.setitem(sys.modules, "mixar.config.logging_config", log_mod)
-    const_mod = types.ModuleType("mixar.modules.paint.utils.constants")
+    monkeypatch.setitem(sys.modules, "webspider.config.logging_config", log_mod)
+    const_mod = types.ModuleType("webspider.modules.paint.utils.constants")
     const_mod.MP_GROUP_PREFIX = "MP_"
-    monkeypatch.setitem(sys.modules, "mixar.modules.paint.utils.constants", const_mod)
+    monkeypatch.setitem(sys.modules, "webspider.modules.paint.utils.constants", const_mod)
 
     spec = importlib.util.spec_from_file_location("agent_tools_common_under_test", COMMON_PY)
     mod = importlib.util.module_from_spec(spec)

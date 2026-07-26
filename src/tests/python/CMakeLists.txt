@@ -1,5 +1,5 @@
 # SPDX-FileCopyrightText: 2011-2023 Blender Authors
-# SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+# SPDX-FileCopyrightText: 2026 WebSpider Studios
 #
 # SPDX-License-Identifier: GPL-2.0-or-later
 
@@ -142,7 +142,7 @@ function(add_python_test testname testscript)
   add_test(
     NAME ${testname}
     COMMAND ${TEST_PYTHON_EXE} ${TEST_PYTHON_EXE_EXTRA_ARGS} ${testscript} ${ARGN}
-    WORKING_DIRECTORY $<TARGET_FILE_DIR:mixar>
+    WORKING_DIRECTORY $<TARGET_FILE_DIR:webspider3d>
   )
   blender_test_set_envvars("${testname}" "")
 endfunction()
@@ -168,7 +168,7 @@ function(add_system_python_test testname testscript)
   add_test(
     NAME ${testname}
     COMMAND ${TEST_SYSTEM_PYTHON_EXE} ${testscript} ${ARGN}
-    WORKING_DIRECTORY $<TARGET_FILE_DIR:mixar>
+    WORKING_DIRECTORY $<TARGET_FILE_DIR:webspider3d>
   )
   blender_test_set_envvars("${testname}" "")
 endfunction()

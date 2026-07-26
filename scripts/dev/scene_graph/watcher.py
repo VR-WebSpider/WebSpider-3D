@@ -1,10 +1,10 @@
-# SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+# SPDX-FileCopyrightText: 2026 WebSpider Studios
 #
 # SPDX-License-Identifier: GPL-2.0-or-later
 
 """Depsgraph watcher: marks the store dirty on every add/modify/delete.
 
-Follows Mixar's handler->flag pattern. The handler does the cheapest possible
+Follows WebSpider 3D's handler->flag pattern. The handler does the cheapest possible
 work -- record which object ids the depsgraph touched and raise a flag. All the
 real recomputation is deferred to STORE.refresh(), which runs lazily when the
 agent next queries the graph.

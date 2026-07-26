@@ -1,5 +1,5 @@
 /* SPDX-FileCopyrightText: 2023 Blender Authors
- * SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+ * SPDX-FileCopyrightText: 2026 WebSpider Studios
  *
  * SPDX-License-Identifier: GPL-2.0-or-later */
 
@@ -86,7 +86,7 @@ using namespace blender::bke;
 
 bool BKE_blendfile_extension_check(const char *str)
 {
-  const char *ext_test[6] = {".mixar", ".mixar.zst", ".blend", ".ble", ".blend.gz", nullptr};
+  const char *ext_test[6] = {".webspider", ".webspider.zst", ".blend", ".ble", ".blend.gz", nullptr};
   return BLI_path_extension_check_array(str, ext_test);
 }
 
@@ -1320,14 +1320,14 @@ static void handle_subversion_warning(Main *main, BlendFileReadReport *reports)
   }
 }
 
-static void handle_mixar_version_warning(Main *main, BlendFileReadReport *reports)
+static void handle_webspider_version_warning(Main *main, BlendFileReadReport *reports)
 {
-  if (main->has_mixar_forward_compatibility_issues) {
+  if (main->has_webspider_forward_compatibility_issues) {
     BKE_reportf(reports->reports,
                 RPT_WARNING,
-                "File saved by newer Mixar version (%d.%d), some data may be lost",
-                main->mixar_versionfile,
-                main->mixar_subversionfile);
+                "File saved by newer WebSpider 3D version (%d.%d), some data may be lost",
+                main->webspider_versionfile,
+                main->webspider_subversionfile);
   }
 }
 
@@ -1372,7 +1372,7 @@ BlendFileData *BKE_blendfile_read(const char *filepath,
 {
   /* Don't print startup file loading. */
   if (params->is_startup == false) {
-    CLOG_INFO_NOCHECK(&LOG_BLEND, "Read mixar: \"%s\"", filepath);
+    CLOG_INFO_NOCHECK(&LOG_BLEND, "Read webspider: \"%s\"", filepath);
   }
 
   BlendFileData *bfd = BLO_read_from_file(filepath, eBLOReadSkip(params->skip_flags), reports);
@@ -1382,7 +1382,7 @@ BlendFileData *BKE_blendfile_read(const char *filepath,
   }
   if (bfd) {
     handle_subversion_warning(bfd->main, reports);
-    handle_mixar_version_warning(bfd->main, reports);
+    handle_webspider_version_warning(bfd->main, reports);
   }
   else {
     BKE_reports_prependf(reports->reports, "Loading \"%s\" failed: ", filepath);
@@ -1676,7 +1676,7 @@ bool BKE_blendfile_userdef_write_all(ReportList *reports)
 
   if (cfgdir) {
     bool ok_write;
-    BLI_path_join(filepath, sizeof(filepath), cfgdir->c_str(), MIXAR_USERPREF_FILE);
+    BLI_path_join(filepath, sizeof(filepath), cfgdir->c_str(), WEBSPIDER_USERPREF_FILE);
     CLOG_INFO_NOCHECK(&LOG_BLEND, "Writing user preferences: \"%s\" ", filepath);
     if (use_template_userpref) {
       ok_write = BKE_blendfile_userdef_write_app_template(filepath, reports);
@@ -1702,7 +1702,7 @@ bool BKE_blendfile_userdef_write_all(ReportList *reports)
     cfgdir = BKE_appdir_folder_id_create(BLENDER_USER_CONFIG, U.app_template);
     if (cfgdir) {
       /* Also save app-template preferences. */
-      BLI_path_join(filepath, sizeof(filepath), cfgdir->c_str(), MIXAR_USERPREF_FILE);
+      BLI_path_join(filepath, sizeof(filepath), cfgdir->c_str(), WEBSPIDER_USERPREF_FILE);
 
       CLOG_INFO_NOCHECK(&LOG_BLEND, "Writing user preferences app-template: \"%s\" ", filepath);
       if (BKE_blendfile_userdef_write(filepath, reports) != 0) {

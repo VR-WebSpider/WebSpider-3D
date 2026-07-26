@@ -1,5 +1,5 @@
 /* SPDX-FileCopyrightText: 2008 Blender Authors
- * SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+ * SPDX-FileCopyrightText: 2026 WebSpider Studios
  *
  * SPDX-License-Identifier: GPL-2.0-or-later */
 
@@ -63,8 +63,8 @@
 
 #include "screen_intern.hh"
 
-/* Mixar custom tab drawing for MIXIE space. */
-void UI_panel_category_draw_all_mixar(ARegion *region, const char *category_id_active);
+/* WebSpider 3D custom tab drawing for WEBSPIDER_AI space. */
+void UI_panel_category_draw_all_webspider(ARegion *region, const char *category_id_active);
 
 /* general area and region code */
 
@@ -1518,7 +1518,7 @@ bool ED_region_is_overlap(int spacetype, int regiontype)
                RGN_TYPE_TOOL_HEADER,
                RGN_TYPE_ASSET_SHELF,
                RGN_TYPE_ASSET_SHELF_HEADER,
-               /* Mixar: agent scene strip draws a transparent background so
+               /* WebSpider 3D: agent scene strip draws a transparent background so
                 * its tiles float over the viewport. */
                RGN_TYPE_EXECUTE))
       {
@@ -1538,7 +1538,7 @@ bool ED_region_is_overlap(int spacetype, int regiontype)
         return true;
       }
     }
-    else if (spacetype == SPACE_MIXIE) {
+    else if (spacetype == SPACE_WEBSPIDER_AI) {
       if (ELEM(regiontype, RGN_TYPE_TOOLS, RGN_TYPE_UI)) {
         return true;
       }
@@ -1603,7 +1603,7 @@ static void region_rect_recursive(
   int prefsizey;
 
   if (region->regiontype == RGN_TYPE_HEADER) {
-    /* Mixar: SPACE_AGENT_BUBBLE's pill window is a single-region
+    /* WebSpider 3D: SPACE_AGENT_BUBBLE's pill window is a single-region
      * window where the HEADER stretches to fill the whole pill
      * (~36 px). Without this override Blender clamps every HEADER
      * region to the global ED_area_headersize() (~22 px), leaving
@@ -3601,8 +3601,8 @@ void ED_region_panels_draw(const bContext *C, ARegion *region)
   /* Set in layout. */
   if (region->runtime->category) {
     ScrArea *area = CTX_wm_area(C);
-    if (area && area->spacetype == SPACE_MIXIE) {
-      UI_panel_category_draw_all_mixar(region, region->runtime->category);
+    if (area && area->spacetype == SPACE_WEBSPIDER_AI) {
+      UI_panel_category_draw_all_webspider(region, region->runtime->category);
     }
     else {
       UI_panel_category_draw_all(region, region->runtime->category);

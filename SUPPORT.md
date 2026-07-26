@@ -1,15 +1,15 @@
-<!-- SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited -->
+<!-- SPDX-FileCopyrightText: 2026 WebSpider Studios -->
 <!-- SPDX-License-Identifier: GPL-3.0-or-later -->
 
 # Support
 
 ## Community
 
-Join the Mixar Discord for real-time discussion, troubleshooting help, and announcements:
+Join the WebSpider 3D Discord for real-time discussion, troubleshooting help, and announcements:
 
 - **Discord:** https://discord.gg/YVqvkQx8rX
 
-The Discord is the fastest way to reach maintainers and other Mixar users. Most build problems, "is this expected?" questions, and general help requests are best handled there before opening a GitHub issue.
+The Discord is the fastest way to reach maintainers and other WebSpider 3D users. Most build problems, "is this expected?" questions, and general help requests are best handled there before opening a GitHub issue.
 
 ## Public Repository Support
 
@@ -26,7 +26,7 @@ Do not use public issues for security reports. Follow [SECURITY.md](SECURITY.md)
 
 For product downloads and user-facing product information, use:
 
-- Downloads: <https://www.mixar.app/downloads>
-- Website: <https://www.mixar.app/>
+- Downloads: <https://www.webspider3d.com/downloads>
+- Website: <https://www.webspider3d.com/>
 
-Some Mixar App features require Mixar hosted services. This repository does not include the hosted backend implementation.
+Some WebSpider 3D App features require WebSpider 3D hosted services. This repository does not include the hosted backend implementation.

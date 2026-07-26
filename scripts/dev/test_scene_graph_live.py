@@ -1,21 +1,21 @@
-# SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+# SPDX-FileCopyrightText: 2026 WebSpider Studios
 #
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-"""Live-update test for the scene_graph module (run in the BUILT Mixar app).
+"""Live-update test for the scene_graph module (run in the BUILT WebSpider 3D app).
 
 Drives a sequence of scene edits (add / parent / rename / delete) on separate
 timer ticks so the depsgraph handler fires and marks the graph dirty between
 steps, then queries after each to prove the per-scene graph auto-updates.
 
 Run from the Text Editor (Run Script) or Console. Watch the system console for
-output (launch Mixar from a terminal to see prints).
+output (launch WebSpider 3D from a terminal to see prints).
 """
 
 import bpy
 
-from mixar.modules.scene_graph.core.store import get_scene_graph
-from mixar.modules.scene_graph.core.tools import run_tool
+from webspider.modules.scene_graph.core.store import get_scene_graph
+from webspider.modules.scene_graph.core.tools import run_tool
 
 scene = bpy.context.scene
 state = {}

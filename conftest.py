@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2024 Mixar Authors
+# SPDX-FileCopyrightText: 2024 WebSpider 3D Authors
 #
 # SPDX-License-Identifier: GPL-2.0-or-later
 
@@ -11,11 +11,11 @@ from unittest.mock import MagicMock
 def _install_bpy_stubs():
     """Install minimal bpy stub hierarchy into sys.modules."""
     bpy_mock = MagicMock(name='bpy')
-    # Register top-level and all known sub-modules that Mixar code imports.
+    # Register top-level and all known sub-modules that WebSpider 3D code imports.
     stub_names = [
         'bpy', 'bpy.types', 'bpy.props', 'bpy.utils', 'bpy.app',
         'bpy.app.timers', 'bpy.context', 'bpy.data', 'bpy.ops',
-        'bpy.ops.mixar',
+        'bpy.ops.webspider',
     ]
     for name in stub_names:
         if name not in sys.modules:

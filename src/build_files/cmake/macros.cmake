@@ -1,5 +1,5 @@
 # SPDX-FileCopyrightText: 2006 Blender Authors
-# SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+# SPDX-FileCopyrightText: 2026 WebSpider Studios
 #
 # SPDX-License-Identifier: GPL-2.0-or-later
 
@@ -1413,7 +1413,7 @@ macro(windows_install_shared_manifest)
     endif()
     install(
       FILES ${WINDOWS_INSTALL_FILES}
-      DESTINATION "mixar.shared"
+      DESTINATION "webspider3d.shared"
       CONFIGURATIONS ${WINDOWS_CONFIGURATIONS}
     )
   else()
@@ -1443,7 +1443,7 @@ macro(windows_generate_manifest)
     set(MANIFEST_LIBS "${MANIFEST_LIBS}    <file name=\"${filename}\"/>\n")
   endforeach()
   configure_file(
-    ${CMAKE_SOURCE_DIR}/release/windows/manifest/mixar.manifest.in
+    ${CMAKE_SOURCE_DIR}/release/windows/manifest/webspider3d.manifest.in
     ${WINDOWS_MANIFEST_OUTPUT}
     @ONLY
   )
@@ -1453,24 +1453,24 @@ macro(windows_generate_shared_manifest)
   if(WINDOWS_SHARED_MANIFEST_DEBUG)
     windows_generate_manifest(
       FILES "${WINDOWS_SHARED_MANIFEST_DEBUG}"
-      OUTPUT "${CMAKE_BINARY_DIR}/Debug/mixar.shared.manifest"
-      NAME "mixar.shared"
+      OUTPUT "${CMAKE_BINARY_DIR}/Debug/webspider3d.shared.manifest"
+      NAME "webspider3d.shared"
     )
     install(
-      FILES ${CMAKE_BINARY_DIR}/Debug/mixar.shared.manifest
-      DESTINATION "mixar.shared"
+      FILES ${CMAKE_BINARY_DIR}/Debug/webspider3d.shared.manifest
+      DESTINATION "webspider3d.shared"
       CONFIGURATIONS Debug
     )
   endif()
   if(WINDOWS_SHARED_MANIFEST_RELEASE)
     windows_generate_manifest(
       FILES "${WINDOWS_SHARED_MANIFEST_RELEASE}"
-      OUTPUT "${CMAKE_BINARY_DIR}/Release/mixar.shared.manifest"
-      NAME "mixar.shared"
+      OUTPUT "${CMAKE_BINARY_DIR}/Release/webspider3d.shared.manifest"
+      NAME "webspider3d.shared"
     )
     install(
-      FILES ${CMAKE_BINARY_DIR}/Release/mixar.shared.manifest
-      DESTINATION "mixar.shared"
+      FILES ${CMAKE_BINARY_DIR}/Release/webspider3d.shared.manifest
+      DESTINATION "webspider3d.shared"
       CONFIGURATIONS Release;RelWithDebInfo;MinSizeRel
     )
   endif()

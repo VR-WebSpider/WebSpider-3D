@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+// SPDX-FileCopyrightText: 2026 WebSpider Studios
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -25,20 +25,20 @@
 #endif
 #endif
 
-static const char* SERVICE_NAME = "MixarSafeStorage";
+static const char* SERVICE_NAME = "WebSpider 3DSafeStorage";
 static const char* ACCOUNT_NAME = "AccessToken";
 static const char* REFRESH_ACCOUNT_NAME = "RefreshToken";
 
 #ifdef _WIN32
 // Use "username@service" format to match Python keyring's compound TargetName format
-static const char* WIN_TARGET_NAME = "AccessToken@MixarSafeStorage";
-static const char* WIN_REFRESH_TARGET_NAME = "RefreshToken@MixarSafeStorage";
+static const char* WIN_TARGET_NAME = "AccessToken@WebSpider 3DSafeStorage";
+static const char* WIN_REFRESH_TARGET_NAME = "RefreshToken@WebSpider 3DSafeStorage";
 #endif
 
 #ifdef __linux__
 #ifdef HAVE_LIBSECRET
 // Schema for libsecret to match Python keyring's SecretService backend
-static const SecretSchema mixar_schema = {
+static const SecretSchema webspider_schema = {
     "org.freedesktop.Secret.Generic",
     SECRET_SCHEMA_NONE,
     {
@@ -127,9 +127,9 @@ bool store_token_to_keyring(const char* token) {
 #ifdef HAVE_LIBSECRET
     GError* error = NULL;
     gboolean result = secret_password_store_sync(
-        &mixar_schema,
+        &webspider_schema,
         SECRET_COLLECTION_DEFAULT,
-        "MixarSafeStorage Access Token",  // Label shown in secret manager
+        "WebSpider 3DSafeStorage Access Token",  // Label shown in secret manager
         token,
         NULL,  // GCancellable
         &error,
@@ -185,7 +185,7 @@ char* get_token_from_keyring() {
     CFDictionarySetValue(query, kSecAttrAccount, account);
     CFDictionarySetValue(query, kSecReturnData, kCFBooleanTrue);
     CFDictionarySetValue(query, kSecMatchLimit, kSecMatchLimitOne);
-    /* Suppress the SecurityAgent "Mixar wants to access your keychain"
+    /* Suppress the SecurityAgent "WebSpider 3D wants to access your keychain"
      * prompt. The previous build's keychain item is ACL-bound to a
      * different code signature / path (especially under App
      * Translocation on first DMG launch from Finder), so without this
@@ -243,7 +243,7 @@ char* get_token_from_keyring() {
 #ifdef HAVE_LIBSECRET
     GError* error = NULL;
     gchar* password = secret_password_lookup_sync(
-        &mixar_schema,
+        &webspider_schema,
         NULL,  // GCancellable
         &error,
         "service", SERVICE_NAME,
@@ -311,7 +311,7 @@ bool delete_token_from_keyring() {
 #ifdef HAVE_LIBSECRET
     GError* error = NULL;
     gboolean result = secret_password_clear_sync(
-        &mixar_schema,
+        &webspider_schema,
         NULL,  // GCancellable
         &error,
         "service", SERVICE_NAME,
@@ -395,9 +395,9 @@ bool store_refresh_token_to_keyring(const char* token) {
 #ifdef HAVE_LIBSECRET
     GError* error = NULL;
     gboolean result = secret_password_store_sync(
-        &mixar_schema,
+        &webspider_schema,
         SECRET_COLLECTION_DEFAULT,
-        "MixarSafeStorage Refresh Token",
+        "WebSpider 3DSafeStorage Refresh Token",
         token,
         NULL,
         &error,
@@ -500,7 +500,7 @@ char* get_refresh_token_from_keyring() {
 #ifdef HAVE_LIBSECRET
     GError* error = NULL;
     gchar* password = secret_password_lookup_sync(
-        &mixar_schema,
+        &webspider_schema,
         NULL,
         &error,
         "service", SERVICE_NAME,
@@ -564,7 +564,7 @@ bool delete_refresh_token_from_keyring() {
 #ifdef HAVE_LIBSECRET
     GError* error = NULL;
     gboolean result = secret_password_clear_sync(
-        &mixar_schema,
+        &webspider_schema,
         NULL,
         &error,
         "service", SERVICE_NAME,

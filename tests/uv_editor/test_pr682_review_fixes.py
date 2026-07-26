@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+# SPDX-FileCopyrightText: 2026 WebSpider Studios
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -28,7 +28,7 @@ def _function_counts(path):
 
 def test_properties_handlers_keeps_single_msgbus_definition():
     counts = _function_counts(
-        ROOT / "src/scripts/mixar/modules/uv_editor/ui/properties_handlers.py"
+        ROOT / "src/scripts/webspider/modules/uv_editor/ui/properties_handlers.py"
     )
 
     for name in (
@@ -41,7 +41,7 @@ def test_properties_handlers_keeps_single_msgbus_definition():
 
 
 def test_snap_base_applies_handles_single_and_multi_value_enums():
-    from mixar.modules.uv_editor.ui.base.panels import snap_base_applies
+    from webspider.modules.uv_editor.ui.base.panels import snap_base_applies
 
     assert snap_base_applies("VERTEX") is True
     assert snap_base_applies("INCREMENT") is False
@@ -51,7 +51,7 @@ def test_snap_base_applies_handles_single_and_multi_value_enums():
 
 def test_active_uv_tool_override_uses_area_owner_window():
     source = (
-        ROOT / "src/scripts/mixar/modules/uv_editor/ui/properties_handlers.py"
+        ROOT / "src/scripts/webspider/modules/uv_editor/ui/properties_handlers.py"
     ).read_text()
     tree = ast.parse(source)
     get_active_tool = next(

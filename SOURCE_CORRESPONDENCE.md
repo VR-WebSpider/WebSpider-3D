@@ -1,9 +1,9 @@
-<!-- SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited -->
+<!-- SPDX-FileCopyrightText: 2026 WebSpider Studios -->
 <!-- SPDX-License-Identifier: GPL-3.0-or-later -->
 
 # Source Correspondence
 
-This document tracks the source-to-binary mapping for Mixar App public releases.
+This document tracks the source-to-binary mapping for WebSpider 3D App public releases.
 
 ## First Public Release
 
@@ -27,7 +27,7 @@ Before publishing binaries:
 
 1. Finalize the launch version.
 2. Commit the version bump, if any.
-3. Create the public source tag in `mixar-app`.
+3. Create the public source tag in `webspider3d-app`.
 4. Build macOS and Windows binaries from that tag.
 5. Publish checksums for release artifacts.
 6. Keep the source tag, binary version, release notes, and download page in sync.
@@ -36,7 +36,7 @@ Before publishing binaries:
 
 The public source release must include:
 
-- Mixar App source for the release tag
+- WebSpider 3D App source for the release tag
 - Build and package scripts used for the release
 - The `upstream` submodule pointer and instructions for fetching Blender source
 - License files and SPDX metadata
@@ -50,15 +50,15 @@ Build configuration, signing credentials, hosted service credentials, and privat
 
 ## Derived Works
 
-Mixar's texture painting module is, in part, a derivative work of the open-source [ucupaint](https://github.com/ucupumar/ucupaint) addon by [ucupumar](https://github.com/ucupumar), licensed GPL-3.0-or-later.
+WebSpider 3D's texture painting module is, in part, a derivative work of the open-source [ucupaint](https://github.com/ucupumar/ucupaint) addon by [ucupumar](https://github.com/ucupumar), licensed GPL-3.0-or-later.
 
 Derived paths in this repository:
 
-- `src/scripts/mixar/modules/paint/core/lib/lib.blend` — modified from ucupaint's `lib_281.blend`
-- `src/scripts/mixar/modules/paint/core/io/connections/layer_connections_*.py` — adapt ucupaint's layer/channel connection patterns
-- `src/scripts/mixar/modules/paint/core/layer/create_channels.py` — adapts ucupaint's channel creation logic
-- `src/scripts/mixar/modules/paint/ui/lists/channel_uilist.py` — channel UI list patterns
-- `src/scripts/mixar/modules/paint/ui/utils/ui_helpers_texture_sets_channels.py` — channel settings UI patterns
+- `src/scripts/webspider/modules/paint/core/lib/lib.blend` — modified from ucupaint's `lib_281.blend`
+- `src/scripts/webspider/modules/paint/core/io/connections/layer_connections_*.py` — adapt ucupaint's layer/channel connection patterns
+- `src/scripts/webspider/modules/paint/core/layer/create_channels.py` — adapts ucupaint's channel creation logic
+- `src/scripts/webspider/modules/paint/ui/lists/channel_uilist.py` — channel UI list patterns
+- `src/scripts/webspider/modules/paint/ui/utils/ui_helpers_texture_sets_channels.py` — channel settings UI patterns
 
 Attribution is recorded in [NOTICE.md](NOTICE.md) and per-file copyright in [REUSE.toml](REUSE.toml). All derivations are distributed under GPL-3.0-or-later, consistent with ucupaint's license.
 

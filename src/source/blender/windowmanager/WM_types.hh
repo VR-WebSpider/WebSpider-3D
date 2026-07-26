@@ -1,5 +1,5 @@
 /* SPDX-FileCopyrightText: 2007 Blender Authors
- * SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+ * SPDX-FileCopyrightText: 2026 WebSpider Studios
  *
  * SPDX-License-Identifier: GPL-2.0-or-later */
 
@@ -542,12 +542,12 @@ struct wmNotifier {
 #define ND_SPACE_SPREADSHEET (22 << 16)
 /* Not a space itself, but a part of another space. */
 #define ND_REGIONS_ASSET_SHELF (23 << 16)
-#define ND_SPACE_MIXIE (24 << 16)         /* Mixie space updates */
-#define ND_SPACE_MIXIE_CHAT (25 << 16)    /* Mixie Chat space updates */
+#define ND_SPACE_WEBSPIDER_AI (24 << 16)         /* WebSpider AI space updates */
+#define ND_SPACE_WEBSPIDER_CHAT (25 << 16)    /* WebSpider Chat space updates */
 #define ND_SPACE_AGENT_BUBBLE (26 << 16)  /* Floating Agent Bubble space updates */
 #define ND_SPACE_AGENT_STRIP (27 << 16)      /* View3D agent scene strip updates */
 #define ND_SPACE_AGENT_STRIP_TICK (28 << 16) /* Agent strip periodic poll tick (timer notifier) */
-#define ND_SPACE_MIXIE_CHAT_TICK (29 << 16)  /* Chat animation frame pump tick (timer notifier) */
+#define ND_SPACE_WEBSPIDER_CHAT_TICK (29 << 16)  /* Chat animation frame pump tick (timer notifier) */
 
 /* NC_ASSET. */
 /* Denotes that the AssetList is done reading some previews. NOT that the preview generation of

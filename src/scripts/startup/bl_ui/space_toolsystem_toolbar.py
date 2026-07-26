@@ -1,5 +1,5 @@
 # SPDX-FileCopyrightText: 2017-2023 Blender Authors
-# SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+# SPDX-FileCopyrightText: 2026 WebSpider Studios
 #
 # SPDX-License-Identifier: GPL-2.0-or-later
 
@@ -32,26 +32,26 @@ from bl_ui.properties_paint_common import (
 
 
 # ---------------------------------------------------------------------------
-# Mixar — allow `ToolDef.icon` to also accept Blender icon-enum names
+# WebSpider 3D — allow `ToolDef.icon` to also accept Blender icon-enum names
 # (e.g. 'TOOL_SETTINGS') in addition to the upstream `ops.*` toolbar
 # `.dat` icon handles.
 #
 # Upstream's `_icon_value_from_icon_handle` only ever looks for a
 # matching `.dat` file in the icons datadir; any other name falls back
 # to the empty "none" icon. We need a wider set of glyphs for the
-# Mixar UV toolbar entries (e.g. the wrench/screwdriver "Tool" icon)
+# WebSpider 3D UV toolbar entries (e.g. the wrench/screwdriver "Tool" icon)
 # than the toolbar `.dat` set provides — so wrap the upstream loader
 # to first try resolving the name as a UILayout `icon=` enum value.
 # ---------------------------------------------------------------------------
 
 
-def _mixar_patch_icon_value_for_blender_enums():
+def _webspider3d_patch_icon_value_for_blender_enums():
     """Monkey-patch `ToolSelectPanelHelper._icon_value_from_icon_handle`
     to fall back to UILayout's `icon=` enum (e.g. 'TOOL_SETTINGS',
     'MODIFIER') when the requested icon name is uppercase and has no
     `.dat` file. ToolDef `ops.*` icons keep their existing path.
     """
-    if getattr(ToolSelectPanelHelper, '_mixar_icon_patched', False):
+    if getattr(ToolSelectPanelHelper, '_webspider3d_icon_patched', False):
         return
 
     # Upstream defines this as `@staticmethod`. Accessing it through the
@@ -93,10 +93,10 @@ def _mixar_patch_icon_value_for_blender_enums():
     ToolSelectPanelHelper._icon_value_from_icon_handle = (
         _icon_value_from_icon_handle
     )
-    ToolSelectPanelHelper._mixar_icon_patched = True
+    ToolSelectPanelHelper._webspider3d_icon_patched = True
 
 
-_mixar_patch_icon_value_for_blender_enums()
+_webspider3d_patch_icon_value_for_blender_enums()
 
 
 def kmi_to_string_or_none(kmi):
@@ -237,12 +237,12 @@ class _defs_view3d_generic:
 class _defs_annotate:
 
     def draw_settings_common(context, layout, tool):
-        # Mixar UV editor renders annotate settings (placement, stabilize,
+        # WebSpider 3D UV editor renders annotate settings (placement, stabilize,
         # radius, factor, arrow styles) in its dedicated sidebar panel —
         # skip the duplicate tool-header rendering when this space is in
-        # Mixar UV mode.
+        # WebSpider 3D UV mode.
         sd = context.space_data
-        if sd is not None and getattr(sd, 'mode', None) == 'MIXAR_UV':
+        if sd is not None and getattr(sd, 'mode', None) == 'WEBSPIDER_UV':
             return
         gpd = context.annotation_data
         region_type = context.region.type
@@ -366,10 +366,10 @@ class _defs_annotate:
     @ToolDef.from_fn
     def eraser():
         def draw_settings(context, layout, _tool):
-            # Skip when the Mixar UV editor sidebar already shows the
+            # Skip when the WebSpider 3D UV editor sidebar already shows the
             # eraser radius — avoids duplicating it in the tool header.
             sd = context.space_data
-            if sd is not None and getattr(sd, 'mode', None) == 'MIXAR_UV':
+            if sd is not None and getattr(sd, 'mode', None) == 'WEBSPIDER_UV':
                 return
             # TODO: Move this setting to tool_settings
             prefs = context.preferences
@@ -2905,11 +2905,11 @@ class _defs_image_uv_sculpt:
     @ToolDef.from_fn
     def grab():
         def draw_settings(context, layout, tool):
-            # Skip duplicate tool-header rendering in Mixar UV mode — the
+            # Skip duplicate tool-header rendering in WebSpider 3D UV mode — the
             # sidebar UV Sculpt Tools panel already shows size, strength,
             # falloff, lock borders, and sculpt all islands.
             sd = context.space_data
-            if sd is not None and getattr(sd, 'mode', None) == 'MIXAR_UV':
+            if sd is not None and getattr(sd, 'mode', None) == 'WEBSPIDER_UV':
                 return
             uv_sculpt = context.scene.tool_settings.uv_sculpt
             layout.prop(uv_sculpt, "size")
@@ -2943,9 +2943,9 @@ class _defs_image_uv_sculpt:
     @ToolDef.from_fn
     def relax():
         def draw_settings(context, layout, tool):
-            # See `grab` — Mixar UV mode renders these in the sidebar.
+            # See `grab` — WebSpider 3D UV mode renders these in the sidebar.
             sd = context.space_data
-            if sd is not None and getattr(sd, 'mode', None) == 'MIXAR_UV':
+            if sd is not None and getattr(sd, 'mode', None) == 'WEBSPIDER_UV':
                 return
             uv_sculpt = context.scene.tool_settings.uv_sculpt
             layout.prop(uv_sculpt, "size")
@@ -2976,9 +2976,9 @@ class _defs_image_uv_sculpt:
     @ToolDef.from_fn
     def pinch():
         def draw_settings(context, layout, tool):
-            # See `grab` — Mixar UV mode renders these in the sidebar.
+            # See `grab` — WebSpider 3D UV mode renders these in the sidebar.
             sd = context.space_data
-            if sd is not None and getattr(sd, 'mode', None) == 'MIXAR_UV':
+            if sd is not None and getattr(sd, 'mode', None) == 'WEBSPIDER_UV':
                 return
             uv_sculpt = context.scene.tool_settings.uv_sculpt
             layout.prop(uv_sculpt, "size")
@@ -3004,8 +3004,8 @@ class _defs_image_uv_sculpt:
         )
 
 
-class _defs_mixar_uv:
-    """Custom tool definitions for Mixar UV Editor."""
+class _defs_webspider3d_uv:
+    """Custom tool definitions for WebSpider 3D UV Editor."""
 
     @ToolDef.from_fn
     def uv_tool():
@@ -3013,7 +3013,7 @@ class _defs_mixar_uv:
         return dict(
             idname="builtin.uv_tool",
             label="Tool",
-            # Wrench/screwdriver glyph — Mixar-authored toolbar `.dat`
+            # Wrench/screwdriver glyph — WebSpider 3D-authored toolbar `.dat`
             # generated from `upstream/release/datafiles/icons_svg/tool_settings.svg`
             # via `src/release/datafiles/add_uv_tool_icons.py`. Matches
             # the visual scale of upstream `ops.*` toolbar icons because
@@ -3026,11 +3026,11 @@ class _defs_mixar_uv:
 
     @ToolDef.from_fn
     def uv_functions():
-        """Functions mode - switches to Functions panel in Mixar UV Properties."""
+        """Functions mode - switches to Functions panel in WebSpider 3D UV Properties."""
         return dict(
             idname="builtin.uv_functions",
             label="Functions",
-            # Mark-seam glyph — Mixar-authored toolbar `.dat` generated
+            # Mark-seam glyph — WebSpider 3D-authored toolbar `.dat` generated
             # from `upstream/release/datafiles/icons_svg/edge_seam.svg`
             # via `src/release/datafiles/add_uv_tool_icons.py`. Same
             # vector-padded format as the rest of `ops.*` so it sits
@@ -3045,7 +3045,7 @@ class _defs_mixar_uv:
     def uv_panel_mode():
         """Header-tab anchor tool. Active whenever any of the seven
         header tabs (UV Set / Unwrap / Texel / Layout / Image /
-        Material / Export) is selected, so none of the six real Mixar
+        Material / Export) is selected, so none of the six real WebSpider 3D
         UV toolbar buttons appear depressed at the same time — giving
         the artist exactly one visually-selected option across the 13
         choices."""
@@ -3582,7 +3582,7 @@ class IMAGE_PT_tools_active(ToolSelectPanelHelper, Panel):
                 if not (type(item) is ToolDef) and callable(item):
                     yield from item(context)
                 else:
-                    # Skip the registered-but-hidden Mixar UV anchor
+                    # Skip the registered-but-hidden WebSpider 3D UV anchor
                     # tool during toolbar rendering. It stays
                     # discoverable to `_tool_get_by_id` when this
                     # flag is False.
@@ -3688,7 +3688,7 @@ class IMAGE_PT_tools_active(ToolSelectPanelHelper, Panel):
             _defs_image_uv_sculpt.relax,
             _defs_image_uv_sculpt.pinch,
         ],
-        'MIXAR_UV': [
+        'WEBSPIDER_UV': [
             # Selection tools
             *_tools_select,
             # Cursor tool - commented out per user request
@@ -3699,8 +3699,8 @@ class IMAGE_PT_tools_active(ToolSelectPanelHelper, Panel):
             None,
             # Tool button — hosts Snapping / Round to Pixels / Align /
             # Align Rotation (moved out of the Transform panel).
-            _defs_mixar_uv.uv_tool,
-            _defs_mixar_uv.uv_functions,
+            _defs_webspider3d_uv.uv_tool,
+            _defs_webspider3d_uv.uv_functions,
             # Sculpt dropdown sits BELOW Functions per user request.
             # Grab is the visible/default tool; Relax, Pinch, and Rip
             # Region live in the long-press flyout.
@@ -3722,14 +3722,14 @@ class IMAGE_PT_tools_active(ToolSelectPanelHelper, Panel):
             # across the 13 choices instead of two.
             #
             # The button is registered here so `wm.tool_set_by_id`
-            # recognises its idname for MIXAR_UV mode, BUT it's hidden
+            # recognises its idname for WEBSPIDER_UV mode, BUT it's hidden
             # from the rendered toolbar by `IMAGE_PT_tools_active.draw`
             # (which sets `_hide_panel_mode_in_toolbar = True` so the
             # override of `tools_from_context` filters this entry out
             # at draw time). Lookups via `_tool_get_by_id` from outside
             # the draw pass — i.e. when `_active_panel_update` calls
             # `wm.tool_set_by_id` — still see it.
-            _defs_mixar_uv.uv_panel_mode,
+            _defs_webspider3d_uv.uv_panel_mode,
         ],
         'MASK': [
             *_tools_mask_select,

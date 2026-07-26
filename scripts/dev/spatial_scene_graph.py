@@ -1,10 +1,10 @@
-# SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+# SPDX-FileCopyrightText: 2026 WebSpider Studios
 #
 # SPDX-License-Identifier: GPL-2.0-or-later
 
 """Spatial scene graph generator (standalone).
 
-Run this inside the Mixar / Blender Python console or as a script to produce an
+Run this inside the WebSpider 3D / Blender Python console or as a script to produce an
 agent-readable JSON graph describing the *spatial* relationships between the
 mesh objects in the current scene.
 
@@ -287,7 +287,7 @@ def build_spatial_graph(scene=None):
             relations.append([index[b_name], index[a_name], rel])
 
     return {
-        "schema": "mixar.spatial_scene_graph",
+        "schema": "webspider.spatial_scene_graph",
         "version": 2,
         "relation_types": {str(k): v for k, v in RELATION_TYPES.items()},
         "axes_legend": AXES_LEGEND,

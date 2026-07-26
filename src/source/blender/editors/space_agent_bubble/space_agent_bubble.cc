@@ -1,16 +1,16 @@
-/* SPDX-FileCopyrightText: 2026 Mixar Authors
- * SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+/* SPDX-FileCopyrightText: 2026 WebSpider 3D Authors
+ * SPDX-FileCopyrightText: 2026 WebSpider Studios
  *
  * SPDX-License-Identifier: GPL-3.0-or-later */
 
 /** \file
  * \ingroup spagentbubble
  *
- * Agent Bubble — small chat overlay editor for Mixar.
+ * Agent Bubble — small chat overlay editor for WebSpider 3D.
  *
  * Three regions stacked vertically: header (status pill), main
  * (scrollable history), footer (input + send). Modeled on
- * space_mixie_chat / space_texture_sets but trimmed to just what we
+ * space_webspider_ai_chat / space_texture_sets but trimmed to just what we
  * need for the floating agent bubble use case. Intended to be opened
  * in a small tear-off Blender window so it floats over the user's
  * working area while still being a real editor (native scroll, native
@@ -94,69 +94,69 @@
  * popup silhouette per the Figma. */
 #define AGENT_BUBBLE_CORNER_RADIUS 12.0f
 
-/* Mixar overlay functions — see GHOST_SystemCocoa.mm (macOS) and
+/* WebSpider 3D overlay functions — see GHOST_SystemCocoa.mm (macOS) and
  * GHOST_SystemWin32.cc (Windows). Declared here as extern "C" so we
  * don't need a fresh GHOST header just for these (the editor build
  * doesn't include the GHOST internals normally). On Linux the symbols
  * won't exist; guard the call sites with the platform macro. */
 #if defined(__APPLE__) || defined(_WIN32)
-extern "C" void Mixar_WindowSetChromeless(void *window_handle, bool chromeless);
-extern "C" void Mixar_WindowForceSize(void *window_handle, int width, int height);
-extern "C" void Mixar_WindowSetCornerRadius(void *window_handle, float radius);
-extern "C" void Mixar_WindowSetMinContentSize(void *window_handle,
+extern "C" void WebSpider_WindowSetChromeless(void *window_handle, bool chromeless);
+extern "C" void WebSpider_WindowForceSize(void *window_handle, int width, int height);
+extern "C" void WebSpider_WindowSetCornerRadius(void *window_handle, float radius);
+extern "C" void WebSpider_WindowSetMinContentSize(void *window_handle,
                                               int width,
                                               int height);
 #ifdef __APPLE__
-extern "C" void Mixar_WindowSetMaxContentSize(void *window_handle,
+extern "C" void WebSpider_WindowSetMaxContentSize(void *window_handle,
                                               int width,
                                               int height);
 #endif
-extern "C" void Mixar_WindowBeginDrag(void *window_handle);
+extern "C" void WebSpider_WindowBeginDrag(void *window_handle);
 #ifdef _WIN32
-extern "C" void Mixar_WindowUpdateDrag(void *window_handle);
-extern "C" void Mixar_WindowEndDrag(void *window_handle);
-extern "C" void Mixar_WindowSetParentTracked(void *child_handle, void *parent_handle);
+extern "C" void WebSpider_WindowUpdateDrag(void *window_handle);
+extern "C" void WebSpider_WindowEndDrag(void *window_handle);
+extern "C" void WebSpider_WindowSetParentTracked(void *child_handle, void *parent_handle);
 #endif
-extern "C" void Mixar_WindowSetParent(void *child_handle, void *parent_handle);
-extern "C" void Mixar_WindowPositionAboveParent(void *child_handle,
+extern "C" void WebSpider_WindowSetParent(void *child_handle, void *parent_handle);
+extern "C" void WebSpider_WindowPositionAboveParent(void *child_handle,
                                                 void *parent_handle,
                                                 int offset_x,
                                                 int offset_y);
-extern "C" bool Mixar_WindowHasChildWindow(void *parent_handle);
-extern "C" void Mixar_WindowSetBorderless(void *window_handle);
-extern "C" void Mixar_WindowSetFloatingLevel(void *window_handle);
-extern "C" void Mixar_WindowSetHidesOnDeactivate(void *window_handle, bool hides);
-extern "C" void Mixar_WindowBindToParentSpace(void *window_handle);
-extern "C" void Mixar_WindowOrderOut(void *window_handle);
-extern "C" void Mixar_WindowOrderFront(void *window_handle);
-extern "C" void Mixar_WindowDetachFromParent(void *child_handle, void *parent_handle);
-extern "C" void Mixar_WindowSnapToCentreBottom(void *window_handle, int margin_bottom);
-extern "C" void Mixar_WindowSetParentPlain(void *child_handle, void *parent_handle);
-extern "C" void Mixar_WindowSnapToCentreBottomOfWindow(void *child_handle,
+extern "C" bool WebSpider_WindowHasChildWindow(void *parent_handle);
+extern "C" void WebSpider_WindowSetBorderless(void *window_handle);
+extern "C" void WebSpider_WindowSetFloatingLevel(void *window_handle);
+extern "C" void WebSpider_WindowSetHidesOnDeactivate(void *window_handle, bool hides);
+extern "C" void WebSpider_WindowBindToParentSpace(void *window_handle);
+extern "C" void WebSpider_WindowOrderOut(void *window_handle);
+extern "C" void WebSpider_WindowOrderFront(void *window_handle);
+extern "C" void WebSpider_WindowDetachFromParent(void *child_handle, void *parent_handle);
+extern "C" void WebSpider_WindowSnapToCentreBottom(void *window_handle, int margin_bottom);
+extern "C" void WebSpider_WindowSetParentPlain(void *child_handle, void *parent_handle);
+extern "C" void WebSpider_WindowSnapToCentreBottomOfWindow(void *child_handle,
                                                        void *parent_handle,
                                                        int margin_bottom);
-extern "C" void Mixar_WindowAnchorAtParentCentreBottom(void *child_handle,
+extern "C" void WebSpider_WindowAnchorAtParentCentreBottom(void *child_handle,
                                                        void *parent_handle,
                                                        int margin_bottom);
-extern "C" void Mixar_WindowAnimateFrameToCentreBottomOfWindow(
+extern "C" void WebSpider_WindowAnimateFrameToCentreBottomOfWindow(
     void *child_handle, void *parent_handle,
     int new_width, int new_height, int margin_bottom, float duration);
-extern "C" void Mixar_WindowAnimateAlphaTo(
+extern "C" void WebSpider_WindowAnimateAlphaTo(
     void *window_handle, float target_alpha, float duration);
-extern "C" void Mixar_WindowSetAlpha(void *window_handle, float alpha);
-extern "C" void Mixar_WindowSetBlurBehind(void *window_handle, bool enable);
-extern "C" void Mixar_WindowMakeKey(void *window_handle);
-extern "C" void Mixar_WindowMarkAsFloatingDock(void *window_handle);
-extern "C" void Mixar_DispatchMainAfter(float delay_seconds,
+extern "C" void WebSpider_WindowSetAlpha(void *window_handle, float alpha);
+extern "C" void WebSpider_WindowSetBlurBehind(void *window_handle, bool enable);
+extern "C" void WebSpider_WindowMakeKey(void *window_handle);
+extern "C" void WebSpider_WindowMarkAsFloatingDock(void *window_handle);
+extern "C" void WebSpider_DispatchMainAfter(float delay_seconds,
                                         void (*callback)(void *),
                                         void *user_data);
-extern "C" void Mixar_WindowGetContentPixelSize(
+extern "C" void WebSpider_WindowGetContentPixelSize(
     void *window_handle, int *r_width, int *r_height);
-extern "C" int Mixar_WindowGetMaxHeightToScreenTop(
+extern "C" int WebSpider_WindowGetMaxHeightToScreenTop(
     void *window_handle, int reserve_top);
 #endif
 
-/* Mixie chat's custom-drawn region callbacks. We reuse them
+/* WebSpider AI chat's custom-drawn region callbacks. We reuse them
  * verbatim for the agent bubble's TOOLS (footer) and WINDOW (main /
  * chat history) regions so the bubble looks AND behaves identically
  * to the chat editor — including the dynamic region resize on
@@ -164,10 +164,10 @@ extern "C" int Mixar_WindowGetMaxHeightToScreenTop(
  * native message rendering / scrolling / selection / hover tracking
  * for the chat history.
  *
- * The functions read from scene.mixie_chat_input / mixie_chat_mode
- * / mixie_chat_messages (global Scene properties), so they work
- * outside SPACE_MIXIE_CHAT without modification. Linker resolution
- * comes via bf_editor_space_mixie_chat in CMakeLists.txt LIB list.
+ * The functions read from scene.webspider_ai_chat_input / webspider_ai_chat_mode
+ * / webspider_ai_chat_messages (global Scene properties), so they work
+ * outside SPACE_WEBSPIDER_CHAT without modification. Linker resolution
+ * comes via bf_editor_space_webspider_ai_chat in CMakeLists.txt LIB list.
  *
  * NOT extern "C" — these are C++ symbols, so the forward
  * declarations below MUST match the original signatures exactly
@@ -175,23 +175,23 @@ extern "C" int Mixar_WindowGetMaxHeightToScreenTop(
 struct ScrArea;
 struct wmWindow;
 struct wmRegionListenerParams;
-struct SpaceMixieChat;
+struct SpaceWebSpider AIChat;
 
-void mixie_chat_footer_region_init(wmWindowManager *wm, ARegion *region);
-void mixie_chat_footer_region_layout(const bContext *C, ARegion *region);
-void mixie_chat_footer_region_draw(const bContext *C, ARegion *region);
+void webspider_ai_chat_footer_region_init(wmWindowManager *wm, ARegion *region);
+void webspider_ai_chat_footer_region_layout(const bContext *C, ARegion *region);
+void webspider_ai_chat_footer_region_draw(const bContext *C, ARegion *region);
 
-void mixie_chat_main_region_init(wmWindowManager *wm, ARegion *region);
-void mixie_chat_main_region_layout(const bContext *C, ARegion *region);
-void mixie_chat_main_region_draw(const bContext *C, ARegion *region);
-void mixie_chat_main_region_exit(wmWindowManager *wm, ARegion *region);
-void mixie_chat_main_region_listener(const wmRegionListenerParams *params);
-void mixie_chat_main_region_cursor(wmWindow *win, ScrArea *area, ARegion *region);
+void webspider_ai_chat_main_region_init(wmWindowManager *wm, ARegion *region);
+void webspider_ai_chat_main_region_layout(const bContext *C, ARegion *region);
+void webspider_ai_chat_main_region_draw(const bContext *C, ARegion *region);
+void webspider_ai_chat_main_region_exit(wmWindowManager *wm, ARegion *region);
+void webspider_ai_chat_main_region_listener(const wmRegionListenerParams *params);
+void webspider_ai_chat_main_region_cursor(wmWindow *win, ScrArea *area, ARegion *region);
 
 /* Free per-space runtime cache (layout, hover, scroll). Called from
  * agent_bubble_free — safe because SpaceAgentBubble is layout-
- * compatible with SpaceMixieChat (see DNA_space_types.h). */
-void mixie_chat_free_runtime(struct SpaceMixieChat *smixie);
+ * compatible with SpaceWebSpider AIChat (see DNA_space_types.h). */
+void webspider_ai_chat_free_runtime(struct SpaceWebSpider AIChat *swebspider_ai);
 
 /* Static state used by the minimise / restore / expand-toggle ops.
  *
@@ -211,43 +211,43 @@ static bool g_bubble_expanded = false;
 static bool g_bubble_had_pending_attachments = false;
 static int g_bubble_last_min_height = 0;
 
-/* The host (main Mixar) window that the agent bubble was opened
+/* The host (main WebSpider 3D) window that the agent bubble was opened
  * from. Stashed when the open op runs so the minimise / restore
- * paths can re-parent the pill onto Mixar's main window — that's
+ * paths can re-parent the pill onto WebSpider 3D's main window — that's
  * what makes the pill follow the user's drags instead of staying
  * pinned to a screen coordinate. nullptr until the first open. */
 static void *g_host_ghostwin = nullptr;
 
 /* Custom background colour for the agent bubble.  Set via the
- * mixar.bubble_set_bg_color operator.  The override is pushed into
- * the shared mixie_chat draw functions via
- * mixie_chat_set_bg_override / mixie_chat_clear_bg_override —
- * see mixie_chat_main_region.cc and mixie_chat_footer.cc. */
+ * webspider.bubble_set_bg_color operator.  The override is pushed into
+ * the shared webspider_ai_chat draw functions via
+ * webspider_ai_chat_set_bg_override / webspider_ai_chat_clear_bg_override —
+ * see webspider_ai_chat_main_region.cc and webspider_ai_chat_footer.cc. */
 static bool g_bubble_bg_custom = false;
 static float g_bubble_bg_color[4] = {0.0f, 0.0f, 0.0f, 1.0f};
 
 void wm_window_close(bContext *C, wmWindowManager *wm, wmWindow *win);
 
-/* Forward declarations for the bg override helpers in mixie_chat. */
-void mixie_chat_set_bg_override(const float rgba[4]);
-void mixie_chat_clear_bg_override();
+/* Forward declarations for the bg override helpers in webspider_ai_chat. */
+void webspider_ai_chat_set_bg_override(const float rgba[4]);
+void webspider_ai_chat_clear_bg_override();
 
 /* Wrapper draw callbacks that push the custom bg colour into the
- * shared mixie_chat draw path, then clear it afterwards so the
- * regular mixie_chat editor is unaffected. */
+ * shared webspider_ai_chat draw path, then clear it afterwards so the
+ * regular webspider_ai_chat editor is unaffected. */
 static void agent_bubble_main_region_draw(const bContext *C, ARegion *region)
 {
   /* The main body (RGN_TYPE_WINDOW) resolves TH_BACK to
    * space_agent_bubble.back, which is the "Window Background" colour
    * in the Agent Bubble theme.  Push it as an override so the shared
-   * mixie_chat draw path uses the agent-bubble colour, not the
-   * mixie-chat one. */
+   * webspider_ai_chat draw path uses the agent-bubble colour, not the
+   * webspider_ai-chat one. */
   bTheme *btheme = UI_GetTheme();
   const unsigned char *bk = btheme->space_agent_bubble.back;
   float body_bg[4] = {bk[0] / 255.0f, bk[1] / 255.0f, bk[2] / 255.0f, bk[3] / 255.0f};
-  mixie_chat_set_bg_override(body_bg);
-  mixie_chat_main_region_draw(C, region);
-  mixie_chat_clear_bg_override();
+  webspider_ai_chat_set_bg_override(body_bg);
+  webspider_ai_chat_main_region_draw(C, region);
+  webspider_ai_chat_clear_bg_override();
 }
 
 static int agent_bubble_height_floor_for_attachments(const int attachment_count)
@@ -268,7 +268,7 @@ static void bubble_set_min_content_size(void *ghostwin, const int min_height)
    * frame while the bubble repaints — two cross-runtime window calls
    * per frame for values that almost never change.
    *
-   * The cache MUST be invalidated whenever Mixar_WindowForceSize runs:
+   * The cache MUST be invalidated whenever WebSpider_WindowForceSize runs:
    * force-size clears both contentMinSize and contentMaxSize to allow
    * free resizing, so the limits need re-applying afterwards. Every
    * force-size on the bubble goes through bubble_force_size_and_refresh
@@ -278,14 +278,14 @@ static void bubble_set_min_content_size(void *ghostwin, const int min_height)
     return;
   }
   g_bubble_last_min_height = min_height;
-  Mixar_WindowSetMinContentSize(ghostwin, AGENT_BUBBLE_MIN_WIDTH, min_height);
+  WebSpider_WindowSetMinContentSize(ghostwin, AGENT_BUBBLE_MIN_WIDTH, min_height);
 #ifdef __APPLE__
   /* Cap the maximum height so the bubble can't grow taller than the
    * expanded size.  Width is unconstrained (like Windows) so the user
    * can widen the bubble freely. */
   const int max_h = (min_height > AGENT_BUBBLE_EXPANDED_HEIGHT) ? min_height
                                                                  : AGENT_BUBBLE_EXPANDED_HEIGHT;
-  Mixar_WindowSetMaxContentSize(ghostwin, 0, max_h);
+  WebSpider_WindowSetMaxContentSize(ghostwin, 0, max_h);
 #endif
 }
 
@@ -295,7 +295,7 @@ static void bubble_force_size_and_refresh(bContext *C, void *ghostwin, int width
     return;
   }
 
-  Mixar_WindowForceSize(ghostwin, width, height);
+  WebSpider_WindowForceSize(ghostwin, width, height);
   /* Force-size cleared the OS min/max constraints — invalidate the
    * cache so the next bubble_set_min_content_size re-applies them. */
   g_bubble_last_min_height = 0;
@@ -303,7 +303,7 @@ static void bubble_force_size_and_refresh(bContext *C, void *ghostwin, int width
 
   int pixel_width = width;
   int pixel_height = height;
-  Mixar_WindowGetContentPixelSize(ghostwin, &pixel_width, &pixel_height);
+  WebSpider_WindowGetContentPixelSize(ghostwin, &pixel_width, &pixel_height);
   if (pixel_width <= 0 || pixel_height <= 0) {
     pixel_width = width;
     pixel_height = height;
@@ -359,7 +359,7 @@ static int agent_bubble_pending_attachment_count(const bContext *C)
 
   PointerRNA scene_ptr = RNA_id_pointer_create(&scene->id);
   PropertyRNA *attachments_prop = RNA_struct_find_property(
-      &scene_ptr, "mixie_chat_pending_attachments");
+      &scene_ptr, "webspider_ai_chat_pending_attachments");
   if (attachments_prop == nullptr) {
     return 0;
   }
@@ -440,7 +440,7 @@ static void agent_bubble_sync_footer_window_size(const bContext *C, ARegion *reg
   int target_height = (required_height > height_floor) ? required_height : height_floor;
 
   /* Clamp to screen boundary. */
-  const int max_height = Mixar_WindowGetMaxHeightToScreenTop(
+  const int max_height = WebSpider_WindowGetMaxHeightToScreenTop(
       win->ghostwin, AGENT_BUBBLE_AUTOGROW_TOP_RESERVE);
   if (max_height > 0 && target_height > max_height) {
     target_height = max_height;
@@ -483,15 +483,15 @@ static void agent_bubble_footer_region_draw(const bContext *C, ARegion *region)
     footer_bg[2] = fb[2] / 255.0f;
     footer_bg[3] = fb[3] / 255.0f;
   }
-  mixie_chat_set_bg_override(footer_bg);
+  webspider_ai_chat_set_bg_override(footer_bg);
 
-  mixie_chat_footer_region_draw(C, region);
-  mixie_chat_clear_bg_override();
+  webspider_ai_chat_footer_region_draw(C, region);
+  webspider_ai_chat_clear_bg_override();
 }
 
 static void agent_bubble_footer_region_layout(const bContext *C, ARegion *region)
 {
-  mixie_chat_footer_region_layout(C, region);
+  webspider_ai_chat_footer_region_layout(C, region);
   agent_bubble_sync_footer_window_size(C, region);
 }
 
@@ -500,7 +500,7 @@ static void agent_bubble_footer_region_layout(const bContext *C, ARegion *region
  * dimensions in sync IMMEDIATELY (don't wait for the GHOST resize
  * event to arrive next frame).
  *
- * Why this matters: Mixar_WindowForceSize resizes the NSWindow at
+ * Why this matters: WebSpider_WindowForceSize resizes the NSWindow at
  * the AppKit layer. Blender catches the resize via GHOST_kEventWindowSize
  * and updates wmWindow::sizex/sizey + recomputes area & region
  * winrct on the NEXT event-loop iteration. Until that happens, the
@@ -516,8 +516,8 @@ static void pill_set_size(bContext *C, int width, int height, float radius)
     return;
   }
 #if defined(__APPLE__) || defined(_WIN32)
-  Mixar_WindowForceSize(g_pill_ghostwin, width, height);
-  Mixar_WindowSetCornerRadius(g_pill_ghostwin, radius);
+  WebSpider_WindowForceSize(g_pill_ghostwin, width, height);
+  WebSpider_WindowSetCornerRadius(g_pill_ghostwin, radius);
 #else
   (void)width;
   (void)height;
@@ -534,12 +534,12 @@ static void pill_set_size(bContext *C, int width, int height, float radius)
    * actual width — the HEADER region's winrct then lands at the
    * wrong width and the separator_spacer sandwich centres content
    * against the wrong axis. Reading the actual backing-store size
-   * via Mixar_WindowGetContentPixelSize matches what GHOST reports
+   * via WebSpider_WindowGetContentPixelSize matches what GHOST reports
    * to Blender on real resize events, regardless of monitor scale. */
   int pixel_width = width;
   int pixel_height = height;
 #if defined(__APPLE__) || defined(_WIN32)
-  Mixar_WindowGetContentPixelSize(g_pill_ghostwin, &pixel_width, &pixel_height);
+  WebSpider_WindowGetContentPixelSize(g_pill_ghostwin, &pixel_width, &pixel_height);
   if (pixel_width <= 0 || pixel_height <= 0) {
     pixel_width = width;
     pixel_height = height;
@@ -630,14 +630,14 @@ static void pill_set_size(bContext *C, int width, int height, float radius)
 
 /* Floating status pill (child window) dimensions. Small chip that
  * sits just above the bubble's top-left and tracks its position via
- * the macOS child-window relationship (see Mixar_WindowSetParent).
+ * the macOS child-window relationship (see WebSpider_WindowSetParent).
  *
  * The pill is its own AGENT_BUBBLE editor window, but with the
  * WINDOW (body) and TOOLS (footer) regions hidden so only the
  * HEADER region renders. The header drawer (header.py) detects
  * "I'm in a pill window" by the small width and renders just the
  * status pill, no drag handle. The pill window itself is set
- * borderless (see Mixar_WindowSetBorderless) so its content view
+ * borderless (see WebSpider_WindowSetBorderless) so its content view
  * fills the entire frame with no chrome — eliminates the "two
  * background colours" issue that titled+transparent caused on the
  * small pill window.
@@ -662,7 +662,7 @@ static void pill_set_size(bContext *C, int width, int height, float radius)
  *     bubble, so it needs a substantial size + readable text.
  *
  * The pill is created at SMALL size on first open, then resized
- * via Mixar_WindowForceSize + Mixar_WindowSetCornerRadius on every
+ * via WebSpider_WindowForceSize + WebSpider_WindowSetCornerRadius on every
  * minimise / restore transition (including the start_minimised
  * branch of the open op). */
 #define AGENT_BUBBLE_PILL_WIDTH 148
@@ -684,7 +684,7 @@ static void pill_set_size(bContext *C, int width, int height, float radius)
 #define AGENT_BUBBLE_PILL_GAP 6
 
 #if defined(__APPLE__) || defined(_WIN32)
-/* Saved .mixar files can restore the agent bubble's wmWindow instances
+/* Saved .webspider files can restore the agent bubble's wmWindow instances
  * before this operator runs. Those windows did not pass through the
  * live create path, so their OS window styles can come back as regular
  * titled windows with min/max/close controls. Re-apply the native bubble
@@ -726,33 +726,33 @@ static bool agent_bubble_repair_existing_windows(bContext *C)
 
     if (has_body_or_footer) {
 #ifdef __APPLE__
-      Mixar_WindowMarkAsFloatingDock(win->ghostwin);
+      WebSpider_WindowMarkAsFloatingDock(win->ghostwin);
 #endif
-      Mixar_WindowSetChromeless(win->ghostwin, true);
-      Mixar_WindowSetFloatingLevel(win->ghostwin);
-      Mixar_WindowSetHidesOnDeactivate(win->ghostwin, true);
-      Mixar_WindowSetCornerRadius(win->ghostwin, AGENT_BUBBLE_CORNER_RADIUS);
+      WebSpider_WindowSetChromeless(win->ghostwin, true);
+      WebSpider_WindowSetFloatingLevel(win->ghostwin);
+      WebSpider_WindowSetHidesOnDeactivate(win->ghostwin, true);
+      WebSpider_WindowSetCornerRadius(win->ghostwin, AGENT_BUBBLE_CORNER_RADIUS);
       const int collapsed_height = agent_bubble_collapsed_height_for_current_attachments(C);
       bubble_force_size_and_refresh(
           C, win->ghostwin, AGENT_BUBBLE_DEFAULT_WIDTH, collapsed_height);
       bubble_set_min_content_size(win->ghostwin, collapsed_height);
 #ifdef _WIN32
       if (g_host_ghostwin != nullptr) {
-        Mixar_WindowSetParentTracked(win->ghostwin, g_host_ghostwin);
+        WebSpider_WindowSetParentTracked(win->ghostwin, g_host_ghostwin);
       }
 #endif
 #ifdef __APPLE__
       if (g_host_ghostwin != nullptr) {
-        Mixar_WindowSetParentPlain(win->ghostwin, g_host_ghostwin);
+        WebSpider_WindowSetParentPlain(win->ghostwin, g_host_ghostwin);
       }
-      Mixar_WindowOrderFront(win->ghostwin);
+      WebSpider_WindowOrderFront(win->ghostwin);
 #endif
       /* Snap the bubble back to the host's centre-bottom so the
        * "Open Agent" button always brings it to a predictable location
        * — even if the user previously dragged it off-screen or onto
        * another monitor. Mirrors the first-open and restore paths. */
       if (g_host_ghostwin != nullptr) {
-        Mixar_WindowSnapToCentreBottomOfWindow(win->ghostwin,
+        WebSpider_WindowSnapToCentreBottomOfWindow(win->ghostwin,
                                                g_host_ghostwin,
                                                AGENT_BUBBLE_BOTTOM_MARGIN);
       }
@@ -763,21 +763,21 @@ static bool agent_bubble_repair_existing_windows(bContext *C)
     }
     else {
 #ifdef __APPLE__
-      Mixar_WindowMarkAsFloatingDock(win->ghostwin);
+      WebSpider_WindowMarkAsFloatingDock(win->ghostwin);
 #endif
-      Mixar_WindowSetBorderless(win->ghostwin);
-      Mixar_WindowSetFloatingLevel(win->ghostwin);
-      Mixar_WindowSetHidesOnDeactivate(win->ghostwin, true);
-      Mixar_WindowSetCornerRadius(win->ghostwin, AGENT_BUBBLE_PILL_CORNER_RADIUS);
-      Mixar_WindowSetMinContentSize(win->ghostwin, 40, 20);
+      WebSpider_WindowSetBorderless(win->ghostwin);
+      WebSpider_WindowSetFloatingLevel(win->ghostwin);
+      WebSpider_WindowSetHidesOnDeactivate(win->ghostwin, true);
+      WebSpider_WindowSetCornerRadius(win->ghostwin, AGENT_BUBBLE_PILL_CORNER_RADIUS);
+      WebSpider_WindowSetMinContentSize(win->ghostwin, 40, 20);
       g_pill_ghostwin = win->ghostwin;
       repaired_pill = win->ghostwin;
     }
   }
 
   if (repaired_bubble != nullptr && repaired_pill != nullptr) {
-    Mixar_WindowSetParent(repaired_pill, repaired_bubble);
-    Mixar_WindowPositionAboveParent(repaired_pill,
+    WebSpider_WindowSetParent(repaired_pill, repaired_bubble);
+    WebSpider_WindowPositionAboveParent(repaired_pill,
                                     repaired_bubble,
                                     /*offset_x=*/0,
                                     /*offset_y=*/AGENT_BUBBLE_PILL_GAP);
@@ -899,13 +899,13 @@ static int agent_bubble_close_all_windows(bContext *C)
    * background application after the bubble HWNDs were destroyed. */
   if (closed > 0) {
     if (host_ghost != nullptr) {
-      Mixar_WindowMakeKey(host_ghost);
+      WebSpider_WindowMakeKey(host_ghost);
     }
     else {
       /* Fallback: pick the first remaining window. */
       wmWindow *first = static_cast<wmWindow *>(wm->windows.first);
       if (first != nullptr && first->ghostwin != nullptr) {
-        Mixar_WindowMakeKey(first->ghostwin);
+        WebSpider_WindowMakeKey(first->ghostwin);
       }
     }
   }
@@ -955,9 +955,9 @@ static SpaceLink *agent_bubble_create(const ScrArea * /*area*/, const Scene * /*
   ARegion *region;
   SpaceAgentBubble *sbubble = MEM_callocN<SpaceAgentBubble>("initagentbubble");
   sbubble->spacetype = SPACE_AGENT_BUBBLE;
-  /* Mirror SpaceMixieChat init — sel_message_index = -1 means no
+  /* Mirror SpaceWebSpider AIChat init — sel_message_index = -1 means no
    * active selection. The struct is laid out identically to
-   * SpaceMixieChat so mixie chat's main region C++ code can read
+   * SpaceWebSpider AIChat so webspider_ai chat's main region C++ code can read
    * these fields safely via reinterpret_cast. */
   sbubble->sel_message_index = -1;
   sbubble->sel_start = 0;
@@ -977,7 +977,7 @@ static SpaceLink *agent_bubble_create(const ScrArea * /*area*/, const Scene * /*
   /* Footer — bottom — input field + send button.
    * Use RGN_TYPE_TOOLS instead of RGN_TYPE_FOOTER because footer regions
    * are size-clamped to ~52 px by Blender's layout system (same fix the
-   * mixie chat editor uses). TOOLS regions honor sizey requests.
+   * webspider_ai chat editor uses). TOOLS regions honor sizey requests.
    *
    * 200 px fits the multi-line input grown to its max (4 lines ≈ 120 px)
    * + the action row with mode dropdown and send button (~40 px) +
@@ -1007,12 +1007,12 @@ static SpaceLink *agent_bubble_create(const ScrArea * /*area*/, const Scene * /*
 
 static void agent_bubble_free(SpaceLink *sl)
 {
-  /* SpaceAgentBubble is layout-identical to SpaceMixieChat — see
-   * DNA_space_types.h. Free the per-space MixieChatRuntime via mixie
+  /* SpaceAgentBubble is layout-identical to SpaceWebSpider AIChat — see
+   * DNA_space_types.h. Free the per-space WebSpider AIChatRuntime via webspider_ai
    * chat's helper (clears layout cache, hover state, etc.). Cast is
    * safe: same field offsets. */
-  SpaceMixieChat *smixie = reinterpret_cast<SpaceMixieChat *>(sl);
-  mixie_chat_free_runtime(smixie);
+  SpaceWebSpider AIChat *swebspider_ai = reinterpret_cast<SpaceWebSpider AIChat *>(sl);
+  webspider_ai_chat_free_runtime(swebspider_ai);
 
   /* NOTE: Do NOT clear g_bubble_ghostwin / g_pill_ghostwin /
    * g_host_ghostwin here. This callback fires for EVERY
@@ -1064,9 +1064,9 @@ void agent_bubble_header_region_draw(const bContext *C, ARegion *region)
 
 /** \} */
 
-/* Main + footer regions are wired to mixie chat's custom-drawn
+/* Main + footer regions are wired to webspider_ai chat's custom-drawn
  * callbacks in spacetype registration below. SpaceAgentBubble is
- * layout-identical to SpaceMixieChat, so the chat history renders
+ * layout-identical to SpaceWebSpider AIChat, so the chat history renders
  * with full markdown / message bubbles / scroll-to-bottom and the
  * composer renders with auto-grow / attachments / send button. */
 
@@ -1075,7 +1075,7 @@ void agent_bubble_header_region_draw(const bContext *C, ARegion *region)
 /** \name Operator and Keymap Registration
  * \{ */
 
-/* (Mixar_* extern declarations and AGENT_BUBBLE_* dimension defines
+/* (WebSpider_* extern declarations and AGENT_BUBBLE_* dimension defines
  * live near the top of this file — moved up there so
  * agent_bubble_create() can reference the region heights it needs to
  * set on the regions it constructs.) */
@@ -1094,11 +1094,11 @@ void agent_bubble_header_region_draw(const bContext *C, ARegion *region)
  *      and stays above it (NSWindowAbove on macOS) when the user
  *      clicks back on the main window. Without this the bubble drops
  *      behind the main window the moment focus leaves.
- *   2. Mixar_WindowSetChromeless to strip the macOS title bar and
+ *   2. WebSpider_WindowSetChromeless to strip the macOS title bar and
  *      traffic-light buttons. dialog=true alone hides the minimize
  *      button but leaves close + zoom + the title bar visible.
  *
- * The Python wrapper (mixar.agent_bubble_open_window) calls this op,
+ * The Python wrapper (webspider.agent_bubble_open_window) calls this op,
  * and the Window menu hook in the agent_bubble_module bootstrap also
  * invokes it directly.
  * \{ */
@@ -1110,7 +1110,7 @@ static wmOperatorStatus agent_bubble_show_window_exec(bContext *C, wmOperator *o
   /* Stash the window the op was invoked from BEFORE WM_window_open
    * runs (which switches CTX_wm_window to the new bubble window).
    * Used later by the minimise / restore paths to re-parent the
-   * pill onto Mixar's main NSWindow so it tracks the user's drags
+   * pill onto WebSpider 3D's main NSWindow so it tracks the user's drags
    * instead of staying pinned to a screen coordinate.
    *
    * Skip this when the op is invoked WITH the bubble already as the
@@ -1139,7 +1139,7 @@ static wmOperatorStatus agent_bubble_show_window_exec(bContext *C, wmOperator *o
    * orderOut'd — it's still alive but hidden, and the dedup loop
    * doesn't always see hidden temp windows.
    *
-   * Mirrors mixar_bubble_restore_exec: snap the bubble to the host's
+   * Mirrors webspider_bubble_restore_exec: snap the bubble to the host's
    * current centre-bottom, orderFront, detach the pill from the
    * host, re-attach it to the bubble. */
   if (g_bubble_ghostwin != nullptr && g_bubble_minimised) {
@@ -1151,17 +1151,17 @@ static wmOperatorStatus agent_bubble_show_window_exec(bContext *C, wmOperator *o
                       AGENT_BUBBLE_PILL_CORNER_RADIUS_LARGE);
       }
       if (g_pill_ghostwin != nullptr && g_host_ghostwin != nullptr) {
-        Mixar_WindowAnchorAtParentCentreBottom(
+        WebSpider_WindowAnchorAtParentCentreBottom(
             g_pill_ghostwin, g_host_ghostwin, AGENT_BUBBLE_PILL_BOTTOM_MARGIN);
 #ifdef __APPLE__
-        Mixar_WindowOrderFront(g_pill_ghostwin);
+        WebSpider_WindowOrderFront(g_pill_ghostwin);
 #endif
       }
       return OPERATOR_FINISHED;
     }
 
     if (g_host_ghostwin != nullptr) {
-      Mixar_WindowSnapToCentreBottomOfWindow(g_bubble_ghostwin,
+      WebSpider_WindowSnapToCentreBottomOfWindow(g_bubble_ghostwin,
                                              g_host_ghostwin,
                                              AGENT_BUBBLE_BOTTOM_MARGIN);
     }
@@ -1171,15 +1171,15 @@ static wmOperatorStatus agent_bubble_show_window_exec(bContext *C, wmOperator *o
     bubble_set_min_content_size(g_bubble_ghostwin, collapsed_height);
     /* Re-arm hidesOnDeactivate AND re-attach to host BEFORE showing
      * (mirrors restore_exec) — avoids Win32 Alt+Tab race. */
-    Mixar_WindowSetHidesOnDeactivate(g_bubble_ghostwin, true);
+    WebSpider_WindowSetHidesOnDeactivate(g_bubble_ghostwin, true);
     if (g_host_ghostwin != nullptr) {
 #ifdef _WIN32
-      Mixar_WindowSetParentTracked(g_bubble_ghostwin, g_host_ghostwin);
+      WebSpider_WindowSetParentTracked(g_bubble_ghostwin, g_host_ghostwin);
 #else
-      Mixar_WindowSetParentPlain(g_bubble_ghostwin, g_host_ghostwin);
+      WebSpider_WindowSetParentPlain(g_bubble_ghostwin, g_host_ghostwin);
 #endif
     }
-    Mixar_WindowOrderFront(g_bubble_ghostwin);
+    WebSpider_WindowOrderFront(g_bubble_ghostwin);
     /* Re-parent pill directly from host → bubble (no detach step)
      * so it's never an unowned visible window. */
     if (g_pill_ghostwin != nullptr) {
@@ -1187,8 +1187,8 @@ static wmOperatorStatus agent_bubble_show_window_exec(bContext *C, wmOperator *o
                     AGENT_BUBBLE_PILL_WIDTH,
                     AGENT_BUBBLE_PILL_HEIGHT,
                     AGENT_BUBBLE_PILL_CORNER_RADIUS);
-      Mixar_WindowSetParent(g_pill_ghostwin, g_bubble_ghostwin);
-      Mixar_WindowPositionAboveParent(g_pill_ghostwin,
+      WebSpider_WindowSetParent(g_pill_ghostwin, g_bubble_ghostwin);
+      WebSpider_WindowPositionAboveParent(g_pill_ghostwin,
                                       g_bubble_ghostwin,
                                       /*offset_x=*/0,
                                       /*offset_y=*/AGENT_BUBBLE_PILL_GAP);
@@ -1229,44 +1229,44 @@ static wmOperatorStatus agent_bubble_show_window_exec(bContext *C, wmOperator *o
     /* Tag this NSWindow as a non-blocking floating dock so
      * hasDialogWindow() exempts it from the modal-dialog gate.
      * Without this tag, BlenderWindow.canBecomeKeyWindow blocks the
-     * main Mixar window from becoming the macOS key window while the
-     * bubble is open — meaning viewport shortcuts and mixie chat
+     * main WebSpider 3D window from becoming the macOS key window while the
+     * bubble is open — meaning viewport shortcuts and webspider_ai chat
      * typing receive no keystrokes. Must be set BEFORE any user
      * interaction (clicking back on the main window). */
-    Mixar_WindowMarkAsFloatingDock(win->ghostwin);
+    WebSpider_WindowMarkAsFloatingDock(win->ghostwin);
 
     /* Pin the bubble to its parent's Space so it doesn't leak onto
      * another Space when the user swipes away from a full-screen
-     * Mixar (the three-finger gesture / Mission Control). Without
+     * WebSpider 3D (the three-finger gesture / Mission Control). Without
      * this the floating bubble surfaces on top of whatever window is
-     * in the Space the user switched to. See Mixar_WindowBindToParentSpace. */
-    Mixar_WindowBindToParentSpace(win->ghostwin);
+     * in the Space the user switched to. See WebSpider_WindowBindToParentSpace. */
+    WebSpider_WindowBindToParentSpace(win->ghostwin);
 #endif
 
     /* Strip traffic lights + title bar. Safe to call on the dedup-
      * reused window too — chromeless state persists. */
-    Mixar_WindowSetChromeless(win->ghostwin, true);
+    WebSpider_WindowSetChromeless(win->ghostwin, true);
 
     /* Pin the bubble to NSFloatingWindowLevel so it stays visible
-     * above the rest of Mixar's interface no matter where the user
+     * above the rest of WebSpider 3D's interface no matter where the user
      * clicks. The dialog=true child-window relationship was supposed
      * to do this but kept losing the bubble behind the main window
      * across various click scenarios — Floating level is the
      * reliable OS-level mechanism. */
-    Mixar_WindowSetFloatingLevel(win->ghostwin);
+    WebSpider_WindowSetFloatingLevel(win->ghostwin);
 
-    /* Hide the bubble when Mixar deactivates (user alt-tabs to
+    /* Hide the bubble when WebSpider 3D deactivates (user alt-tabs to
      * another app). Without this, the floating level keeps the
      * bubble visible above other apps' windows too — the
      * cross-app leak the user reported. AppKit handles the
      * orderOut/orderFront automatically based on app activation. */
-    Mixar_WindowSetHidesOnDeactivate(win->ghostwin, true);
+    WebSpider_WindowSetHidesOnDeactivate(win->ghostwin, true);
 
     /* Round the window corners to match the Figma's soft popup look.
      * Done after Chromeless so the title-bar style mask is already
      * settled — corner-rounding sets opaque=NO + clearColor which
      * doesn't play nicely with subsequent style-mask changes. */
-    Mixar_WindowSetCornerRadius(win->ghostwin, AGENT_BUBBLE_CORNER_RADIUS);
+    WebSpider_WindowSetCornerRadius(win->ghostwin, AGENT_BUBBLE_CORNER_RADIUS);
 
     /* Force the actual NSWindow size to our requested dimensions.
      * Without this, WM_window_open's std::max-with-{200,150} clamping
@@ -1278,24 +1278,24 @@ static wmOperatorStatus agent_bubble_show_window_exec(bContext *C, wmOperator *o
         C, win->ghostwin, AGENT_BUBBLE_DEFAULT_WIDTH, collapsed_height);
     bubble_set_min_content_size(win->ghostwin, collapsed_height);
 
-    /* Anchor the bubble at the centre-bottom of Mixar's HOST
+    /* Anchor the bubble at the centre-bottom of WebSpider 3D's HOST
      * window (not the screen). WM_window_open used
      * WIN_ALIGN_PARENT_CENTER which centres on the parent window's
      * geometric centre — fine for an editor popup but the wrong
      * rest position for a chat dock. The Figma spec, the pill's
      * minimised position, and the user's mental model all sit the
-     * bubble near the bottom of Mixar's window. Anchoring to the
+     * bubble near the bottom of WebSpider 3D's window. Anchoring to the
      * host's frame (instead of the screen) keeps the bubble inside
-     * Mixar even when Mixar is small/non-fullscreen — earlier
+     * WebSpider 3D even when WebSpider 3D is small/non-fullscreen — earlier
      * builds that snapped to the screen put the bubble visually
-     * "below Mixar" if Mixar didn't fill the screen. */
+     * "below WebSpider 3D" if WebSpider 3D didn't fill the screen. */
     if (g_host_ghostwin != nullptr) {
-      Mixar_WindowSnapToCentreBottomOfWindow(win->ghostwin,
+      WebSpider_WindowSnapToCentreBottomOfWindow(win->ghostwin,
                                              g_host_ghostwin,
                                              AGENT_BUBBLE_BOTTOM_MARGIN);
     }
     else {
-      Mixar_WindowSnapToCentreBottom(win->ghostwin,
+      WebSpider_WindowSnapToCentreBottom(win->ghostwin,
                                      AGENT_BUBBLE_BOTTOM_MARGIN);
     }
 
@@ -1320,16 +1320,16 @@ static wmOperatorStatus agent_bubble_show_window_exec(bContext *C, wmOperator *o
      * SetWinEventHook that maintains the bubble's relative offset
      * to the host, so it follows when the host moves between screens. */
     if (g_host_ghostwin != nullptr) {
-      Mixar_WindowSetParentTracked(g_bubble_ghostwin, g_host_ghostwin);
+      WebSpider_WindowSetParentTracked(g_bubble_ghostwin, g_host_ghostwin);
     }
 #else
     /* Match the restore path on macOS: make the bubble a child of
-     * the main Mixar window immediately after first open. Without
+     * the main WebSpider 3D window immediately after first open. Without
      * this initial parent relationship AppKit treats the bubble as a
      * separate floating window until the user minimises/restores it,
-     * which can hide it when focus returns to another Mixar editor. */
+     * which can hide it when focus returns to another WebSpider 3D editor. */
     if (g_host_ghostwin != nullptr) {
-      Mixar_WindowSetParentPlain(g_bubble_ghostwin, g_host_ghostwin);
+      WebSpider_WindowSetParentPlain(g_bubble_ghostwin, g_host_ghostwin);
     }
 #endif
 
@@ -1340,7 +1340,7 @@ static wmOperatorStatus agent_bubble_show_window_exec(bContext *C, wmOperator *o
      * menu twice) would spawn duplicate pills that all stack above
      * the bubble. The bubble itself dedups via WM_window_open's
      * temp-reuse loop; we mirror the dedup for the pill via
-     * Mixar_WindowHasChildWindow.
+     * WebSpider_WindowHasChildWindow.
      *
      * The pill is opened with temp=false so its own AGENT_BUBBLE
      * area doesn't get caught by the temp-reuse dedup that returned
@@ -1355,7 +1355,7 @@ static wmOperatorStatus agent_bubble_show_window_exec(bContext *C, wmOperator *o
      *      tracks the bubble's position automatically when the user
      *      drags the bubble around the screen, and closes when the
      *      bubble closes. */
-    if (!Mixar_WindowHasChildWindow(win->ghostwin)) {
+    if (!WebSpider_WindowHasChildWindow(win->ghostwin)) {
       rcti pill_rect;
       pill_rect.xmin = 0;
       pill_rect.ymin = 0;
@@ -1433,13 +1433,13 @@ static wmOperatorStatus agent_bubble_show_window_exec(bContext *C, wmOperator *o
           /* Tag the pill as a non-blocking floating dock too — same
            * reason as the bubble: keeps hasDialogWindow() from
            * blocking the main window's key-window eligibility. */
-          Mixar_WindowMarkAsFloatingDock(pill_win->ghostwin);
+          WebSpider_WindowMarkAsFloatingDock(pill_win->ghostwin);
 
           /* Pin the pill to its parent's Space too — when the bubble
            * is minimised the pill is detached and re-parented onto the
            * host window, so it must carry the same Space-binding to
-           * avoid leaking onto another Space in full-screen Mixar. */
-          Mixar_WindowBindToParentSpace(pill_win->ghostwin);
+           * avoid leaking onto another Space in full-screen WebSpider 3D. */
+          WebSpider_WindowBindToParentSpace(pill_win->ghostwin);
 #endif
 
           /* Borderless (NOT chromeless): chromeless leaves the
@@ -1449,41 +1449,41 @@ static wmOperatorStatus agent_bubble_show_window_exec(bContext *C, wmOperator *o
            * reported). Borderless removes the title bar entirely so
            * the pill's contentView fills the frame with a single
            * solid colour. */
-          Mixar_WindowSetBorderless(pill_win->ghostwin);
+          WebSpider_WindowSetBorderless(pill_win->ghostwin);
 
           /* Pin the pill to floating level too. As a child window of
            * the bubble it'd inherit the bubble's level, but when the
            * user minimises the bubble we detach the pill and need
            * it to stay above other windows on its own. */
-          Mixar_WindowSetFloatingLevel(pill_win->ghostwin);
+          WebSpider_WindowSetFloatingLevel(pill_win->ghostwin);
 
-          /* Pill also hides when Mixar deactivates — same anti-leak
+          /* Pill also hides when WebSpider 3D deactivates — same anti-leak
            * treatment as the bubble. */
-          Mixar_WindowSetHidesOnDeactivate(pill_win->ghostwin, true);
+          WebSpider_WindowSetHidesOnDeactivate(pill_win->ghostwin, true);
 
           /* Half-height corner radius gives a true pill silhouette
            * (fully rounded left + right ends) rather than a small
            * rounded rectangle. */
-          Mixar_WindowSetCornerRadius(pill_win->ghostwin,
+          WebSpider_WindowSetCornerRadius(pill_win->ghostwin,
                                       AGENT_BUBBLE_PILL_CORNER_RADIUS);
 
           /* Override macOS contentMinSize so setFrame can shrink to
            * the small pill dimensions. 40×20 is well below our 80×26
            * target so the resize isn't clamped. */
-          Mixar_WindowSetMinContentSize(pill_win->ghostwin, 40, 20);
-          Mixar_WindowForceSize(pill_win->ghostwin,
+          WebSpider_WindowSetMinContentSize(pill_win->ghostwin, 40, 20);
+          WebSpider_WindowForceSize(pill_win->ghostwin,
                                 AGENT_BUBBLE_PILL_WIDTH,
                                 AGENT_BUBBLE_PILL_HEIGHT);
 
           /* Position pill above bubble's top-left, with the gap. */
-          Mixar_WindowPositionAboveParent(pill_win->ghostwin,
+          WebSpider_WindowPositionAboveParent(pill_win->ghostwin,
                                           win->ghostwin,
                                           /*offset_x=*/0,
                                           /*offset_y=*/AGENT_BUBBLE_PILL_GAP);
 
           /* Attach as macOS child window — pill follows bubble's
            * frame automatically and closes with it. */
-          Mixar_WindowSetParent(pill_win->ghostwin, win->ghostwin);
+          WebSpider_WindowSetParent(pill_win->ghostwin, win->ghostwin);
 
           /* Stash the pill ghostwin too — needed by the minimise /
            * restore ops which detach + re-attach the pill from the
@@ -1499,7 +1499,7 @@ static wmOperatorStatus agent_bubble_show_window_exec(bContext *C, wmOperator *o
      * AFTER all setup (size, parent, pill) and BEFORE the optional
      * start-minimised path which hides the bubble again. */
     if (!start_minimised) {
-      Mixar_WindowOrderFront(g_bubble_ghostwin);
+      WebSpider_WindowOrderFront(g_bubble_ghostwin);
     }
 #endif
 
@@ -1513,12 +1513,12 @@ static wmOperatorStatus agent_bubble_show_window_exec(bContext *C, wmOperator *o
      * run loop and renders a frame, so there's no visible flash of
      * the full bubble appearing-then-vanishing.
      *
-     * Mirrors mixar_bubble_minimise_exec exactly: detach the pill,
+     * Mirrors webspider_bubble_minimise_exec exactly: detach the pill,
      * orderOut the bubble, anchor the pill at the centre-bottom of
-     * Mixar's host window (so it tracks the user's drags), set the
+     * WebSpider 3D's host window (so it tracks the user's drags), set the
      * minimised flag. */
     if (start_minimised) {
-      Mixar_WindowSetHidesOnDeactivate(g_bubble_ghostwin, false);
+      WebSpider_WindowSetHidesOnDeactivate(g_bubble_ghostwin, false);
       pill_set_size(C,
                     AGENT_BUBBLE_PILL_WIDTH_LARGE,
                     AGENT_BUBBLE_PILL_HEIGHT_LARGE,
@@ -1528,30 +1528,30 @@ static wmOperatorStatus agent_bubble_show_window_exec(bContext *C, wmOperator *o
        * an unowned visible window (avoids Alt+Tab race).  Then
        * detach bubble from host and hide it. */
       if (g_pill_ghostwin != nullptr && g_host_ghostwin != nullptr) {
-        Mixar_WindowAnchorAtParentCentreBottom(
+        WebSpider_WindowAnchorAtParentCentreBottom(
             g_pill_ghostwin, g_host_ghostwin, AGENT_BUBBLE_PILL_BOTTOM_MARGIN);
       }
       if (g_host_ghostwin != nullptr) {
-        Mixar_WindowDetachFromParent(g_bubble_ghostwin, g_host_ghostwin);
+        WebSpider_WindowDetachFromParent(g_bubble_ghostwin, g_host_ghostwin);
       }
 #else
       /* macOS: detach pill from bubble first (AppKit cascades hide
        * to children), then detach bubble from host. */
       if (g_pill_ghostwin != nullptr) {
-        Mixar_WindowDetachFromParent(g_pill_ghostwin, g_bubble_ghostwin);
+        WebSpider_WindowDetachFromParent(g_pill_ghostwin, g_bubble_ghostwin);
       }
       if (g_host_ghostwin != nullptr) {
-        Mixar_WindowDetachFromParent(g_bubble_ghostwin, g_host_ghostwin);
+        WebSpider_WindowDetachFromParent(g_bubble_ghostwin, g_host_ghostwin);
       }
 #endif
-      Mixar_WindowOrderOut(g_bubble_ghostwin);
+      WebSpider_WindowOrderOut(g_bubble_ghostwin);
       if (g_pill_ghostwin != nullptr) {
         if (g_host_ghostwin != nullptr) {
           /* Same anchor helper as the manual minimise path — installs
            * Move + Resize observers on the host so the pill stays
            * pinned to the host's centre-bottom across drags (within
            * a monitor, across monitors) and host resizes. */
-          Mixar_WindowAnchorAtParentCentreBottom(
+          WebSpider_WindowAnchorAtParentCentreBottom(
               g_pill_ghostwin,
               g_host_ghostwin,
               AGENT_BUBBLE_PILL_BOTTOM_MARGIN);
@@ -1560,7 +1560,7 @@ static wmOperatorStatus agent_bubble_show_window_exec(bContext *C, wmOperator *o
           /* No host window known (e.g. opened from an unusual context):
            * fall back to screen-relative snapping so the pill is at
            * least visible somewhere predictable. */
-          Mixar_WindowSnapToCentreBottom(g_pill_ghostwin,
+          WebSpider_WindowSnapToCentreBottom(g_pill_ghostwin,
                                          AGENT_BUBBLE_PILL_BOTTOM_MARGIN);
         }
       }
@@ -1571,7 +1571,7 @@ static wmOperatorStatus agent_bubble_show_window_exec(bContext *C, wmOperator *o
      * working.  WM_window_open calls makeKeyAndOrderFront which steals
      * focus — we undo that here. */
     if (g_host_ghostwin != nullptr) {
-      Mixar_WindowMakeKey(g_host_ghostwin);
+      WebSpider_WindowMakeKey(g_host_ghostwin);
     }
   }
 #endif
@@ -1579,14 +1579,14 @@ static wmOperatorStatus agent_bubble_show_window_exec(bContext *C, wmOperator *o
   return OPERATOR_FINISHED;
 }
 
-void MIXAR_OT_agent_bubble_show_window(wmOperatorType *ot)
+void WEBSPIDER_OT_agent_bubble_show_window(wmOperatorType *ot)
 {
   ot->name = "Show Agent Bubble Window";
   /* C-style idname; Blender exposes it to Python as
-   * bpy.ops.mixar.agent_bubble_show_window. Using the dotted form
+   * bpy.ops.webspider.agent_bubble_show_window. Using the dotted form
    * here would silently break Python lookup (same gotcha
-   * mixie_chat_agent_bubble.cc warns about). */
-  ot->idname = "MIXAR_OT_agent_bubble_show_window";
+   * webspider_ai_chat_agent_bubble.cc warns about). */
+  ot->idname = "WEBSPIDER_OT_agent_bubble_show_window";
   ot->description =
       "Open the Agent Bubble chat in a small floating Blender window";
 
@@ -1615,10 +1615,10 @@ static wmOperatorStatus agent_bubble_purge_windows_exec(bContext *C, wmOperator 
   return OPERATOR_FINISHED;
 }
 
-void MIXAR_OT_agent_bubble_purge_windows(wmOperatorType *ot)
+void WEBSPIDER_OT_agent_bubble_purge_windows(wmOperatorType *ot)
 {
   ot->name = "Purge Agent Bubble Windows";
-  ot->idname = "MIXAR_OT_agent_bubble_purge_windows";
+  ot->idname = "WEBSPIDER_OT_agent_bubble_purge_windows";
   ot->description = "Close all transient Agent Bubble overlay windows";
 
   ot->exec = agent_bubble_purge_windows_exec;
@@ -1639,8 +1639,8 @@ void MIXAR_OT_agent_bubble_purge_windows(wmOperatorType *ot)
 /* -------------------------------------------------------------------- */
 /** \name Set Agent Bubble Window Size Operator
  *
- * Python-callable wrapper around Mixar_WindowForceSize. The
- * mixar.bubble_toggle_history operator invokes this from Python to
+ * Python-callable wrapper around WebSpider_WindowForceSize. The
+ * webspider.bubble_toggle_history operator invokes this from Python to
  * grow/shrink the bubble window in lockstep with the body region's
  * hidden state. Width/height are Blender pixel dimensions; the Cocoa
  * helper converts to AppKit points before applying the frame-rect
@@ -1648,7 +1648,7 @@ void MIXAR_OT_agent_bubble_purge_windows(wmOperatorType *ot)
  * macOS's normal floor.
  * \{ */
 
-static wmOperatorStatus mixar_bubble_set_size_exec(bContext *C, wmOperator *op)
+static wmOperatorStatus webspider_bubble_set_size_exec(bContext *C, wmOperator *op)
 {
   wmWindow *win = CTX_wm_window(C);
   if (win == nullptr || win->ghostwin == nullptr) {
@@ -1661,7 +1661,7 @@ static wmOperatorStatus mixar_bubble_set_size_exec(bContext *C, wmOperator *op)
 #if defined(__APPLE__) || defined(_WIN32)
   bubble_force_size_and_refresh(C, win->ghostwin, width, height);
 #  ifdef __APPLE__
-  Mixar_WindowOrderFront(win->ghostwin);
+  WebSpider_WindowOrderFront(win->ghostwin);
 #  endif
 #else
   /* Non-macOS: best-effort no-op for now. Windows / Linux GHOST
@@ -1674,13 +1674,13 @@ static wmOperatorStatus mixar_bubble_set_size_exec(bContext *C, wmOperator *op)
   return OPERATOR_FINISHED;
 }
 
-void MIXAR_OT_bubble_set_size(wmOperatorType *ot)
+void WEBSPIDER_OT_bubble_set_size(wmOperatorType *ot)
 {
   ot->name = "Set Agent Bubble Window Size";
-  ot->idname = "MIXAR_OT_bubble_set_size";
+  ot->idname = "WEBSPIDER_OT_bubble_set_size";
   ot->description = "Internal: resize the Agent Bubble floating window";
 
-  ot->exec = mixar_bubble_set_size_exec;
+  ot->exec = webspider_bubble_set_size_exec;
 
   RNA_def_int(ot->srna,
               "width",
@@ -1735,7 +1735,7 @@ static void agent_bubble_force_redraw(bContext *C)
   }
 }
 
-static wmOperatorStatus mixar_bubble_sync_attachment_size_exec(bContext *C, wmOperator *op)
+static wmOperatorStatus webspider_bubble_sync_attachment_size_exec(bContext *C, wmOperator *op)
 {
 #if defined(__APPLE__) || defined(_WIN32)
   const bool force_attachment_height = RNA_boolean_get(op->ptr, "force_attachment_height");
@@ -1763,13 +1763,13 @@ static wmOperatorStatus mixar_bubble_sync_attachment_size_exec(bContext *C, wmOp
 #endif
 }
 
-void MIXAR_OT_bubble_sync_attachment_size(wmOperatorType *ot)
+void WEBSPIDER_OT_bubble_sync_attachment_size(wmOperatorType *ot)
 {
   ot->name = "Sync Agent Bubble Attachment Size";
-  ot->idname = "MIXAR_OT_bubble_sync_attachment_size";
+  ot->idname = "WEBSPIDER_OT_bubble_sync_attachment_size";
   ot->description = "Internal: sync Agent Bubble size with pending image attachments";
 
-  ot->exec = mixar_bubble_sync_attachment_size_exec;
+  ot->exec = webspider_bubble_sync_attachment_size_exec;
 
   RNA_def_boolean(ot->srna,
                   "force_attachment_height",
@@ -1783,7 +1783,7 @@ void MIXAR_OT_bubble_sync_attachment_size(wmOperatorType *ot)
 /* -------------------------------------------------------------------- */
 /** \name Begin Window-Drag Operator
  *
- * Python-callable wrapper around Mixar_WindowBeginDrag. The Python
+ * Python-callable wrapper around WebSpider_WindowBeginDrag. The Python
  * drag modal calls this once on mouse-down — AppKit's
  * performWindowDragWithEvent: takes over from there and tracks the
  * drag natively until the user releases the mouse. Eliminates the
@@ -1791,7 +1791,7 @@ void MIXAR_OT_bubble_sync_attachment_size(wmOperatorType *ot)
  * delta-based implementation laggy.
  * \{ */
 
-static wmOperatorStatus mixar_bubble_window_begin_drag_exec(bContext *C, wmOperator * /*op*/)
+static wmOperatorStatus webspider_bubble_window_begin_drag_exec(bContext *C, wmOperator * /*op*/)
 {
   wmWindow *win = CTX_wm_window(C);
   if (win == nullptr || win->ghostwin == nullptr) {
@@ -1799,21 +1799,21 @@ static wmOperatorStatus mixar_bubble_window_begin_drag_exec(bContext *C, wmOpera
   }
 
 #if defined(__APPLE__) || defined(_WIN32)
-  Mixar_WindowBeginDrag(win->ghostwin);
+  WebSpider_WindowBeginDrag(win->ghostwin);
 #endif
 
   return OPERATOR_FINISHED;
 }
 
-void MIXAR_OT_bubble_window_begin_drag(wmOperatorType *ot)
+void WEBSPIDER_OT_bubble_window_begin_drag(wmOperatorType *ot)
 {
   ot->name = "Begin Agent Bubble Window Drag";
-  ot->idname = "MIXAR_OT_bubble_window_begin_drag";
+  ot->idname = "WEBSPIDER_OT_bubble_window_begin_drag";
   ot->description = "Internal: start Agent Bubble window drag";
-  ot->exec = mixar_bubble_window_begin_drag_exec;
+  ot->exec = webspider_bubble_window_begin_drag_exec;
 }
 
-static wmOperatorStatus mixar_bubble_window_update_drag_exec(bContext *C,
+static wmOperatorStatus webspider_bubble_window_update_drag_exec(bContext *C,
                                                              wmOperator * /*op*/)
 {
   wmWindow *win = CTX_wm_window(C);
@@ -1821,20 +1821,20 @@ static wmOperatorStatus mixar_bubble_window_update_drag_exec(bContext *C,
     return OPERATOR_CANCELLED;
   }
 #ifdef _WIN32
-  Mixar_WindowUpdateDrag(win->ghostwin);
+  WebSpider_WindowUpdateDrag(win->ghostwin);
 #endif
   return OPERATOR_FINISHED;
 }
 
-void MIXAR_OT_bubble_window_update_drag(wmOperatorType *ot)
+void WEBSPIDER_OT_bubble_window_update_drag(wmOperatorType *ot)
 {
   ot->name = "Update Agent Bubble Window Drag";
-  ot->idname = "MIXAR_OT_bubble_window_update_drag";
+  ot->idname = "WEBSPIDER_OT_bubble_window_update_drag";
   ot->description = "Internal: update Agent Bubble window position during drag";
-  ot->exec = mixar_bubble_window_update_drag_exec;
+  ot->exec = webspider_bubble_window_update_drag_exec;
 }
 
-static wmOperatorStatus mixar_bubble_window_end_drag_exec(bContext *C,
+static wmOperatorStatus webspider_bubble_window_end_drag_exec(bContext *C,
                                                           wmOperator * /*op*/)
 {
   wmWindow *win = CTX_wm_window(C);
@@ -1842,17 +1842,17 @@ static wmOperatorStatus mixar_bubble_window_end_drag_exec(bContext *C,
     return OPERATOR_CANCELLED;
   }
 #ifdef _WIN32
-  Mixar_WindowEndDrag(win->ghostwin);
+  WebSpider_WindowEndDrag(win->ghostwin);
 #endif
   return OPERATOR_FINISHED;
 }
 
-void MIXAR_OT_bubble_window_end_drag(wmOperatorType *ot)
+void WEBSPIDER_OT_bubble_window_end_drag(wmOperatorType *ot)
 {
   ot->name = "End Agent Bubble Window Drag";
-  ot->idname = "MIXAR_OT_bubble_window_end_drag";
+  ot->idname = "WEBSPIDER_OT_bubble_window_end_drag";
   ot->description = "Internal: end Agent Bubble window drag";
-  ot->exec = mixar_bubble_window_end_drag_exec;
+  ot->exec = webspider_bubble_window_end_drag_exec;
 }
 
 /** \} */
@@ -1863,16 +1863,16 @@ void MIXAR_OT_bubble_window_end_drag(wmOperatorType *ot)
  * Drive the yellow + green "traffic light" buttons in the bubble's
  * header and the pill window's click-to-restore handler.
  *
- *   * MIXAR_OT_bubble_minimise — yellow click. Detach the pill from
+ *   * WEBSPIDER_OT_bubble_minimise — yellow click. Detach the pill from
  *     the bubble (so it survives the parent's hide), orderOut the
  *     bubble, snap the now-orphan pill to the centre-bottom of the
  *     screen. Sets g_bubble_minimised = true.
- *   * MIXAR_OT_bubble_restore — invoked by clicking the pill while
+ *   * WEBSPIDER_OT_bubble_restore — invoked by clicking the pill while
  *     minimised. orderFront the bubble (it remembers its frame),
- *     re-attach the pill as a child window (Mixar_WindowSetParent
+ *     re-attach the pill as a child window (WebSpider_WindowSetParent
  *     also re-positions it above the parent's top-left). Clears
  *     g_bubble_minimised. No-op when not minimised.
- *   * MIXAR_OT_bubble_toggle_expand — green click. Toggles the
+ *   * WEBSPIDER_OT_bubble_toggle_expand — green click. Toggles the
  *     bubble between the collapsed default (AGENT_BUBBLE_DEFAULT_HEIGHT) and the
  *     expanded chat-history view. State tracked in
  *     g_bubble_expanded.
@@ -1884,39 +1884,39 @@ void MIXAR_OT_bubble_window_end_drag(wmOperatorType *ot)
 #if defined(__APPLE__) || defined(_WIN32)
 /* Tail of the minimise glide animation: hide the bubble, reset its
  * alpha for next time, and install the live host→pill anchor.
- * Scheduled by Mixar_DispatchMainAfter at the end of the
+ * Scheduled by WebSpider_DispatchMainAfter at the end of the
  * NSAnimationContext duration so it runs exactly when the slide
  * finishes. user_data is unused — we read the static window
  * pointers directly. Defined as a plain C function (not a lambda
- * with capture) because Mixar_DispatchMainAfter takes a function
+ * with capture) because WebSpider_DispatchMainAfter takes a function
  * pointer. */
 static void minimise_anim_finish(void * /*user_data*/)
 {
   if (g_pill_ghostwin != nullptr && g_host_ghostwin != nullptr) {
 #ifdef _WIN32
-    Mixar_WindowSetCornerRadius(g_pill_ghostwin, AGENT_BUBBLE_PILL_CORNER_RADIUS_LARGE);
-    Mixar_WindowAnimateFrameToCentreBottomOfWindow(
+    WebSpider_WindowSetCornerRadius(g_pill_ghostwin, AGENT_BUBBLE_PILL_CORNER_RADIUS_LARGE);
+    WebSpider_WindowAnimateFrameToCentreBottomOfWindow(
         g_pill_ghostwin,
         g_host_ghostwin,
         AGENT_BUBBLE_PILL_WIDTH_LARGE,
         AGENT_BUBBLE_PILL_HEIGHT_LARGE,
         AGENT_BUBBLE_PILL_BOTTOM_MARGIN,
         /*duration=*/0.0f);
-    Mixar_WindowAnchorAtParentCentreBottom(
+    WebSpider_WindowAnchorAtParentCentreBottom(
         g_pill_ghostwin, g_host_ghostwin, AGENT_BUBBLE_PILL_BOTTOM_MARGIN);
 #else
-    Mixar_WindowAnchorAtParentCentreBottom(
+    WebSpider_WindowAnchorAtParentCentreBottom(
         g_pill_ghostwin, g_host_ghostwin, AGENT_BUBBLE_PILL_BOTTOM_MARGIN);
 #endif
   }
   if (g_bubble_ghostwin != nullptr) {
-    Mixar_WindowOrderOut(g_bubble_ghostwin);
-    Mixar_WindowSetAlpha(g_bubble_ghostwin, 1.0f);
+    WebSpider_WindowOrderOut(g_bubble_ghostwin);
+    WebSpider_WindowSetAlpha(g_bubble_ghostwin, 1.0f);
   }
 }
 #endif
 
-static wmOperatorStatus mixar_bubble_minimise_exec(bContext *C, wmOperator * /*op*/)
+static wmOperatorStatus webspider_bubble_minimise_exec(bContext *C, wmOperator * /*op*/)
 {
 #if defined(__APPLE__) || defined(_WIN32)
   if (g_bubble_ghostwin == nullptr || g_bubble_minimised) {
@@ -1925,13 +1925,13 @@ static wmOperatorStatus mixar_bubble_minimise_exec(bContext *C, wmOperator * /*o
 
   /* Disarm AppKit's hidesOnDeactivate so the bubble stays hidden
    * across alt-tab cycles (macOS). */
-  Mixar_WindowSetHidesOnDeactivate(g_bubble_ghostwin, false);
+  WebSpider_WindowSetHidesOnDeactivate(g_bubble_ghostwin, false);
 
 #ifdef _WIN32
   /* Win32: the finish helper resizes, moves, and anchors the pill to
    * the host in one native step before hiding the bubble. */
   if (g_host_ghostwin != nullptr) {
-    Mixar_WindowDetachFromParent(g_bubble_ghostwin, g_host_ghostwin);
+    WebSpider_WindowDetachFromParent(g_bubble_ghostwin, g_host_ghostwin);
   }
 #else
   if (g_pill_ghostwin != nullptr) {
@@ -1944,10 +1944,10 @@ static wmOperatorStatus mixar_bubble_minimise_exec(bContext *C, wmOperator * /*o
    * child windows — the pill must be detached before the bubble
    * hides or it will vanish too). */
   if (g_pill_ghostwin != nullptr) {
-    Mixar_WindowDetachFromParent(g_pill_ghostwin, g_bubble_ghostwin);
+    WebSpider_WindowDetachFromParent(g_pill_ghostwin, g_bubble_ghostwin);
   }
   if (g_host_ghostwin != nullptr) {
-    Mixar_WindowDetachFromParent(g_bubble_ghostwin, g_host_ghostwin);
+    WebSpider_WindowDetachFromParent(g_bubble_ghostwin, g_host_ghostwin);
   }
 #endif
 
@@ -1961,7 +1961,7 @@ static wmOperatorStatus mixar_bubble_minimise_exec(bContext *C, wmOperator * /*o
   /* macOS: animate the pill glide + bubble fade, then schedule the
    * finish callback via dispatch_after. */
   if (g_pill_ghostwin != nullptr && g_host_ghostwin != nullptr) {
-    Mixar_WindowAnimateFrameToCentreBottomOfWindow(
+    WebSpider_WindowAnimateFrameToCentreBottomOfWindow(
         g_pill_ghostwin,
         g_host_ghostwin,
         AGENT_BUBBLE_PILL_WIDTH_LARGE,
@@ -1969,9 +1969,9 @@ static wmOperatorStatus mixar_bubble_minimise_exec(bContext *C, wmOperator * /*o
         AGENT_BUBBLE_PILL_BOTTOM_MARGIN,
         AGENT_BUBBLE_MINIMISE_ANIM_DURATION);
   }
-  Mixar_WindowAnimateAlphaTo(g_bubble_ghostwin, 0.0f,
+  WebSpider_WindowAnimateAlphaTo(g_bubble_ghostwin, 0.0f,
                              AGENT_BUBBLE_MINIMISE_ANIM_DURATION);
-  Mixar_DispatchMainAfter(AGENT_BUBBLE_MINIMISE_ANIM_DURATION,
+  WebSpider_DispatchMainAfter(AGENT_BUBBLE_MINIMISE_ANIM_DURATION,
                           minimise_anim_finish,
                           /*user_data=*/nullptr);
 #endif
@@ -1983,7 +1983,7 @@ static wmOperatorStatus mixar_bubble_minimise_exec(bContext *C, wmOperator * /*o
 #endif
 }
 
-void MIXAR_OT_bubble_minimise(wmOperatorType *ot)
+void WEBSPIDER_OT_bubble_minimise(wmOperatorType *ot)
 {
   /* Both name and description are single short words on purpose.
    * Blender renders operator tooltips inside the host NSWindow's
@@ -1993,13 +1993,13 @@ void MIXAR_OT_bubble_minimise(wmOperatorType *ot)
    * the…") that looks like a UI bug. Single-word strings always fit,
    * so the tooltip — when it does pop — reads cleanly. */
   ot->name = "Minimise";
-  ot->idname = "MIXAR_OT_bubble_minimise";
+  ot->idname = "WEBSPIDER_OT_bubble_minimise";
   ot->description = "Minimise";
-  ot->exec = mixar_bubble_minimise_exec;
+  ot->exec = webspider_bubble_minimise_exec;
 }
 
 
-static wmOperatorStatus mixar_bubble_restore_exec(bContext *C, wmOperator * /*op*/)
+static wmOperatorStatus webspider_bubble_restore_exec(bContext *C, wmOperator * /*op*/)
 {
 #if defined(__APPLE__) || defined(_WIN32)
   if (g_bubble_ghostwin == nullptr || !g_bubble_minimised) {
@@ -2009,12 +2009,12 @@ static wmOperatorStatus mixar_bubble_restore_exec(bContext *C, wmOperator * /*op
   /* Snap the bubble to the host's centre-bottom BEFORE bringing it
    * forward. orderFront alone restores the bubble at its old frame
    * origin — fine when the host hasn't moved, but if the user
-   * dragged Mixar to another monitor between minimise and restore,
+   * dragged WebSpider 3D to another monitor between minimise and restore,
    * the bubble pops back on the original monitor while the pill is
    * sitting on the new one. Snapping first makes the bubble appear
    * wherever the host currently lives. */
   if (g_host_ghostwin != nullptr) {
-    Mixar_WindowSnapToCentreBottomOfWindow(g_bubble_ghostwin,
+    WebSpider_WindowSnapToCentreBottomOfWindow(g_bubble_ghostwin,
                                            g_host_ghostwin,
                                            AGENT_BUBBLE_BOTTOM_MARGIN);
   }
@@ -2033,11 +2033,11 @@ static wmOperatorStatus mixar_bubble_restore_exec(bContext *C, wmOperator * /*op
       agent_bubble_collapsed_height_for_current_attachments(C));
   bubble_set_min_content_size(
       g_bubble_ghostwin, agent_bubble_collapsed_height_for_current_attachments(C));
-  Mixar_WindowSetAlpha(g_bubble_ghostwin, 1.0f);
+  WebSpider_WindowSetAlpha(g_bubble_ghostwin, 1.0f);
 
   /* Re-arm hidesOnDeactivate so the bubble hides/shows with the
    * app on alt-tab (macOS).  Do this before showing. */
-  Mixar_WindowSetHidesOnDeactivate(g_bubble_ghostwin, true);
+  WebSpider_WindowSetHidesOnDeactivate(g_bubble_ghostwin, true);
 
   /* CRITICAL: set the owner (GWLP_HWNDPARENT) BEFORE showing the
    * bubble.  On Win32 the shell decides Alt+Tab membership at
@@ -2047,14 +2047,14 @@ static wmOperatorStatus mixar_bubble_restore_exec(bContext *C, wmOperator * /*op
    * "visible + no owner" intermediate state entirely. */
   if (g_host_ghostwin != nullptr) {
 #ifdef _WIN32
-    Mixar_WindowSetParentTracked(g_bubble_ghostwin, g_host_ghostwin);
+    WebSpider_WindowSetParentTracked(g_bubble_ghostwin, g_host_ghostwin);
 #else
-    Mixar_WindowSetParentPlain(g_bubble_ghostwin, g_host_ghostwin);
+    WebSpider_WindowSetParentPlain(g_bubble_ghostwin, g_host_ghostwin);
 #endif
   }
 
   /* Show the bubble (now it already has an owner). */
-  Mixar_WindowOrderFront(g_bubble_ghostwin);
+  WebSpider_WindowOrderFront(g_bubble_ghostwin);
 
   /* Re-parent the pill directly from host → bubble.  This changes
    * GWLP_HWNDPARENT atomically (host→bubble) so the pill is NEVER
@@ -2065,8 +2065,8 @@ static wmOperatorStatus mixar_bubble_restore_exec(bContext *C, wmOperator * /*op
                   AGENT_BUBBLE_PILL_WIDTH,
                   AGENT_BUBBLE_PILL_HEIGHT,
                   AGENT_BUBBLE_PILL_CORNER_RADIUS);
-    Mixar_WindowSetParent(g_pill_ghostwin, g_bubble_ghostwin);
-    Mixar_WindowPositionAboveParent(g_pill_ghostwin,
+    WebSpider_WindowSetParent(g_pill_ghostwin, g_bubble_ghostwin);
+    WebSpider_WindowPositionAboveParent(g_pill_ghostwin,
                                     g_bubble_ghostwin,
                                     /*offset_x=*/0,
                                     /*offset_y=*/AGENT_BUBBLE_PILL_GAP);
@@ -2079,27 +2079,27 @@ static wmOperatorStatus mixar_bubble_restore_exec(bContext *C, wmOperator * /*op
 #endif
 }
 
-void MIXAR_OT_bubble_restore(wmOperatorType *ot)
+void WEBSPIDER_OT_bubble_restore(wmOperatorType *ot)
 {
-  /* See MIXAR_OT_bubble_minimise — single-word strings to keep
+  /* See WEBSPIDER_OT_bubble_minimise — single-word strings to keep
    * tooltips inside the pill window's tight bounds. */
   ot->name = "Restore";
-  ot->idname = "MIXAR_OT_bubble_restore";
+  ot->idname = "WEBSPIDER_OT_bubble_restore";
   ot->description = "Restore";
-  ot->exec = mixar_bubble_restore_exec;
+  ot->exec = webspider_bubble_restore_exec;
 }
 
 
-static wmOperatorStatus mixar_bubble_toggle_expand_exec(bContext *C, wmOperator * /*op*/)
+static wmOperatorStatus webspider_bubble_toggle_expand_exec(bContext *C, wmOperator * /*op*/)
 {
 #if defined(__APPLE__) || defined(_WIN32)
   if (g_bubble_ghostwin == nullptr) {
     return OPERATOR_CANCELLED;
   }
   /* Toggle between the default (collapsed) and expanded sizes.
-   * Mixar_WindowForceSize is bottom-anchored, so growing extends
+   * WebSpider_WindowForceSize is bottom-anchored, so growing extends
    * the bubble's TOP edge upward; the pill child window's resize
-   * observer (in Mixar_WindowSetParent) repositions it above the
+   * observer (in WebSpider_WindowSetParent) repositions it above the
    * new top automatically.
    *
    * If the bubble is near the screen TOP (e.g. the user dragged it
@@ -2118,7 +2118,7 @@ static wmOperatorStatus mixar_bubble_toggle_expand_exec(bContext *C, wmOperator 
      * neither overlaps the menu bar or notch. */
     const int reserve_top = AGENT_BUBBLE_PILL_HEIGHT +
                             AGENT_BUBBLE_PILL_GAP + 8;
-    int max_height = Mixar_WindowGetMaxHeightToScreenTop(
+    int max_height = WebSpider_WindowGetMaxHeightToScreenTop(
         g_bubble_ghostwin, reserve_top);
     target_height = AGENT_BUBBLE_EXPANDED_HEIGHT;
     if (max_height > 0 && max_height < target_height) {
@@ -2134,7 +2134,7 @@ static wmOperatorStatus mixar_bubble_toggle_expand_exec(bContext *C, wmOperator 
       C, g_bubble_ghostwin, AGENT_BUBBLE_DEFAULT_WIDTH, target_height);
   bubble_set_min_content_size(g_bubble_ghostwin, collapsed_height);
 #ifdef __APPLE__
-  Mixar_WindowOrderFront(g_bubble_ghostwin);
+  WebSpider_WindowOrderFront(g_bubble_ghostwin);
 #endif
   g_bubble_expanded = !g_bubble_expanded;
   return OPERATOR_FINISHED;
@@ -2143,14 +2143,14 @@ static wmOperatorStatus mixar_bubble_toggle_expand_exec(bContext *C, wmOperator 
 #endif
 }
 
-void MIXAR_OT_bubble_toggle_expand(wmOperatorType *ot)
+void WEBSPIDER_OT_bubble_toggle_expand(wmOperatorType *ot)
 {
-  /* See MIXAR_OT_bubble_minimise — single-word strings to keep
+  /* See WEBSPIDER_OT_bubble_minimise — single-word strings to keep
    * tooltips inside the bubble window's narrow header. */
   ot->name = "Expand";
-  ot->idname = "MIXAR_OT_bubble_toggle_expand";
+  ot->idname = "WEBSPIDER_OT_bubble_toggle_expand";
   ot->description = "Expand";
-  ot->exec = mixar_bubble_toggle_expand_exec;
+  ot->exec = webspider_bubble_toggle_expand_exec;
 }
 
 /** \} */
@@ -2158,11 +2158,11 @@ void MIXAR_OT_bubble_toggle_expand(wmOperatorType *ot)
 /* -------------------------------------------------------------------- */
 /** \name Set Background Colour Operator
  *
- * Python: `bpy.ops.mixar.bubble_set_bg_color(r=0.1, g=0.1, b=0.1, a=1.0)`
+ * Python: `bpy.ops.webspider.bubble_set_bg_color(r=0.1, g=0.1, b=0.1, a=1.0)`
  * Passing a=0 disables the custom colour and falls back to the theme.
  * \{ */
 
-static wmOperatorStatus mixar_bubble_set_bg_color_exec(bContext * /*C*/, wmOperator *op)
+static wmOperatorStatus webspider_bubble_set_bg_color_exec(bContext * /*C*/, wmOperator *op)
 {
   float r = RNA_float_get(op->ptr, "r");
   float g = RNA_float_get(op->ptr, "g");
@@ -2183,12 +2183,12 @@ static wmOperatorStatus mixar_bubble_set_bg_color_exec(bContext * /*C*/, wmOpera
   return OPERATOR_FINISHED;
 }
 
-void MIXAR_OT_bubble_set_bg_color(wmOperatorType *ot)
+void WEBSPIDER_OT_bubble_set_bg_color(wmOperatorType *ot)
 {
   ot->name = "Set Agent Bubble Background Colour";
-  ot->idname = "MIXAR_OT_bubble_set_bg_color";
+  ot->idname = "WEBSPIDER_OT_bubble_set_bg_color";
   ot->description = "Set the background colour (RGBA) of the Agent Bubble window";
-  ot->exec = mixar_bubble_set_bg_color_exec;
+  ot->exec = webspider_bubble_set_bg_color_exec;
 
   RNA_def_float(ot->srna, "r", 0.0f, 0.0f, 1.0f, "Red", "", 0.0f, 1.0f);
   RNA_def_float(ot->srna, "g", 0.0f, 0.0f, 1.0f, "Green", "", 0.0f, 1.0f);
@@ -2200,31 +2200,31 @@ void MIXAR_OT_bubble_set_bg_color(wmOperatorType *ot)
 
 static void agent_bubble_operatortypes()
 {
-  WM_operatortype_append(MIXAR_OT_agent_bubble_show_window);
-  WM_operatortype_append(MIXAR_OT_agent_bubble_purge_windows);
-  WM_operatortype_append(MIXAR_OT_bubble_set_size);
-  WM_operatortype_append(MIXAR_OT_bubble_sync_attachment_size);
-  WM_operatortype_append(MIXAR_OT_bubble_window_begin_drag);
-  WM_operatortype_append(MIXAR_OT_bubble_window_update_drag);
-  WM_operatortype_append(MIXAR_OT_bubble_window_end_drag);
-  WM_operatortype_append(MIXAR_OT_bubble_minimise);
-  WM_operatortype_append(MIXAR_OT_bubble_restore);
-  WM_operatortype_append(MIXAR_OT_bubble_toggle_expand);
-  WM_operatortype_append(MIXAR_OT_bubble_set_bg_color);
+  WM_operatortype_append(WEBSPIDER_OT_agent_bubble_show_window);
+  WM_operatortype_append(WEBSPIDER_OT_agent_bubble_purge_windows);
+  WM_operatortype_append(WEBSPIDER_OT_bubble_set_size);
+  WM_operatortype_append(WEBSPIDER_OT_bubble_sync_attachment_size);
+  WM_operatortype_append(WEBSPIDER_OT_bubble_window_begin_drag);
+  WM_operatortype_append(WEBSPIDER_OT_bubble_window_update_drag);
+  WM_operatortype_append(WEBSPIDER_OT_bubble_window_end_drag);
+  WM_operatortype_append(WEBSPIDER_OT_bubble_minimise);
+  WM_operatortype_append(WEBSPIDER_OT_bubble_restore);
+  WM_operatortype_append(WEBSPIDER_OT_bubble_toggle_expand);
+  WM_operatortype_append(WEBSPIDER_OT_bubble_set_bg_color);
 }
 
 static void agent_bubble_keymap(wmKeyConfig *keyconf)
 {
   /* Ensure all three region keymap categories exist on the default
    * keyconfig so the Python addon-keyconfig registrations in
-   * mixar.bootstrap.agent_bubble_module attach to keymaps Blender's
+   * webspider.bootstrap.agent_bubble_module attach to keymaps Blender's
    * event dispatcher actually consults. Without the HEADER ensure,
    * the addon-side "Agent Bubble Header" keymap was effectively
    * orphaned — clicks in the header region weren't matching it. */
   wmKeyMap *km = WM_keymap_ensure(
       keyconf, "Agent Bubble", SPACE_AGENT_BUBBLE, RGN_TYPE_WINDOW);
 
-  /* Ctrl+V / Cmd+V: paste image from clipboard — reuses the Mixie Chat
+  /* Ctrl+V / Cmd+V: paste image from clipboard — reuses the WebSpider Chat
    * paste operator which writes to the shared pending-attachments collection. */
   KeyMapItem_Params paste_params{};
   paste_params.type = EVT_VKEY;
@@ -2234,13 +2234,13 @@ static void agent_bubble_keymap(wmKeyConfig *keyconf)
 #else
   paste_params.modifier = KM_CTRL;
 #endif
-  WM_keymap_add_item(km, "MIXIE_CHAT_OT_paste_image", &paste_params);
+  WM_keymap_add_item(km, "WEBSPIDER_AI_CHAT_OT_paste_image", &paste_params);
 
   /* Also register on the footer (TOOLS) region so paste works when the
    * text input has focus. */
   wmKeyMap *km_footer = WM_keymap_ensure(
       keyconf, "Agent Bubble", SPACE_AGENT_BUBBLE, RGN_TYPE_TOOLS);
-  WM_keymap_add_item(km_footer, "MIXIE_CHAT_OT_paste_image", &paste_params);
+  WM_keymap_add_item(km_footer, "WEBSPIDER_AI_CHAT_OT_paste_image", &paste_params);
 
   WM_keymap_ensure(
       keyconf, "Agent Bubble Header", SPACE_AGENT_BUBBLE, RGN_TYPE_HEADER);
@@ -2285,25 +2285,25 @@ void ED_spacetype_agent_bubble()
   st->keymap = agent_bubble_keymap;
   st->blend_write = agent_bubble_space_blend_write;
 
-  /* Main region — REUSES MIXIE CHAT'S CUSTOM-DRAWN MESSAGE LIST.
+  /* Main region — REUSES WEBSPIDER_AI CHAT'S CUSTOM-DRAWN MESSAGE LIST.
    *
-   * Identical chat-history rendering to mixie chat: markdown, code
+   * Identical chat-history rendering to webspider_ai chat: markdown, code
    * blocks, message selection, scroll-to-bottom indicator, hover
    * effects on action chips, the lot.
    *
    * Why this is safe (we previously had a crash from this exact
    * wiring): SpaceAgentBubble is now layout-identical to
-   * SpaceMixieChat (see DNA_space_types.h), so the
-   * `reinterpret_cast<SpaceMixieChat *>(area->spacedata.first)`
-   * inside mixie chat's callbacks reads valid memory and the
-   * per-space MixieChatRuntime is allocated fresh on first
-   * `mixie_chat_ensure_runtime` call.
+   * SpaceWebSpider AIChat (see DNA_space_types.h), so the
+   * `reinterpret_cast<SpaceWebSpider AIChat *>(area->spacedata.first)`
+   * inside webspider_ai chat's callbacks reads valid memory and the
+   * per-space WebSpider AIChatRuntime is allocated fresh on first
+   * `webspider_ai_chat_ensure_runtime` call.
    *
-   * The chat MESSAGES live on Scene (mixie_chat_messages collection
+   * The chat MESSAGES live on Scene (webspider_ai_chat_messages collection
    * property), not in the space struct, so the bubble and the full
-   * mixie chat editor see the same conversation.
+   * webspider_ai chat editor see the same conversation.
    *
-   * keymapflag = 0 mirrors mixie chat exactly. ED_KEYMAP_UI would
+   * keymapflag = 0 mirrors webspider_ai chat exactly. ED_KEYMAP_UI would
    * install a ui_region_handler + "User Interface" keymap that
    * consumes LEFTMOUSE before our text-selection / option-chip
    * keymap can see it. The custom region's init function attaches
@@ -2311,12 +2311,12 @@ void ED_spacetype_agent_bubble()
   art = MEM_callocN<ARegionType>("spacetype agent_bubble main region");
   art->regionid = RGN_TYPE_WINDOW;
   art->keymapflag = 0;
-  art->init = mixie_chat_main_region_init;
-  art->layout = mixie_chat_main_region_layout;
+  art->init = webspider_ai_chat_main_region_init;
+  art->layout = webspider_ai_chat_main_region_layout;
   art->draw = agent_bubble_main_region_draw;
-  art->exit = mixie_chat_main_region_exit; /* Stop the animation frame pump */
-  art->listener = mixie_chat_main_region_listener;
-  art->cursor = mixie_chat_main_region_cursor;
+  art->exit = webspider_ai_chat_main_region_exit; /* Stop the animation frame pump */
+  art->listener = webspider_ai_chat_main_region_listener;
+  art->cursor = webspider_ai_chat_main_region_cursor;
   /* Run the cursor callback on every mouse move, not just on region entry or
    * explicit refresh (region_cursor_set_ex gates on this flag). This keeps
    * history rows, option bubbles, stars, chips, and links responsive while
@@ -2333,29 +2333,29 @@ void ED_spacetype_agent_bubble()
   art->draw = agent_bubble_header_region_draw;
   BLI_addhead(&st->regiontypes, art);
 
-  /* Footer region — REUSES MIXIE CHAT'S CUSTOM-DRAWN FOOTER.
+  /* Footer region — REUSES WEBSPIDER_AI CHAT'S CUSTOM-DRAWN FOOTER.
    *
    * The Python panel-based footer (AGENT_BUBBLE_PT_footer) was
    * limited to a static prefsizey, so multi-line input grown via
    * Shift+Enter pushed the action row (Mode + paperclip + send) off
-   * the bottom. Mixie chat's footer region has its own
-   * region->sizey-recalculation logic in mixie_chat_footer_region_layout
+   * the bottom. WebSpider AI chat's footer region has its own
+   * region->sizey-recalculation logic in webspider_ai_chat_footer_region_layout
    * that grows the region as input lines grow, keeping the action
    * row pinned to the bottom. Reusing the same callbacks gives the
    * agent bubble the identical behaviour AND look (custom GPU draw,
    * attachment thumbnails, send-button glow, plan-mode toggle, …).
    *
    * The Python AGENT_BUBBLE_PT_footer registration becomes inert —
-   * mixie_chat_footer_region_init does NOT call ED_region_panels_init,
+   * webspider_ai_chat_footer_region_init does NOT call ED_region_panels_init,
    * so the panel system isn't set up for this region; Python panels
    * registered for AGENT_BUBBLE TOOLS never get a draw call. */
   art = MEM_callocN<ARegionType>("spacetype agent_bubble footer region");
   art->regionid = RGN_TYPE_TOOLS;
   art->keymapflag = ED_KEYMAP_UI | ED_KEYMAP_FOOTER;
-  art->init = mixie_chat_footer_region_init;
+  art->init = webspider_ai_chat_footer_region_init;
   art->layout = agent_bubble_footer_region_layout;
   art->draw = agent_bubble_footer_region_draw;
-  /* No prefsizey — mixie chat's layout callback computes the height
+  /* No prefsizey — webspider_ai chat's layout callback computes the height
    * dynamically based on input line count + pending attachments, so
    * a static prefsizey would be overridden every layout pass. */
   BLI_addhead(&st->regiontypes, art);

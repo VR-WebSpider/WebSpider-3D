@@ -1,5 +1,5 @@
 /* SPDX-FileCopyrightText: 2024 Blender Authors
- * SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+ * SPDX-FileCopyrightText: 2026 WebSpider Studios
  *
  * SPDX-License-Identifier: GPL-2.0-or-later */
 
@@ -202,7 +202,7 @@ class Cursor : Overlay {
       case SI_MODE_MASK:
         break;
       case SI_MODE_UV:
-      case SI_MODE_MIXAR_UV:
+      case SI_MODE_WEBSPIDER_UV:
         break;
     }
     return (sima->overlay.flag & SI_OVERLAY_SHOW_OVERLAYS) != 0;

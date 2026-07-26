@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+# SPDX-FileCopyrightText: 2026 WebSpider Studios
 #
 # SPDX-License-Identifier: GPL-2.0-or-later
 
@@ -235,7 +235,7 @@ def main():
     if args.output:
         output_file = Path(args.output)
     else:
-        output_file = default_output_dir / f'mixar_modifications_{timestamp}.patch'
+        output_file = default_output_dir / f'webspider3d_modifications_{timestamp}.patch'
 
     if args.custom_files_output:
         custom_files_output = Path(args.custom_files_output)
@@ -275,7 +275,7 @@ def main():
     upstream_files = get_all_files(str(upstream_dir))
 
     # Categorize files
-    # Custom files: exist in src/ but NOT in upstream/ (these are Mixar-specific additions)
+    # Custom files: exist in src/ but NOT in upstream/ (these are WebSpider 3D-specific additions)
     custom_files = sorted(src_files - upstream_files)
 
     # Removed files: exist in upstream/ but not in src/ (shouldn't be many)
@@ -309,7 +309,7 @@ def main():
     # Print summary
     print("Summary:")
     print(f"  Upstream-modified files: {len(upstream_modified_files)} (will be patched with 3-way merge)")
-    print(f"  Custom Mixar files:      {len(custom_files)} (will be preserved as-is)")
+    print(f"  Custom WebSpider 3D files:      {len(custom_files)} (will be preserved as-is)")
     print(f"  Removed from upstream:   {len(removed_files)} (manual review needed)")
     print()
 
@@ -321,7 +321,7 @@ def main():
     diff_lines = []
 
     # Add header
-    diff_lines.append(f"# Mixar Upstream Modifications Patch")
+    diff_lines.append(f"# WebSpider 3D Upstream Modifications Patch")
     diff_lines.append(f"# Generated on {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
     diff_lines.append(f"# Source: {src_dir}")
     diff_lines.append(f"# Upstream: {upstream_dir}")
@@ -330,7 +330,7 @@ def main():
     diff_lines.append(f"# This commit is used as the common ancestor for 3-way merge")
     diff_lines.append("#")
     diff_lines.append(f"# This patch contains ONLY modifications to upstream Blender files.")
-    diff_lines.append(f"# Custom Mixar files are listed separately in: {custom_files_output.name}")
+    diff_lines.append(f"# Custom WebSpider 3D files are listed separately in: {custom_files_output.name}")
     diff_lines.append("#")
     diff_lines.append(f"# Summary: {len(upstream_modified_files)} upstream files modified")
     diff_lines.append("")
@@ -385,7 +385,7 @@ def main():
                     "total_count": len(custom_files)
                 },
                 "custom_files": list(custom_files),
-                "note": "These files exist in src/ but not in upstream/. They are Mixar-specific and should be preserved as-is during migration."
+                "note": "These files exist in src/ but not in upstream/. They are WebSpider 3D-specific and should be preserved as-is during migration."
             }
 
             with open(custom_files_output, 'w', encoding='utf-8') as f:

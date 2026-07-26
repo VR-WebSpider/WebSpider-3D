@@ -1,0 +1,802 @@
+# SPDX-FileCopyrightText: 2025 WebSpider 3D Authors
+# SPDX-FileCopyrightText: 2026 WebSpider Studios
+#
+# SPDX-License-Identifier: GPL-3.0-or-later
+
+"""
+WebSpider Chat Special Message Operators
+
+Slot action button click handler.
+"""
+
+import queue
+import threading
+
+import bpy
+from bpy.types import Operator
+from bpy.props import IntProperty, StringProperty
+
+from webspider.config.logging_config import get_logger
+
+from ...constants import (
+    FEEDBACK_STATUS_FAILED,
+    FEEDBACK_STATUS_RECEIVED,
+    FEEDBACK_STATUS_SENDING,
+)
+from ...core.feedback_policy import validate_feedback_comment
+from ...core.ui_utils import bump_layout_epoch as _bump_layout_epoch
+from ...core.ui_utils import redraw_chat_areas
+
+logger = get_logger(__name__)
+
+_feedback_post_queue: queue.Queue = queue.Queue()
+_feedback_worker_lock = threading.Lock()
+_feedback_worker_started = False
+
+
+def _feedback_worker() -> None:
+    """Process feedback requests in click order on one daemon thread."""
+    while True:
+        post = _feedback_post_queue.get()
+        try:
+            post()
+        except Exception as exc:
+            # Each post also handles its own failure; keep the worker alive if
+            # a future implementation accidentally lets an exception escape.
+            logger.warning(f"Feedback worker recovered from an error: {exc}")
+        finally:
+            _feedback_post_queue.task_done()
+
+
+def _enqueue_feedback_post(post) -> None:
+    """Queue a post and lazily start the single FIFO feedback worker."""
+    global _feedback_worker_started
+
+    with _feedback_worker_lock:
+        if not _feedback_worker_started:
+            threading.Thread(
+                target=_feedback_worker,
+                name="WebSpider 3DFeedback",
+                daemon=True,
+            ).start()
+            _feedback_worker_started = True
+    _feedback_post_queue.put(post)
+
+
+def _post_feedback_async(scene, payload: dict, on_complete=None) -> bool:
+    """Post agent feedback without blocking Blender's main thread.
+
+    ``on_complete`` is always marshalled back to Blender's main thread and
+    receives a boolean indicating whether the server accepted the request.
+    """
+    try:
+        from ...core import get_session_manager
+
+        session_id = get_session_manager().get_session_id(scene)
+        if not session_id:
+            logger.warning("Feedback send skipped: no session_id")
+            return False
+
+        from webspider.config.config import get_server_url
+        from ...constants import AGENT_FEEDBACK_ENDPOINT
+
+        base_url = get_server_url()
+
+        try:
+            from webspider.modules.auth.core.auth import get_access_token
+
+            token = get_access_token() or ""
+        except Exception:
+            token = ""
+
+        request_payload = {**payload, "session_id": session_id}
+
+        def _notify(success: bool) -> None:
+            if on_complete is None:
+                return
+            from ...core.main_thread_executor import run_on_main_thread
+
+            run_on_main_thread(lambda: on_complete(success))
+
+        def _post() -> None:
+            success = False
+            try:
+                import httpx
+
+                headers = {"Content-Type": "application/json"}
+                if token:
+                    headers["Authorization"] = f"Bearer {token}"
+                response = httpx.post(
+                    f"{base_url}{AGENT_FEEDBACK_ENDPOINT}",
+                    json=request_payload,
+                    headers=headers,
+                    # The backend forwards to Langfuse ingestion synchronously,
+                    # which intermittently takes >10s — outlive its 20s worst
+                    # case so a slow-but-successful push isn't reported as a
+                    # failure. Runs on the FIFO feedback worker thread, so the
+                    # wait never blocks Blender's UI.
+                    timeout=30.0,
+                )
+                response.raise_for_status()
+                success = True
+            except Exception as exc:
+                logger.warning(f"Feedback POST failed (non-critical): {exc}")
+            finally:
+                _notify(success)
+
+        _enqueue_feedback_post(_post)
+        return True
+    except Exception as exc:
+        logger.warning(f"Feedback send skipped: {exc}")
+        return False
+
+
+def _find_feedback_message(scene, bubble_id: str):
+    """Return the message matching ``bubble_id``, if it still exists."""
+    for msg in scene.webspider_chat_messages:
+        if getattr(msg, 'bubble_id', '') == bubble_id:
+            return msg
+    return None
+
+
+def _queue_feedback_comment(scene, msg) -> tuple[bool, str]:
+    """Validate and queue a comment submission for one feedback message."""
+    comment = msg.feedback_comment.strip()
+    validation_error = validate_feedback_comment(
+        msg.feedback_rating,
+        comment,
+        msg.feedback_comment_submitting,
+    )
+    if validation_error:
+        return False, validation_error
+
+    bubble_id = msg.bubble_id
+    rating = int(msg.feedback_rating)
+    msg.feedback_comment_submitting = True
+    msg.feedback_status = FEEDBACK_STATUS_SENDING
+
+    def _complete(success: bool) -> None:
+        current = _find_feedback_message(scene, bubble_id)
+        if current is None:
+            return
+        current.feedback_comment_submitting = False
+        if success:
+            current.feedback_comment = ""
+            current.feedback_comment_expanded = False
+            current.feedback_submitted_comment = comment
+            current.feedback_status = FEEDBACK_STATUS_RECEIVED
+        else:
+            # Keep the authored text editable so a transient backend/network
+            # failure is retryable without asking the user to reconstruct it.
+            current.feedback_comment = comment
+            current.feedback_comment_expanded = True
+            current.feedback_status = FEEDBACK_STATUS_FAILED
+        _bump_layout_epoch(scene)
+        redraw_chat_areas()
+
+    queued = _post_feedback_async(
+        scene,
+        {
+            "bubble_id": bubble_id,
+            "rating": rating,
+            "comment": comment,
+        },
+        on_complete=_complete,
+    )
+    if not queued:
+        msg.feedback_comment_submitting = False
+        msg.feedback_comment = comment
+        msg.feedback_comment_expanded = True
+        msg.feedback_status = FEEDBACK_STATUS_FAILED
+        _bump_layout_epoch(scene)
+        return False, "Could not queue feedback. Please try again."
+
+    _bump_layout_epoch(scene)
+    logger.info(
+        f"Feedback comment queued: bubble_id={bubble_id}, "
+        f"comment_length={len(comment)}"
+    )
+    return True, ""
+
+
+def _deferred_send_message():
+    """Execute send_message via timer to avoid calling bpy.ops in operator exec."""
+    try:
+        if hasattr(bpy.ops.webspider_ai_chat, 'send_message'):
+            bpy.ops.webspider_ai_chat.send_message()
+    except Exception as e:
+        logger.error(f"Deferred send_message failed: {e}")
+
+
+class WEBSPIDER_AI_CHAT_OT_select_slot_action(Operator):
+    """Handle slot action button click"""
+    bl_idname = "webspider_ai_chat.select_slot_action"
+    bl_label = "Select Slot Action"
+    bl_options = {'REGISTER'}
+
+    bubble_id: StringProperty(
+        name="Bubble ID",
+        description="ID of the bubble containing the action",
+        default=""
+    )
+    action_value: StringProperty(
+        name="Action Value",
+        description="Value of the selected action",
+        default=""
+    )
+
+    @classmethod
+    def poll(cls, context):
+        """Allow button clicks whenever action buttons are visible.
+
+        Previously required session.is_connected, but that caused buttons
+        to silently fail if the connection dropped after they were displayed.
+        The execute() method handles connection state internally.
+        """
+        return True
+
+    def execute(self, context):
+        logger.warning(
+            f"[SLOT ACTION] execute called: bubble_id='{self.bubble_id}', "
+            f"value='{self.action_value}'"
+        )
+
+        if not self.bubble_id or not self.action_value:
+            logger.warning("[SLOT ACTION] CANCELLED: Missing bubble_id or action_value")
+            self.report({'WARNING'}, "Missing bubble_id or action_value")
+            return {'CANCELLED'}
+
+        # Local intercept: "which model?" ask buttons (posted by
+        # chat_props._ask_model_choice). Value shape:
+        #   chat_model:<service_key>:<model_slug>
+        # Stores the choice for the next generate send — no backend
+        # round-trip, works while disconnected.
+        if self.action_value.startswith("chat_model:"):
+            return self._apply_model_choice(context)
+
+        # Credit-upgrade CTA: open the manage-subscription page via the shared
+        # upgrade operator (seamless auth handoff) instead of dispatching the
+        # value back to the backend. Handled before the connection check so it
+        # works even when disconnected or out of credits.
+        from webspider.modules.common.notifications.credit_upgrade import (
+            CREDIT_UPGRADE_CHAT_ACTION,
+        )
+        if self.action_value == CREDIT_UPGRADE_CHAT_ACTION:
+            try:
+                bpy.ops.webspider3d.open_credit_upgrade('INVOKE_DEFAULT')
+            except Exception as e:
+                logger.error(f"[SLOT ACTION] Failed to open credit upgrade: {e}")
+                self.report({'ERROR'}, "Couldn't open the upgrade page")
+                return {'CANCELLED'}
+            return {'FINISHED'}
+
+        # Check connection before dispatching
+        from ...core import get_session_manager
+        session = get_session_manager()
+        if not session.is_connected(context.scene):
+            logger.warning("[SLOT ACTION] CANCELLED: Not connected to server")
+            self.report({'WARNING'}, "Not connected to server. Please reconnect.")
+            return {'CANCELLED'}
+
+        logger.info(
+            f"Slot action selected: bubble_id={self.bubble_id}, "
+            f"value={self.action_value}"
+        )
+
+        scene = context.scene
+
+        # Find the bubble by bubble_id and get the action label for user message
+        action_label = self.action_value
+        for msg in scene.webspider_chat_messages:
+            if hasattr(msg, 'bubble_id') and msg.bubble_id == self.bubble_id:
+                for action_item in msg.action_items:
+                    if action_item.value == self.action_value:
+                        action_label = action_item.label
+                        break
+                # Clear action items from the bubble
+                msg.action_items.clear()
+                break
+
+        # Dispatch action
+        try:
+            from ...constants import SessionState
+            from ...core.queue_processor import (
+                queue_sse_event,
+                queue_sse_error,
+                queue_sse_complete,
+            )
+            from ...core.sse_handler import create_sse_handler
+            from webspider.config.config import get_server_url
+
+            # Handle modify action specially - user needs to type feedback first
+            if self.action_value == "modify":
+                session.set_state(scene, SessionState.MODIFYING)
+
+                # Add hint instead of "Modify" user message
+                hint_msg = scene.webspider_chat_messages.add()
+                hint_msg.sender = 'AGENT'
+                hint_msg.text = "Type your feedback below and press Enter to modify the plan."
+
+                logger.info("Switched to MODIFYING state via slot action")
+                self.report({'INFO'}, "Enter your feedback in the chat input")
+            else:
+                # Add user message showing the selected action
+                user_msg = scene.webspider_chat_messages.add()
+                user_msg.sender = 'USER'
+                user_msg.text = action_label
+
+                base_url = get_server_url()
+                target_scene_name = scene.name
+                sse_handler = create_sse_handler(
+                    scene_name=target_scene_name,
+                    host=base_url,
+                    on_event=lambda event: queue_sse_event(event, target_scene_name),
+                    on_error=lambda error: queue_sse_error(error, target_scene_name),
+                    on_complete=lambda: queue_sse_complete(target_scene_name),
+                )
+
+                # Get auth token
+                try:
+                    from webspider.modules.auth.core.auth import get_access_token
+                    auth_token = get_access_token() or ""
+                except Exception:
+                    auth_token = ""
+
+                success = sse_handler.start_input_stream(
+                    session_id=session.get_session_id(scene),
+                    action=self.action_value,
+                    auth_token=auth_token,
+                )
+
+                if success:
+                    session.set_state(scene, SessionState.BUSY)
+                    session.clear_streaming()
+                else:
+                    logger.error("Failed to start input stream for slot action")
+                    self.report({'ERROR'}, "Failed to send action")
+
+        except Exception as e:
+            logger.error(f"Error dispatching slot action: {e}")
+            self.report({'ERROR'}, f"Error: {e}")
+
+        redraw_chat_areas()
+        return {'FINISHED'}
+
+    def _apply_model_choice(self, context):
+        """Handle a chat_model:<service>:<slug> button click locally."""
+        from .generate_ops import normalize_generate_service
+
+        scene = context.scene
+        try:
+            _, service_key, slug = self.action_value.split(":", 2)
+        except ValueError:
+            logger.warning("Malformed model choice value: %r", self.action_value)
+            return {'CANCELLED'}
+
+        current = normalize_generate_service(
+            getattr(scene, 'webspider_chat_generate_type', ''))
+        if service_key != current:
+            # Stale ask from a previously selected type — don't cross wires.
+            self.report(
+                {'INFO'},
+                "That model belongs to a different generate type — "
+                "pick the type again to choose its model.",
+            )
+            return {'CANCELLED'}
+
+        scene.webspider_chat_generate_model = slug
+
+        # Clear the ask bubble's buttons and confirm the choice.
+        label = slug
+        try:
+            from webspider.bootstrap.chat_generate_options_cache import (
+                get_display_label,
+                get_option,
+            )
+            option = get_option(service_key) or {}
+            for model in option.get("models") or []:
+                if model.get("slug") == slug:
+                    label = model.get("label") or slug
+                    break
+            service_label = get_display_label(service_key)
+        except Exception:
+            service_label = service_key
+        for msg in scene.webspider_chat_messages:
+            if getattr(msg, 'bubble_id', "") == self.bubble_id:
+                msg.action_items.clear()
+                break
+
+        confirm = scene.webspider_chat_messages.add()
+        confirm.sender = 'AGENT'
+        confirm.text = f"Got it — I'll use {label} for {service_label}."
+        redraw_chat_areas()
+        return {'FINISHED'}
+
+
+class WEBSPIDER_AI_CHAT_OT_insert_prompt_text(Operator):
+    """Insert prompt text into chat input and auto-submit"""
+    bl_idname = "webspider_ai_chat.insert_prompt_text"
+    bl_label = "Insert Prompt Text"
+    bl_options = {'REGISTER', 'INTERNAL'}
+
+    text: StringProperty(
+        name="Text",
+        description="The prompt text to insert into the chat input",
+        default="",
+    )
+
+    mode: StringProperty(
+        name="Mode",
+        description="The chat mode to switch to (AGENT, GENERATE)",
+        default="",
+    )
+
+    generate_type: StringProperty(
+        name="Generate Type",
+        description="The generate sub-type — a generation-catalog service "
+                    "key (e.g. image_gen, model_3d)",
+        default="",
+    )
+
+    def execute(self, context):
+        if not self.text:
+            return {'CANCELLED'}
+
+        # Set the chat mode if provided
+        if self.mode and self.mode in {'AGENT', 'GENERATE'}:
+            context.scene.webspider_chat_mode = self.mode
+
+        # Set the generate type if provided (only applies when mode is
+        # GENERATE). Legacy identifiers are mapped to service keys; the
+        # enum is catalog-driven, so validate by attempting the assignment
+        # — an identifier missing from the current options raises
+        # TypeError and we keep the current selection.
+        if self.generate_type:
+            from .generate_ops import normalize_generate_service
+            generate_type = normalize_generate_service(self.generate_type)
+            try:
+                context.scene.webspider_chat_generate_type = generate_type
+            except TypeError:
+                logger.warning(
+                    "Unknown generate type %r — keeping current selection",
+                    self.generate_type,
+                )
+
+        # Set the chat input to the prompt text
+        context.scene.webspider_chat_input = self.text
+
+        # Auto-submit: defer send to timer (same mechanism as Enter key submit)
+        bpy.app.timers.register(
+            lambda: _deferred_send_message() or None,
+            first_interval=0.01,
+        )
+
+        redraw_chat_areas()
+
+        logger.debug(f"Inserted and submitting: {self.text[:50]}... mode={self.mode}")
+        return {'FINISHED'}
+
+
+class WEBSPIDER_AI_CHAT_OT_toggle_plan_mode(Operator):
+    """Plan Mode enables extensive thinking for the agent. This also lets you review and modify the plan before the agent executes it"""
+    bl_idname = "webspider_ai_chat.toggle_plan_mode"
+    bl_label = "Toggle Plan Mode"
+    bl_options = {'REGISTER', 'INTERNAL'}
+
+    def execute(self, context):
+        scene = context.scene
+        scene.webspider_chat_plan_enabled = not scene.webspider_chat_plan_enabled
+
+        for area in context.screen.areas:
+            if area.type == 'WEBSPIDER_AI_CHAT':
+                area.tag_redraw()
+        return {'FINISHED'}
+
+
+class WEBSPIDER_AI_CHAT_OT_set_feedback_rating(Operator):
+    """Set star rating for an agent response"""
+    bl_idname = "webspider_ai_chat.set_feedback_rating"
+    bl_label = "Rate Response"
+    bl_options = {'REGISTER', 'INTERNAL'}
+
+    bubble_id: StringProperty(
+        name="Bubble ID",
+        description="ID of the message bubble to rate",
+        default="",
+    )
+    rating: IntProperty(
+        name="Rating",
+        description="Star rating (1-5)",
+        default=0,
+        min=1,
+        max=5,
+    )
+
+    def execute(self, context):
+        scene = context.scene
+        bubble_id = self.bubble_id
+        rating = self.rating
+        for msg in scene.webspider_chat_messages:
+            bid = getattr(msg, 'bubble_id', '')
+            if bid and bid == bubble_id:
+                # Submitted feedback is locked — no revisions once a rating
+                # is in flight or accepted (only idle/failed accept clicks).
+                if msg.feedback_status in (
+                    FEEDBACK_STATUS_SENDING,
+                    FEEDBACK_STATUS_RECEIVED,
+                ):
+                    logger.info(
+                        f"Feedback rating ignored (locked): "
+                        f"bubble_id={bubble_id}"
+                    )
+                    return {'CANCELLED'}
+                msg.feedback_rating = rating
+                logger.info(
+                    f"Feedback rating set: bubble_id={bubble_id}, "
+                    f"rating={rating}"
+                )
+                def _complete(success: bool) -> None:
+                    current = _find_feedback_message(scene, bubble_id)
+                    if (
+                        current is None
+                        or current.feedback_comment_submitting
+                        or current.feedback_status != FEEDBACK_STATUS_SENDING
+                    ):
+                        # A newer comment submission owns the visible state.
+                        return
+                    current.feedback_status = (
+                        FEEDBACK_STATUS_RECEIVED
+                        if success else FEEDBACK_STATUS_FAILED
+                    )
+                    _bump_layout_epoch(scene)
+                    redraw_chat_areas()
+
+                queued = _post_feedback_async(
+                    scene,
+                    {
+                        "bubble_id": bubble_id,
+                        "rating": rating,
+                    },
+                    on_complete=_complete,
+                )
+                if queued:
+                    msg.feedback_status = FEEDBACK_STATUS_SENDING
+                else:
+                    msg.feedback_status = FEEDBACK_STATUS_FAILED
+                # Open the comment field right away so text feedback is
+                # discoverable — there is no separate toggle to find.
+                if not msg.feedback_comment_submitting:
+                    msg.feedback_comment_expanded = True
+                _bump_layout_epoch(scene)
+                redraw_chat_areas()
+                return {'FINISHED'}
+
+        logger.warning(f"Feedback: bubble_id '{bubble_id}' not found")
+        return {'CANCELLED'}
+
+class WEBSPIDER_AI_CHAT_OT_toggle_feedback_comment(Operator):
+    """Toggle inline comment field for feedback"""
+    bl_idname = "webspider_ai_chat.toggle_feedback_comment"
+    bl_label = "Toggle Comment"
+    bl_options = {'REGISTER', 'INTERNAL'}
+
+    bubble_id: StringProperty(name="Bubble ID", default="")
+
+    def execute(self, context):
+        scene = context.scene
+        for msg in scene.webspider_chat_messages:
+            bid = getattr(msg, 'bubble_id', '')
+            if bid and bid == self.bubble_id:
+                was_expanded = msg.feedback_comment_expanded
+                # Auto-submit on collapse if comment is non-empty
+                if was_expanded and msg.feedback_comment.strip():
+                    queued, error = _queue_feedback_comment(scene, msg)
+                    if not queued:
+                        self.report({'WARNING'}, error)
+                        msg.feedback_comment_expanded = True
+                        redraw_chat_areas()
+                        return {'CANCELLED'}
+                else:
+                    msg.feedback_comment_expanded = not was_expanded
+                    _bump_layout_epoch(scene)
+                redraw_chat_areas()
+                return {'FINISHED'}
+
+        logger.warning(f"Toggle comment: bubble_id '{self.bubble_id}' not found")
+        return {'CANCELLED'}
+
+
+class WEBSPIDER_AI_CHAT_OT_submit_feedback_comment(Operator):
+    """Submit feedback comment"""
+    bl_idname = "webspider_ai_chat.submit_feedback_comment"
+    bl_label = "Submit Comment"
+    bl_options = {'REGISTER', 'INTERNAL'}
+
+    bubble_id: StringProperty(name="Bubble ID", default="")
+
+    def execute(self, context):
+        scene = context.scene
+        for msg in scene.webspider_chat_messages:
+            bid = getattr(msg, 'bubble_id', '')
+            if bid and bid == self.bubble_id:
+                if not msg.feedback_comment.strip():
+                    msg.feedback_comment_expanded = False
+                    _bump_layout_epoch(scene)
+                    redraw_chat_areas()
+                    return {'FINISHED'}
+                queued, error = _queue_feedback_comment(scene, msg)
+                if not queued:
+                    self.report({'WARNING'}, error)
+                    msg.feedback_comment_expanded = True
+                    redraw_chat_areas()
+                    return {'CANCELLED'}
+                redraw_chat_areas()
+                return {'FINISHED'}
+
+        logger.warning(f"Feedback comment: bubble_id '{self.bubble_id}' not found")
+        return {'CANCELLED'}
+
+class WEBSPIDER_AI_CHAT_OT_cancel_generation(Operator):
+    """Cancel the active generation"""
+    bl_idname = "webspider_ai_chat.cancel_generation"
+    bl_label = "Cancel Generation"
+    bl_description = "Stop the current generation"
+    bl_options = {'REGISTER', 'INTERNAL'}
+
+    # Map of generate type (catalog service key) -> (is_generating attr,
+    # error attr). Keep in sync with the footer's spinner map in
+    # webspider_chat_footer.cc and generate_ops routing.
+    _GEN_FLAGS = {
+        'depth_to_image':       ('webspider_ai_lookdev_is_generating',       'webspider_ai_lookdev_error'),
+        'pbr_gen':              ('webspider_ai_lookdev360_is_generating',    'webspider_ai_lookdev360_error'),
+        'model_3d':             ('webspider_ai_image_to_3d_is_generating',   'webspider_ai_image_to_3d_error'),
+        'image_to_3d':          ('webspider_ai_image_to_3d_is_generating',   'webspider_ai_image_to_3d_error'),
+        'hunyuan_rapid':        ('webspider_ai_hunyuan_rapid_is_generating', 'webspider_ai_hunyuan_rapid_error'),
+        'image_gen':            ('webspider_ai_imagegen_is_generating',      'webspider_ai_imagegen_error'),
+        'scene_reconstruction': ('webspider_ai_scene_recon_is_generating',   'webspider_ai_scene_recon_error'),
+    }
+
+    def execute(self, context):
+        from .generate_ops import normalize_generate_service
+
+        scene = context.scene
+        gen_type = normalize_generate_service(
+            getattr(scene, 'webspider_chat_generate_type', ''))
+
+        # Cancel the specific generation type
+        flag_info = self._GEN_FLAGS.get(gen_type)
+        if flag_info:
+            gen_attr, err_attr = flag_info
+            if getattr(scene, gen_attr, False):
+                setattr(scene, gen_attr, False)
+                if hasattr(scene, err_attr):
+                    setattr(scene, err_attr, "Cancelled by user")
+
+        # Also reset progress
+        try:
+            from webspider.modules.moodboard.core.generate_progress import reset_progress
+            progress_key = {
+                'depth_to_image': 'lookdev',
+                'pbr_gen': 'lookdev360',
+                'model_3d': 'image_to_3d',
+                'image_to_3d': 'image_to_3d',
+                'hunyuan_rapid': 'hunyuan_rapid',
+                'image_gen': 'imagegen',
+                'scene_reconstruction': 'scene_recon',
+            }.get(gen_type)
+            if progress_key:
+                reset_progress(progress_key)
+        except Exception:
+            pass
+
+        # Redraw
+        for area in context.screen.areas:
+            if area.type in ('WEBSPIDER_AI_CHAT', 'WEBSPIDER_AI'):
+                area.tag_redraw()
+
+        return {'FINISHED'}
+
+
+def _find_bubble(scene, bubble_id):
+    """Linear scan for a message by bubble_id (mirrors slot_processor)."""
+    for msg in scene.webspider_chat_messages:
+        if getattr(msg, 'bubble_id', "") == bubble_id:
+            return msg
+    return None
+
+
+class WEBSPIDER_AI_CHAT_OT_toggle_steps(Operator):
+    """Collapse / expand the agent steps block"""
+    bl_idname = "webspider_ai_chat.toggle_steps"
+    bl_label = "Toggle Steps Block"
+    bl_options = {'REGISTER'}
+
+    bubble_id: StringProperty(name="Bubble ID", default="")
+
+    def execute(self, context):
+        scene = context.scene
+        msg = _find_bubble(scene, self.bubble_id)
+        if msg is None:
+            return {'CANCELLED'}
+        msg.steps_collapsed = not msg.steps_collapsed
+        _bump_layout_epoch(scene)
+        redraw_chat_areas()
+        return {'FINISHED'}
+
+
+class WEBSPIDER_AI_CHAT_OT_toggle_step_row(Operator):
+    """Expand / collapse a single step row's detail"""
+    bl_idname = "webspider_ai_chat.toggle_step_row"
+    bl_label = "Toggle Step Row"
+    bl_options = {'REGISTER'}
+
+    bubble_id: StringProperty(name="Bubble ID", default="")
+    item_id: StringProperty(name="Item ID", default="")
+
+    def execute(self, context):
+        scene = context.scene
+        msg = _find_bubble(scene, self.bubble_id)
+        if msg is None:
+            return {'CANCELLED'}
+        for row in msg.step_items:
+            if row.item_id == self.item_id:
+                row.expanded = not row.expanded
+                _bump_layout_epoch(scene)
+                redraw_chat_areas()
+                return {'FINISHED'}
+        return {'CANCELLED'}
+
+
+class WEBSPIDER_AI_CHAT_OT_toggle_thinking(Operator):
+    """Collapse / expand the finalized thinking dropdown"""
+    bl_idname = "webspider_ai_chat.toggle_thinking"
+    bl_label = "Toggle Thinking"
+    bl_options = {'REGISTER'}
+
+    bubble_id: StringProperty(name="Bubble ID", default="")
+
+    def execute(self, context):
+        scene = context.scene
+        msg = _find_bubble(scene, self.bubble_id)
+        if msg is None:
+            return {'CANCELLED'}
+        msg.thinking_collapsed = not msg.thinking_collapsed
+        _bump_layout_epoch(scene)
+        redraw_chat_areas()
+        return {'FINISHED'}
+
+
+class WEBSPIDER_AI_CHAT_OT_dev_stream_demo(Operator):
+    """Stream a scripted demo agent turn (thinking → plan → tools → answer).
+
+    Dev/QA aid for evaluating the agent-output UI without a backend. Drives the
+    real slot pipeline so what renders here matches live streaming.
+    """
+    bl_idname = "webspider_ai_chat.dev_stream_demo"
+    bl_label = "Dev: Stream Demo Turn"
+    bl_options = {'REGISTER'}
+
+    user_text: StringProperty(
+        name="User Text",
+        default="Make a woods scene with a cabin and an outdoor fireplace",
+    )
+
+    def execute(self, context):
+        from ...core.dev_stream import start_demo_stream
+        start_demo_stream(context.scene, self.user_text)
+        return {'FINISHED'}
+
+
+classes = (
+    WEBSPIDER_AI_CHAT_OT_select_slot_action,
+    WEBSPIDER_AI_CHAT_OT_insert_prompt_text,
+    WEBSPIDER_AI_CHAT_OT_toggle_plan_mode,
+    WEBSPIDER_AI_CHAT_OT_set_feedback_rating,
+    WEBSPIDER_AI_CHAT_OT_toggle_feedback_comment,
+    WEBSPIDER_AI_CHAT_OT_submit_feedback_comment,
+    WEBSPIDER_AI_CHAT_OT_cancel_generation,
+    WEBSPIDER_AI_CHAT_OT_toggle_steps,
+    WEBSPIDER_AI_CHAT_OT_toggle_step_row,
+    WEBSPIDER_AI_CHAT_OT_toggle_thinking,
+    WEBSPIDER_AI_CHAT_OT_dev_stream_demo,
+)

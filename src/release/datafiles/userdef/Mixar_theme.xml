@@ -1,4 +1,4 @@
-<!-- SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited -->
+<!-- SPDX-FileCopyrightText: 2026 WebSpider Studios -->
 <!-- SPDX-License-Identifier: GPL-3.0-or-later -->
 
 <bpy>
@@ -1633,8 +1633,8 @@
         >
       </ThemeStripColor>
     </strip_color>
-    <mixie_chat>
-      <ThemeMixieChat>
+    <webspider_ai_chat>
+      <ThemeWebSpider AIChat>
         <space>
           <ThemeSpaceGeneric
             back="#20222e"
@@ -1726,8 +1726,8 @@
             </panelcolors>
           </ThemeSpaceGeneric>
         </space>
-      </ThemeMixieChat>
-    </mixie_chat>
+      </ThemeWebSpider AIChat>
+    </webspider_ai_chat>
   </Theme>
   <ThemeStyle>
     <panel_title>

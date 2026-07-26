@@ -1,5 +1,5 @@
-# SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
-# SPDX-License-Identifier: LicenseRef-Mixar-Brand
+# SPDX-FileCopyrightText: 2026 WebSpider Studios
+# SPDX-License-Identifier: LicenseRef-WebSpider-Brand
 Apache License
 Version 2.0, January 2004
 http://www.apache.org/licenses/

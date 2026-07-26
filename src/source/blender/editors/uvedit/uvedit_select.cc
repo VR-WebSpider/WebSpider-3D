@@ -1,5 +1,5 @@
 /* SPDX-FileCopyrightText: 2001-2002 NaN Holding BV. All rights reserved.
- * SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+ * SPDX-FileCopyrightText: 2026 WebSpider Studios
  *
  * SPDX-License-Identifier: GPL-2.0-or-later */
 
@@ -6837,7 +6837,7 @@ static wmOperatorStatus uv_select_mode_invoke(bContext *C,
   const SpaceImage *sima = CTX_wm_space_image(C);
 
   /* Could be removed? - Already done in poll callback. */
-  if ((!sima) || (!ELEM(sima->mode, SI_MODE_UV, SI_MODE_MIXAR_UV))) {
+  if ((!sima) || (!ELEM(sima->mode, SI_MODE_UV, SI_MODE_WEBSPIDER_UV))) {
     return OPERATOR_CANCELLED;
   }
   /* Pass through when UV sync selection is enabled.

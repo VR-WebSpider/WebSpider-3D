@@ -1,5 +1,5 @@
 /* SPDX-FileCopyrightText: 2023 Blender Authors
- * SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+ * SPDX-FileCopyrightText: 2026 WebSpider Studios
  *
  * SPDX-License-Identifier: GPL-2.0-or-later */
 
@@ -246,16 +246,16 @@ static eSpace_Type rna_Space_refine_reverse(StructRNA *srna)
   if (srna == &RNA_SpaceSpreadsheet) {
     return SPACE_SPREADSHEET;
   }
-  /* Mixar — custom spaces. Without these cases, the Python
-   * `Space.draw_handler_add` API rejects every Mixar editor
+  /* WebSpider 3D — custom spaces. Without these cases, the Python
+   * `Space.draw_handler_add` API rejects every WebSpider 3D editor
    * (moodboard, chat, layers, etc.) with "unknown space type",
-   * leaving GPU overlays unable to render anywhere a Mixar user
+   * leaving GPU overlays unable to render anywhere a WebSpider 3D user
    * actually works. */
-  if (srna == &RNA_SpaceMixie) {
-    return SPACE_MIXIE;
+  if (srna == &RNA_SpaceWebSpider AI) {
+    return SPACE_WEBSPIDER_AI;
   }
-  if (srna == &RNA_SpaceMixieChat) {
-    return SPACE_MIXIE_CHAT;
+  if (srna == &RNA_SpaceWebSpider AIChat) {
+    return SPACE_WEBSPIDER_CHAT;
   }
   if (srna == &RNA_SpaceAgentBubble) {
     return SPACE_AGENT_BUBBLE;
@@ -263,14 +263,14 @@ static eSpace_Type rna_Space_refine_reverse(StructRNA *srna)
   if (srna == &RNA_SpaceTopBar) {
     return SPACE_TOPBAR;
   }
-  if (srna == &RNA_SpaceMixarLayers) {
-    return SPACE_MIXAR_LAYERS;
+  if (srna == &RNA_SpaceWebSpider 3DLayers) {
+    return SPACE_WEBSPIDER_LAYERS;
   }
-  if (srna == &RNA_SpaceMixarProperties) {
-    return SPACE_MIXAR_PROPERTIES;
+  if (srna == &RNA_SpaceWebSpider 3DProperties) {
+    return SPACE_WEBSPIDER_PROPERTIES;
   }
-  if (srna == &RNA_SpaceMixarAssets) {
-    return SPACE_MIXAR_ASSETS;
+  if (srna == &RNA_SpaceWebSpider 3DAssets) {
+    return SPACE_WEBSPIDER_ASSETS;
   }
   if (srna == &RNA_SpaceBaking) {
     return SPACE_BAKING;

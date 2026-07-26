@@ -1,4 +1,4 @@
-REM SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+REM SPDX-FileCopyrightText: 2026 WebSpider Studios
 REM
 REM SPDX-License-Identifier: GPL-2.0-or-later
 
@@ -6,7 +6,7 @@ REM SPDX-License-Identifier: GPL-2.0-or-later
 setlocal enabledelayedexpansion
 
 REM Upstream Overlay Conflict Detector for Windows
-REM Detects when upstream Blender changes files that Mixar also overlays.
+REM Detects when upstream Blender changes files that WebSpider 3D also overlays.
 REM
 REM Usage:
 REM   check_overlay_conflicts.bat --generate   Generate/update the manifest

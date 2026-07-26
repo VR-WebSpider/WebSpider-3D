@@ -1,5 +1,5 @@
 /* SPDX-FileCopyrightText: 2023 Blender Authors
- * SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+ * SPDX-FileCopyrightText: 2026 WebSpider Studios
  *
  * SPDX-License-Identifier: GPL-2.0-or-later */
 
@@ -165,9 +165,9 @@ enum {
   BLENDER_USER_SCRIPTS = 33,
   BLENDER_USER_EXTENSIONS = 34,
   
-  /* mixar-specific */
-  MIXAR_USER_CONFIG = 35,
-  MIXAR_USER_EXTENSIONS = 36,
+  /* webspider-specific */
+  WEBSPIDER_USER_CONFIG = 35,
+  WEBSPIDER_USER_EXTENSIONS = 36,
 
   /* system */
   BLENDER_SYSTEM_DATAFILES = 52,
@@ -191,4 +191,4 @@ enum {
 #define BLENDER_RECENT_SEARCHES_FILE "recent-searches.txt"
 #define BLENDER_PLATFORM_SUPPORT_FILE "platform_support.txt"
 
-#define MIXAR_USERPREF_FILE "mixar_userpref.blend"
+#define WEBSPIDER_USERPREF_FILE "webspider_userpref.blend"

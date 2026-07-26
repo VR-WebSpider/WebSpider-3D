@@ -1,5 +1,5 @@
 # SPDX-FileCopyrightText: 2023 Blender Authors
-# SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+# SPDX-FileCopyrightText: 2026 WebSpider Studios
 #
 # SPDX-License-Identifier: GPL-2.0-or-later
 
@@ -31,12 +31,12 @@ set(LIB
   bf_editor_space_graph
   bf_editor_space_image
   bf_editor_space_info
-  bf_editor_space_mixie
-  bf_editor_space_mixie_chat
+  bf_editor_space_webspider_ai
+  bf_editor_space_webspider_ai_chat
   bf_editor_space_agent_bubble
-  bf_editor_space_mixar_layers
-  bf_editor_space_mixar_properties
-  bf_editor_space_mixar_assets
+  bf_editor_space_webspider_layers
+  bf_editor_space_webspider_properties
+  bf_editor_space_webspider_assets
 
   bf_editor_space_baking
   bf_editor_space_texture_sets

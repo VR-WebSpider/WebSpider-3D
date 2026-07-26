@@ -1,5 +1,5 @@
 /* SPDX-FileCopyrightText: 2001-2002 NaN Holding BV. All rights reserved.
- * SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+ * SPDX-FileCopyrightText: 2026 WebSpider Studios
  *
  * SPDX-License-Identifier: GPL-2.0-or-later */
 
@@ -1089,7 +1089,7 @@ static void setSnappingCallback(TransInfo *t)
     BKE_view_layer_synced_ensure(t->scene, t->view_layer);
     Object *obact = BKE_view_layer_active_object_get(t->view_layer);
 
-    const bool is_uv_editor = ELEM(sima->mode, SI_MODE_UV, SI_MODE_MIXAR_UV);
+    const bool is_uv_editor = ELEM(sima->mode, SI_MODE_UV, SI_MODE_WEBSPIDER_UV);
     const bool has_edit_object = obact && BKE_object_is_in_editmode(obact);
     if (is_uv_editor && has_edit_object) {
       t->tsnap.snap_target_fn = snap_target_uv_fn;

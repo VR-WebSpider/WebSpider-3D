@@ -1,5 +1,5 @@
 /* SPDX-FileCopyrightText: 2001-2002 NaN Holding BV. All rights reserved.
- * SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+ * SPDX-FileCopyrightText: 2026 WebSpider Studios
  *
  * SPDX-License-Identifier: GPL-2.0-or-later */
 
@@ -459,7 +459,7 @@ typedef struct ThemeSpace {
   unsigned char metadatabg[4];
   unsigned char metadatatext[4];
 
-  /** Chat interface colors (Mixie Chat space). */
+  /** Chat interface colors (WebSpider Chat space). */
   unsigned char chat_user_bubble[4];
   unsigned char chat_agent_bubble[4];
   unsigned char chat_bubble_hover[4];  /* Hover color for interactive bubbles (prompts) */
@@ -487,7 +487,7 @@ typedef struct ThemeSpace {
   unsigned char chat_send_arrow_color[4];          /* Send icon arrow color */
   unsigned char chat_plan_toggle_on[4];            /* Plan mode toggle ON track color */
 
-  /** Moodboard/MIXIE Space colors */
+  /** Moodboard/WEBSPIDER_AI Space colors */
   unsigned char moodboard_input_bg[4];      /* Text input background color */
   unsigned char moodboard_input_text[4];    /* Text input text color */
   unsigned char moodboard_input_border[4];  /* Text input border color */
@@ -497,21 +497,21 @@ typedef struct ThemeSpace {
   unsigned char moodboard_panel_bg[4];      /* Panel background color */
   unsigned char moodboard_label_text[4];    /* Label text color */
 
-  /** Sidebar tab bar colors (Mixar custom vertical tabs) */
-  unsigned char mixar_tab_accent[4];         /* Accent color for active tab fill */
-  unsigned char mixar_tab_strip_bg[4];       /* Tab strip background color */
-  unsigned char mixar_tab_inactive[4];       /* Inactive tab fill color */
-  unsigned char mixar_tab_text_active[4];    /* Active tab text color */
-  unsigned char mixar_tab_text_inactive[4];  /* Inactive tab text color */
-  unsigned char mixar_tab_glow[4];           /* Active tab outer glow color */
-  unsigned char mixar_tab_highlight[4];      /* Active tab inner highlight color */
-  unsigned char mixar_tab_indicator[4];      /* Active tab edge indicator bar color */
+  /** Sidebar tab bar colors (WebSpider 3D custom vertical tabs) */
+  unsigned char webspider_tab_accent[4];         /* Accent color for active tab fill */
+  unsigned char webspider_tab_strip_bg[4];       /* Tab strip background color */
+  unsigned char webspider_tab_inactive[4];       /* Inactive tab fill color */
+  unsigned char webspider_tab_text_active[4];    /* Active tab text color */
+  unsigned char webspider_tab_text_inactive[4];  /* Inactive tab text color */
+  unsigned char webspider_tab_glow[4];           /* Active tab outer glow color */
+  unsigned char webspider_tab_highlight[4];      /* Active tab inner highlight color */
+  unsigned char webspider_tab_indicator[4];      /* Active tab edge indicator bar color */
 
-  /** Accent colors for custom Mixar widgets (action button, toggle). */
-  unsigned char mixar_action_button[4];     /* Action/Generate button background */
-  unsigned char mixar_toggle_active[4];     /* Toggle track color when checked */
+  /** Accent colors for custom WebSpider 3D widgets (action button, toggle). */
+  unsigned char webspider_action_button[4];     /* Action/Generate button background */
+  unsigned char webspider_toggle_active[4];     /* Toggle track color when checked */
 
-  /** Chat interface sizing (Mixie Chat space). */
+  /** Chat interface sizing (WebSpider Chat space). */
   unsigned char chat_footer_bottom_padding;
   char _pad_chat1[7]; /* Padding for 8-byte alignment */
 
@@ -633,8 +633,8 @@ typedef struct bTheme {
   ThemeSpace space_topbar;
   ThemeSpace space_statusbar;
   ThemeSpace space_spreadsheet;
-  ThemeSpace space_mixie_chat;
-  ThemeSpace space_mixie;
+  ThemeSpace space_webspider_ai_chat;
+  ThemeSpace space_webspider_ai;
   ThemeSpace space_agent_bubble;
 
   /* 20 sets of bone colors for this theme */

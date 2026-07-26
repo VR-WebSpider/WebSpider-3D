@@ -1,5 +1,5 @@
 # SPDX-FileCopyrightText: 2023 Blender Authors
-# SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+# SPDX-FileCopyrightText: 2026 WebSpider Studios
 #
 # SPDX-License-Identifier: GPL-2.0-or-later
 
@@ -41,7 +41,7 @@ set(SRC
   interface_icons.cc
   interface_icons_event.cc
   interface_layout.cc
-  interface_mixar_section.cc
+  interface_webspider_section.cc
   interface_ops.cc
   interface_panel.cc
   interface_query.cc
@@ -108,7 +108,7 @@ set(SRC
   views/tree_view.cc
 
   eyedroppers/eyedropper_intern.hh
-  interface_mixar_section.hh
+  interface_webspider_section.hh
   templates/interface_templates_intern.hh
   interface_intern.hh
   regions/interface_regions_intern.hh

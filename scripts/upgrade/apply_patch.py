@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
-# SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+# SPDX-FileCopyrightText: 2026 WebSpider Studios
 #
 # SPDX-License-Identifier: GPL-2.0-or-later
 
 """
-Apply custom Mixar modifications to new upstream Blender version using 3-way merge.
+Apply custom WebSpider 3D modifications to new upstream Blender version using 3-way merge.
 
 This script uses git merge-file for proper 3-way merging with conflict markers.
-It handles upstream-modified files separately from custom Mixar files.
+It handles upstream-modified files separately from custom WebSpider 3D files.
 
 Workflow:
 1. Backup src/ to src_backup_TIMESTAMP/
@@ -21,7 +21,7 @@ Workflow:
 4. Generate conflict report for manual resolution
 
 Usage:
-    python apply_patch.py patches/mixar_modifications_TIMESTAMP.patch [options]
+    python apply_patch.py patches/webspider3d_modifications_TIMESTAMP.patch [options]
 
 Options:
     --custom-files FILE    JSON file listing custom files to preserve
@@ -30,14 +30,14 @@ Options:
 
 Examples:
     # Basic usage
-    python apply_patch.py patches/mixar_modifications_2025-11-18.patch
+    python apply_patch.py patches/webspider3d_modifications_2025-11-18.patch
 
     # With custom files list
-    python apply_patch.py patches/mixar_modifications_2025-11-18.patch \\
+    python apply_patch.py patches/webspider3d_modifications_2025-11-18.patch \\
         --custom-files patches/custom_files_2025-11-18.json
 
     # Dry run
-    python apply_patch.py patches/mixar_modifications_2025-11-18.patch --dry-run
+    python apply_patch.py patches/webspider3d_modifications_2025-11-18.patch --dry-run
 """
 
 import os
@@ -556,7 +556,7 @@ class PatchApplier:
         try:
             print()
             print(f"{Colors.CYAN}{'='*70}{Colors.NC}")
-            print(f"{Colors.CYAN}{Colors.BOLD}{'Mixar Patch Applicator (3-way merge)'.center(70)}{Colors.NC}")
+            print(f"{Colors.CYAN}{Colors.BOLD}{'WebSpider 3D Patch Applicator (3-way merge)'.center(70)}{Colors.NC}")
             print(f"{Colors.CYAN}{'='*70}{Colors.NC}")
             print()
 

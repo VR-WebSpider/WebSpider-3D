@@ -1,5 +1,5 @@
 # SPDX-FileCopyrightText: 2009-2023 Blender Authors
-# SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+# SPDX-FileCopyrightText: 2026 WebSpider Studios
 #
 # SPDX-License-Identifier: GPL-2.0-or-later
 
@@ -142,8 +142,8 @@ class FILEBROWSER_PT_filter(FileBrowserPanel, Panel):
             col.label(text=params.filter_glob)
         else:
             row = col.row()
-            row.label(icon='MIXAR_ICON')
-            row.prop(params, "use_filter_mixar", text=".mixar Files", toggle=False)
+            row.label(icon='WEBSPIDER_ICON')
+            row.prop(params, "use_filter_webspider3d", text=".webspider3d Files", toggle=False)
             row = col.row()
             row.label(icon='FILE_BACKUP')
             row.prop(params, "use_filter_backup", text="Backup .blend Files", toggle=False)

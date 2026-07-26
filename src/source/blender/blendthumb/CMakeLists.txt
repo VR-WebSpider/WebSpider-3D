@@ -1,5 +1,5 @@
 # SPDX-FileCopyrightText: 2006 Blender Authors
-# SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+# SPDX-FileCopyrightText: 2026 WebSpider Studios
 #
 # SPDX-License-Identifier: GPL-2.0-or-later
 
@@ -59,16 +59,16 @@ if(WIN32)
 
 elseif(APPLE)
   # -----------------------------------------------------------------------------
-  # Build `mixar-thumbnailer.appex` app extension.
+  # Build `webspider-thumbnailer.appex` app extension.
   set(SRC_APPEX
     src/thumbnail_provider.h
     src/thumbnail_provider.mm
   )
 
-  add_executable(mixar-thumbnailer MACOSX_BUNDLE ${SRC} ${SRC_APPEX})
-  setup_platform_linker_flags(mixar-thumbnailer)
-  setup_platform_linker_libs(mixar-thumbnailer)
-  target_link_libraries(mixar-thumbnailer
+  add_executable(webspider-thumbnailer MACOSX_BUNDLE ${SRC} ${SRC_APPEX})
+  setup_platform_linker_flags(webspider-thumbnailer)
+  setup_platform_linker_libs(webspider-thumbnailer)
+  target_link_libraries(webspider-thumbnailer
     bf_blenlib
     bf_blenloader_core
     # Avoid linker error about undefined _main symbol.
@@ -77,7 +77,7 @@ elseif(APPLE)
   )
   # The RPATH here points to the main Blender Resources/lib directory.
   # Avoid duplicating the large `dylibs` (~300MB).
-  set_target_properties(mixar-thumbnailer PROPERTIES
+  set_target_properties(webspider-thumbnailer PROPERTIES
     INSTALL_RPATH "@loader_path/../../../../Resources/lib"
     # Prevent Xcode from overwriting the signature.
     XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY ""
@@ -87,24 +87,24 @@ elseif(APPLE)
   # even on developer machine to generate thumbnails.
   # Command taken from XCode build process.
   add_custom_command(
-    TARGET mixar-thumbnailer POST_BUILD
+    TARGET webspider-thumbnailer POST_BUILD
     COMMAND codesign --deep --force --sign -
       --entitlements "${CMAKE_SOURCE_DIR}/release/darwin/thumbnailer_entitlements.plist"
-      --timestamp=none $<TARGET_BUNDLE_DIR:mixar-thumbnailer>
+      --timestamp=none $<TARGET_BUNDLE_DIR:webspider-thumbnailer>
   )
 elseif(UNIX)
   # -----------------------------------------------------------------------------
-  # Build `mixar-thumbnailer` executable
+  # Build `webspider-thumbnailer` executable
 
   set(SRC_CMD
     src/blender_thumbnailer.cc
   )
 
-  add_executable(mixar-thumbnailer ${SRC} ${SRC_CMD})
-  setup_platform_linker_flags(mixar-thumbnailer)
-  setup_platform_linker_libs(mixar-thumbnailer)
-  target_link_libraries(mixar-thumbnailer PRIVATE bf_blenlib bf_blenloader_core)
+  add_executable(webspider-thumbnailer ${SRC} ${SRC_CMD})
+  setup_platform_linker_flags(webspider-thumbnailer)
+  setup_platform_linker_libs(webspider-thumbnailer)
+  target_link_libraries(webspider-thumbnailer PRIVATE bf_blenlib bf_blenloader_core)
   if(DEFINED PTHREADS_LIBRARIES)
-    target_link_libraries(mixar-thumbnailer PRIVATE ${PTHREADS_LIBRARIES})
+    target_link_libraries(webspider-thumbnailer PRIVATE ${PTHREADS_LIBRARIES})
   endif()
 endif()

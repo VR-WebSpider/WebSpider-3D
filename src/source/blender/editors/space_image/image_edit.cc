@@ -1,5 +1,5 @@
 /* SPDX-FileCopyrightText: 2008 Blender Authors
- * SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+ * SPDX-FileCopyrightText: 2026 WebSpider Studios
  *
  * SPDX-License-Identifier: GPL-2.0-or-later */
 
@@ -47,8 +47,8 @@ Image *ED_space_image(const SpaceImage *sima)
 void ED_space_image_set(Main *bmain, SpaceImage *sima, Image *ima, bool automatic)
 {
   /* Automatically pin image when manually assigned, otherwise it follows object. */
-  /* MIXAR: Check for both UV modes */
-  if (!automatic && sima->image != ima && ELEM(sima->mode, SI_MODE_UV, SI_MODE_MIXAR_UV)) {
+  /* WEBSPIDER: Check for both UV modes */
+  if (!automatic && sima->image != ima && ELEM(sima->mode, SI_MODE_UV, SI_MODE_WEBSPIDER_UV)) {
     sima->pin = true;
   }
 
@@ -96,8 +96,8 @@ void ED_space_image_sync(Main *bmain, Image *image, bool ignore_render_viewer)
 
 void ED_space_image_auto_set(const bContext *C, SpaceImage *sima)
 {
-  /* MIXAR: Check for both UV modes */
-  if (!ELEM(sima->mode, SI_MODE_UV, SI_MODE_MIXAR_UV) || sima->pin) {
+  /* WEBSPIDER: Check for both UV modes */
+  if (!ELEM(sima->mode, SI_MODE_UV, SI_MODE_WEBSPIDER_UV) || sima->pin) {
     return;
   }
 
@@ -472,8 +472,8 @@ bool ED_space_image_show_uvedit(const SpaceImage *sima, Object *obedit)
     if (ED_space_image_show_render(sima)) {
       return false;
     }
-    /* MIXAR: Check for both UV modes */
-    if (!ELEM(sima->mode, SI_MODE_UV, SI_MODE_MIXAR_UV)) {
+    /* WEBSPIDER: Check for both UV modes */
+    if (!ELEM(sima->mode, SI_MODE_UV, SI_MODE_WEBSPIDER_UV)) {
       return false;
     }
   }

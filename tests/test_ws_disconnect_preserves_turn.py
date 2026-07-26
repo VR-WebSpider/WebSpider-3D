@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+# SPDX-FileCopyrightText: 2026 WebSpider Studios
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -28,14 +28,14 @@ SCRIPTS = ROOT / "src" / "scripts"
 if str(SCRIPTS) not in sys.path:
     sys.path.insert(0, str(SCRIPTS))
 
-from mixar.modules.testing.mock_bpy import install_bpy_mock
+from webspider.modules.testing.mock_bpy import install_bpy_mock
 
 install_bpy_mock()
 
 import pytest
 
-from mixar.modules.space_mixie_chat.constants import SessionState
-from mixar.modules.space_mixie_chat.core.session import SessionManager
+from webspider.modules.space_webspider_chat.constants import SessionState
+from webspider.modules.space_webspider_chat.core.session import SessionManager
 
 
 def _set_scenes(scenes):
@@ -53,10 +53,10 @@ class FakeScene:
 
     def __init__(self, name="Scene"):
         self.name = name
-        self.mixie_chat_state = "OFFLINE"
-        self.mixie_chat_is_busy = False
-        self.mixie_chat_mode = "AGENT"
-        self.mixie_chat_active_turn_mode = ""
+        self.webspider_chat_state = "OFFLINE"
+        self.webspider_chat_is_busy = False
+        self.webspider_chat_mode = "AGENT"
+        self.webspider_chat_active_turn_mode = ""
 
 
 @pytest.fixture(autouse=True)
@@ -146,7 +146,7 @@ def test_connecting_scene_downgrades_on_transient_disconnect():
 def test_auth_failure_reason_constant_matches_client():
     """connection_manager compares the callback reason against the constant;
     jsonrpc_client must emit exactly that string for terminal disconnects."""
-    from mixar.modules.space_mixie_chat.constants import (
+    from webspider.modules.space_webspider_chat.constants import (
         DISCONNECT_REASON_AUTH_FAILED,
     )
 

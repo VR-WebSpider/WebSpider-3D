@@ -53,7 +53,7 @@ CMakeUserPresets.json
 .env
 
 # Runtime config (generated at build time by scripts/generate_config.py)
-config/mixar.json
+config/webspider.json
 
 # Large files and build artifacts
 src/__pycache__/
@@ -177,8 +177,8 @@ src_backup_**/
 conflicts_report.json
 .overlay_manifest
 scripts/upgrade/patches/
-src/scripts/mixar/modules/agent/vendor/
-src/scripts/mixar/modules/sample_images/
+src/scripts/webspider/modules/agent/vendor/
+src/scripts/webspider/modules/sample_images/
 ucupaint-master/
 .claude/
 .codex/
@@ -188,7 +188,7 @@ src/source/extern/
 node_modules/
 
 # procedural materials
-src/scripts/mixar/modules/paint/procedural_materials/
+src/scripts/webspider/modules/paint/procedural_materials/
 matgen-v3-scripts/
 showcase_v4-3/
 showcase_v6/
@@ -209,7 +209,7 @@ matgen_scripts/
 docs/superpowers/
 docs/open-source/audit/
 geometry_node_setups/
-mixar_api_out/
+webspider_api_out/
 report/
 scripts/audit_out/
 

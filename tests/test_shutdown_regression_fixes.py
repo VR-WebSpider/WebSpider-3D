@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+# SPDX-FileCopyrightText: 2026 WebSpider Studios
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -7,7 +7,7 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-SRC = ROOT / "src" / "scripts" / "mixar"
+SRC = ROOT / "src" / "scripts" / "webspider3d"
 
 
 def read_src(relative_path: str) -> str:
@@ -28,7 +28,7 @@ def test_lookdev360_unregister_skips_unregistered_classes():
 
 def test_agent_shutdown_disconnect_skips_scene_state_updates():
     bootstrap_source = read_src("bootstrap/agent_connection.py")
-    manager_source = read_src("modules/space_mixie_chat/core/connection_manager.py")
+    manager_source = read_src("modules/space_webspider_chat/core/connection_manager.py")
 
     assert "manager.disconnect(update_session_state=False)" in bootstrap_source
     assert "def disconnect(self, update_session_state: bool = True)" in manager_source
@@ -36,7 +36,7 @@ def test_agent_shutdown_disconnect_skips_scene_state_updates():
 
 
 def test_agent_shutdown_suppresses_disconnect_callback_scene_writes():
-    manager_source = read_src("modules/space_mixie_chat/core/connection_manager.py")
+    manager_source = read_src("modules/space_webspider_chat/core/connection_manager.py")
 
     assert "self._is_shutting_down" in manager_source
     assert "if self._is_shutting_down:" in manager_source
@@ -105,7 +105,7 @@ def test_startup_cache_fetches_do_not_schedule_redraw_after_shutdown():
 
 
 def test_agent_connection_callbacks_skip_main_thread_timers_during_shutdown():
-    manager_source = read_src("modules/space_mixie_chat/core/connection_manager.py")
+    manager_source = read_src("modules/space_webspider_chat/core/connection_manager.py")
     on_connected_start = manager_source.index("        def on_connected():")
     on_connected_block = manager_source[
         on_connected_start:manager_source.index("        def on_disconnected", on_connected_start)
@@ -119,7 +119,7 @@ def test_agent_connection_callbacks_skip_main_thread_timers_during_shutdown():
 
 
 def test_main_thread_executor_rejects_late_timers_after_cleanup():
-    executor_source = read_src("modules/space_mixie_chat/core/main_thread_executor.py")
+    executor_source = read_src("modules/space_webspider_chat/core/main_thread_executor.py")
     run_on_main_thread = executor_source[
         executor_source.index("def run_on_main_thread")
         :executor_source.index("def cleanup")

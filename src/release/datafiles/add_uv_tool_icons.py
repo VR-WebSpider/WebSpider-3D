@@ -1,12 +1,12 @@
-# SPDX-FileCopyrightText: 2025 Mixar Authors
-# SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+# SPDX-FileCopyrightText: 2025 WebSpider 3D Authors
+# SPDX-FileCopyrightText: 2026 WebSpider Studios
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 """
-Add Mixar UV Tool / UV Functions toolbar icons to `toolbar.blend`.
+Add WebSpider 3D UV Tool / UV Functions toolbar icons to `toolbar.blend`.
 
-This is a one-shot authoring script. It opens the Mixar overlay
+This is a one-shot authoring script. It opens the WebSpider 3D overlay
 `icons_blend/toolbar.blend`, imports the upstream
 `tool_settings.svg` and `edge_seam.svg` glyphs, converts them to
 flat filled meshes with white vertex colors, normalises them to the
@@ -15,15 +15,15 @@ pipeline picks them up, and saves the file in-place.
 
 Run headless from the repo root:
 
-    build/Dev/bin/mixar.exe -b \
+    build/Dev/bin/webspider3d.exe -b \
         src/release/datafiles/icons_blend/toolbar.blend \
         --python src/release/datafiles/add_uv_tool_icons.py
 
 Then regenerate the `.dat` files (this also updates the
 `ICON_GEOM_NAMES` block in the editors `CMakeLists.txt`):
 
-    build/Dev/bin/mixar.exe -b --factory-startup \
-        --python src/release/datafiles/mixar_icons_geom_update.py
+    build/Dev/bin/webspider3d.exe -b --factory-startup \
+        --python src/release/datafiles/webspider3d_icons_geom_update.py
 
 Re-running this script is safe — the two named mesh objects are
 removed and recreated on every run.
@@ -124,7 +124,7 @@ def _curves_to_filled_mesh(objects: list, joined_name: str):
     if len(obj.data.polygons) == 0:
         _fill_edge_loops_to_faces(obj)
 
-    print(f"[mixar-icons]   {joined_name}: "
+    print(f"[webspider3d-icons]   {joined_name}: "
           f"{len(obj.data.vertices)} verts, "
           f"{len(obj.data.polygons)} polys")
 
@@ -229,7 +229,7 @@ def _move_to_export(obj, export_coll) -> None:
 
 
 def _create_icon(name: str, svg_path: str, export_coll) -> None:
-    print(f"[mixar-icons] importing {svg_path!r} as {name!r}")
+    print(f"[webspider3d-icons] importing {svg_path!r} as {name!r}")
     new_objects = _import_svg(svg_path)
     if not new_objects:
         raise RuntimeError(f"Import of {svg_path!r} produced no objects.")
@@ -247,7 +247,7 @@ def main() -> int:
     for name, svg_filename in _ICONS:
         svg_path = os.path.join(svg_dir, svg_filename)
         if not os.path.exists(svg_path):
-            print(f"[mixar-icons] WARN: {svg_path} not found — skipping",
+            print(f"[webspider3d-icons] WARN: {svg_path} not found — skipping",
                   file=sys.stderr)
             continue
         _remove_existing(name)
@@ -258,7 +258,7 @@ def main() -> int:
     # format (uncompressed saves balloon the file from ~3 MB to ~18 MB
     # — mostly redundant bone/material data the icon export ignores).
     bpy.ops.wm.save_mainfile(compress=True)
-    print("[mixar-icons] saved", bpy.data.filepath)
+    print("[webspider3d-icons] saved", bpy.data.filepath)
     return 0
 
 

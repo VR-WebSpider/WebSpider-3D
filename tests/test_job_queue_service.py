@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+# SPDX-FileCopyrightText: 2026 WebSpider Studios
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -11,22 +11,22 @@ SCRIPTS = ROOT / "src" / "scripts"
 if str(SCRIPTS) not in sys.path:
     sys.path.insert(0, str(SCRIPTS))
 
-from mixar.modules.testing.mock_bpy import install_bpy_mock
+from webspider.modules.testing.mock_bpy import install_bpy_mock
 
 install_bpy_mock()
 
-from mixar.modules.common.api.response import APIResponse
-from mixar.modules.common.api.exceptions import TimeoutError as APITimeoutError
-from mixar.modules.common.api.processor import APIQueueProcessor
-from mixar.modules.common.api.request_queue import (
+from webspider.modules.common.api.response import APIResponse
+from webspider.modules.common.api.exceptions import TimeoutError as APITimeoutError
+from webspider.modules.common.api.processor import APIQueueProcessor
+from webspider.modules.common.api.request_queue import (
     AsyncResponse,
     ResponseStatus,
     get_request_queues,
 )
-from mixar.modules.common.api.services import job_queue_service as JQS
-from mixar.modules.common.job_queue.core.generic_jobs import AsyncGLBJob
-from mixar.modules.common.job_queue.core import queue_manager as QM
-from mixar.modules.common.job_queue.core.job import Job, JobState
+from webspider.modules.common.api.services import job_queue_service as JQS
+from webspider.modules.common.job_queue.core.generic_jobs import AsyncGLBJob
+from webspider.modules.common.job_queue.core import queue_manager as QM
+from webspider.modules.common.job_queue.core.job import Job, JobState
 
 
 class FakeClient:
@@ -295,7 +295,7 @@ def test_terminal_job_update_reconciles_with_ws_get(monkeypatch):
     QM._sync_watchdog_registered = False
     monkeypatch.setattr(QM.bpy.app.timers, "register", lambda *args, **kwargs: None)
 
-    from mixar.modules.space_mixie_chat.core import jsonrpc_client, main_thread_executor
+    from webspider.modules.space_webspider_chat.core import jsonrpc_client, main_thread_executor
 
     monkeypatch.setattr(main_thread_executor, "run_on_main_thread", lambda fn: fn())
 

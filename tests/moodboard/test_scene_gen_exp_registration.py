@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+# SPDX-FileCopyrightText: 2026 WebSpider Studios
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -7,8 +7,8 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[2]
-MOODBOARD_UI = ROOT / "src/scripts/mixar/modules/moodboard/ui"
-COMMON_JOB_QUEUE = ROOT / "src/scripts/mixar/modules/common/job_queue"
+MOODBOARD_UI = ROOT / "src/scripts/webspider/modules/moodboard/ui"
+COMMON_JOB_QUEUE = ROOT / "src/scripts/webspider/modules/common/job_queue"
 
 
 def read(relative_path: str) -> str:
@@ -77,7 +77,7 @@ def test_scene_gen_exp_ui_list_is_not_registered():
     panels = read("moodboard_sidebar_panels.py")
 
     assert assigned_class_names(ui_list) == set()
-    assert "MIXIE_PT_gen_scene_gen_exp" not in assigned_class_names(panels)
+    assert "WEBSPIDER_AI_PT_gen_scene_gen_exp" not in assigned_class_names(panels)
 
 
 def test_scene_gen_exp_properties_are_not_registered_on_bpy_types():
@@ -86,13 +86,13 @@ def test_scene_gen_exp_properties_are_not_registered_on_bpy_types():
     queue_properties = read_job_queue("ui/properties/queue_properties.py")
 
     forbidden = (
-        "MixieSceneGenExpBBox",
-        "MixieSceneGenExpLabelObject",
-        "MixieMoodboardTabSceneGenExpProps",
+        "WebSpiderAISceneGenExpBBox",
+        "WebSpiderAISceneGenExpLabelObject",
+        "WebSpiderAIMoodboardTabSceneGenExpProps",
         "tab_scene_gen_exp",
-        "mixie_scene_gen_exp_is_processing",
-        "mixie_scene_gen_hp_is_generating",
-        "mixie_scene_gen_lp_is_generating",
+        "webspider_ai_scene_gen_exp_is_processing",
+        "webspider_ai_scene_gen_hp_is_generating",
+        "webspider_ai_scene_gen_lp_is_generating",
         "scene_gen_hp",
         "scene_gen_lp",
         "SCENE_GEN_EXP",

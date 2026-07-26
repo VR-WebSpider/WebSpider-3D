@@ -1,5 +1,5 @@
-// SPDX-FileCopyrightText: 2026 Mixar AI
-// SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+// SPDX-FileCopyrightText: 2026 WebSpider Studios
+// SPDX-FileCopyrightText: 2026 WebSpider Studios
 //
 // SPDX-License-Identifier: GPL-2.0-or-later
 
@@ -17,9 +17,9 @@ BEGIN
     BEGIN
       VALUE "FileVersion", "1.4\0"
       VALUE "ProductVersion", "2.78\0"
-      VALUE "FileDescription", "Mixar Thumbnail Handler\0"
+      VALUE "FileDescription", "WebSpider 3D Thumbnail Handler\0"
       VALUE "OriginalFilename", "BlendThumb.dll\0"
-      VALUE "ProductName", "Mixar\0"
+      VALUE "ProductName", "WebSpider 3D\0"
       VALUE "LegalCopyright", "GPL2, 2024\0"
     END
   END

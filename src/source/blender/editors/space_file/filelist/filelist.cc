@@ -1,5 +1,5 @@
 /* SPDX-FileCopyrightText: 2007 Blender Authors
- * SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+ * SPDX-FileCopyrightText: 2026 WebSpider Studios
  *
  * SPDX-License-Identifier: GPL-2.0-or-later */
 
@@ -338,7 +338,7 @@ static int filelist_geticon_file_type_ex(const FileList *filelist,
   }
 
   if (typeflag & FILE_TYPE_BLENDER) {
-    if (strstr(file->relpath, ".mixar")) {
+    if (strstr(file->relpath, ".webspider")) {
       return ICON_FILE_BLEND;
     }
     return (is_main || file->preview_icon_id) ? ICON_FILE_BLEND : ICON_BLENDER;
@@ -1777,7 +1777,7 @@ static bool file_is_blend_backup(const char *str)
     }
 
     /* allow .blend1 .blend2 .blend32 */
-    loc = BLI_strcasestr(str + a - b, ".mixar");
+    loc = BLI_strcasestr(str + a - b, ".webspider");
 
     if (loc) {
       retval = true;
@@ -1791,8 +1791,8 @@ int ED_path_extension_type(const char *path)
 {
   /* ATTENTION: Never return OR'ed bit-flags here, always return a single enum value! Some code
    * using this may do `ELEM()`-like checks. */
-  if (BLI_path_extension_check_n(path, ".mixar", ".mixar.zst", ".mixar.gz", nullptr)) {
-    return FILE_TYPE_MIXAR;
+  if (BLI_path_extension_check_n(path, ".webspider", ".webspider.zst", ".webspider.gz", nullptr)) {
+    return FILE_TYPE_WEBSPIDER;
   }
   if (BKE_blendfile_extension_check(path)) {
     return FILE_TYPE_BLENDER;

@@ -1,18 +1,18 @@
-<!-- SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited -->
+<!-- SPDX-FileCopyrightText: 2026 WebSpider Studios -->
 <!-- SPDX-License-Identifier: GPL-3.0-or-later -->
 
 # Contributing
 
-Mixar is publishing the Blender-side client source first. External pull requests are not open for general contribution yet.
+WebSpider 3D is publishing the Blender-side client source first. External pull requests are not open for general contribution yet.
 
-For questions, build help, and general discussion, the fastest channel is the **Mixar Discord**: https://discord.gg/YVqvkQx8rX. Use GitHub issues for the specific reports listed under "Before Opening An Issue" below.
+For questions, build help, and general discussion, the fastest channel is the **WebSpider 3D Discord**: https://discord.gg/YVqvkQx8rX. Use GitHub issues for the specific reports listed under "Before Opening An Issue" below.
 
 ## Current Contribution Status
 
 - Public source: open
 - Public issues: limited to source-availability, build, license, and security-process questions
-- External pull requests: not accepted until Mixar publishes the CLA workflow
-- Contributor agreement: CLA required before Mixar accepts substantial external contributions
+- External pull requests: not accepted until WebSpider 3D publishes the CLA workflow
+- Contributor agreement: CLA required before WebSpider 3D accepts substantial external contributions
 
 Pull requests opened before the CLA process is published may be closed without review.
 
@@ -30,15 +30,15 @@ Use this repository for:
 Do not post:
 
 - Security vulnerabilities or suspected secrets; follow [SECURITY.md](SECURITY.md)
-- Mixar account credentials, API keys, tokens, logs containing secrets, or private scene data
-- Requests for Mixar backend source code
+- WebSpider 3D account credentials, API keys, tokens, logs containing secrets, or private scene data
+- Requests for WebSpider 3D backend source code
 
 ## Development Rules
 
 Follow the same structure used by the repo:
 
-- Put durable Mixar source changes under `src/`
-- Put Python module code under `src/scripts/mixar/modules/`
+- Put durable WebSpider 3D source changes under `src/`
+- Put Python module code under `src/scripts/webspider/modules/`
 - Put C/C++ Blender customizations under `src/source/blender/`
 - Keep reusable logic in the relevant module or `common`
 - Use the build scripts instead of building directly from generated `source/`

@@ -315,7 +315,7 @@ void ED_spacetype_topbar()
   /* regions: header */
   art = MEM_callocN<ARegionType>("spacetype topbar header region");
   art->regionid = RGN_TYPE_HEADER;
-  /* Mixar: taller topbar than the shared HEADERY (26px) used by every other
+  /* WebSpider 3D: taller topbar than the shared HEADERY (26px) used by every other
    * editor header. Topbar-only — tune the +8 to taste. */
   art->prefsizey = HEADERY + 8;
   art->prefsizex = UI_UNIT_X * 5; /* Mainly to avoid glitches */

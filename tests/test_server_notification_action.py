@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+# SPDX-FileCopyrightText: 2026 WebSpider Studios
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -17,11 +17,11 @@ SCRIPTS = ROOT / "src" / "scripts"
 if str(SCRIPTS) not in sys.path:
     sys.path.insert(0, str(SCRIPTS))
 
-from mixar.modules.testing.mock_bpy import install_bpy_mock
+from webspider.modules.testing.mock_bpy import install_bpy_mock
 
 install_bpy_mock()
 
-from mixar.modules.common.notifications.store import get_notification_store
+from webspider.modules.common.notifications.store import get_notification_store
 
 
 def _get_item(store, nid):
@@ -36,14 +36,14 @@ def test_action_url_and_label_become_primary_button():
         "type": "info",
         "title": "New feature",
         "body": "Check out the new docs.",
-        "action_url": "https://mixar.app/docs",
+        "action_url": "https://webspider3d.com/docs",
         "action_label": "View Docs",
     })
     item = _get_item(store, nid)
     assert len(item.actions) == 1
     action = item.actions[0]
     assert action.label == "View Docs"
-    assert action.url == "https://mixar.app/docs"
+    assert action.url == "https://webspider3d.com/docs"
     assert action.style == "primary"
     assert action.operator == ""
     # Button replaces the inline link — no double rendering.
@@ -57,11 +57,11 @@ def test_action_url_without_label_defaults_to_open():
     nid = store.push_from_server({
         "id": "srv-2",
         "title": "Heads up",
-        "action_url": "https://mixar.app/news",
+        "action_url": "https://webspider3d.com/news",
     })
     item = _get_item(store, nid)
     assert [a.label for a in item.actions] == ["Open"]
-    assert item.actions[0].url == "https://mixar.app/news"
+    assert item.actions[0].url == "https://webspider3d.com/news"
 
 
 def test_no_action_url_means_no_button():

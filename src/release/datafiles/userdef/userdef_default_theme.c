@@ -19,7 +19,7 @@
 #define RGB(c)  {((c) >> 16) & 0xff, ((c) >> 8) & 0xff, (c) & 0xff}
 
 const bTheme U_theme_default = {
-  .name = "Mixar Dark",
+  .name = "WebSpider 3D Dark",
   .tui = {
     .wcol_regular = {
       .outline = RGBA(0x1b3320ff),
@@ -808,7 +808,7 @@ const bTheme U_theme_default = {
     .edited_object = RGBA(0x00806266),
     .row_alternate = RGBA(0xffffff07),
   },
-  .space_mixie_chat = {
+  .space_webspider_chat = {
     .text = RGBA(0xffffff00),
     .header = RGBA(0x010000ff),
     .header_text = RGBA(0xffffff00),

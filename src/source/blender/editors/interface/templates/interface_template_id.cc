@@ -1,5 +1,5 @@
 /* SPDX-FileCopyrightText: 2024 Blender Authors
- * SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+ * SPDX-FileCopyrightText: 2026 WebSpider Studios
  *
  * SPDX-License-Identifier: GPL-2.0-or-later */
 
@@ -22,7 +22,7 @@
 #include "BLI_listbase.h"
 #include "BLI_string_search.hh"
 #include "BLI_string_utf8.h"
-/* Mixar: STREQ used in template_ID_tabs to hide the Zen Mode workspace
+/* WebSpider 3D: STREQ used in template_ID_tabs to hide the Zen Mode workspace
  * from the topbar tab strip. */
 #include "BLI_utildefines.h"
 
@@ -1459,7 +1459,7 @@ static void template_ID_tabs(const bContext *C,
   const uiStyle *style = UI_style_get_dpi();
 
   for (ID *id : BKE_id_ordered_list(template_id.idlb)) {
-    /* Mixar: hide the dedicated Zen Mode workspace AND the legacy
+    /* WebSpider 3D: hide the dedicated Zen Mode workspace AND the legacy
      * "Basic Mode" / "AI Mode" workspaces from the topbar tab strip.
      *
      * Zen Mode is an internal layout used by the Zen UI mode — users
@@ -1467,7 +1467,7 @@ static void template_ID_tabs(const bContext *C,
      *
      * "Basic Mode" is the prior name for the Zen Mode workspace
      * (renamed for UX). "AI Mode" is the legacy workspace shipped in
-     * startup.mixar that historically served as the Zen mode surface.
+     * startup.webspider that historically served as the Zen mode surface.
      * The dual-mode design now uses a dedicated Zen Mode workspace
      * instead, but we keep the AI Mode workspace around in bpy.data
      * because it's the seed template the first switch into Zen Mode
@@ -1479,7 +1479,7 @@ static void template_ID_tabs(const bContext *C,
      *
      * All three names hard-coded so this is a build-time guarantee
      * (and so the filter doesn't need to import any Python state).
-     * Mirror in src/scripts/mixar/modules/workflow/constants.py if
+     * Mirror in src/scripts/webspider/modules/workflow/constants.py if
      * these change. */
     if (template_id.idcode == ID_WS &&
         (STREQ(id->name + 2, "Zen Mode") ||

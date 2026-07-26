@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited -->
+<!-- SPDX-FileCopyrightText: 2026 WebSpider Studios -->
 <!-- SPDX-License-Identifier: GPL-3.0-or-later -->
 
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
@@ -12,12 +12,12 @@
 		<dict>
 			<key>CFBundleTypeExtensions</key>
 			<array>
-				<string>mixar</string>
+				<string>webspider</string>
 			</array>
 			<key>CFBundleTypeIconFile</key>
-			<string>Mixar_Legacy_Document_Icon.icns</string>
+			<string>WebSpider_Legacy_Document_Icon.icns</string>
 			<key>CFBundleTypeName</key>
-			<string>Mixar File</string>
+			<string>WebSpider 3D File</string>
 			<key>CFBundleTypeOSTypes</key>
 			<array>
 				<string>MIXR</string>
@@ -28,18 +28,18 @@
 			<true/>
 			<key>LSItemContentTypes</key>
 			<array>
-				<string>com.mixar.mixar.file</string>
+				<string>com.webspiderstudios.webspider3d.file</string>
 			</array>
 			<key>CFBundleTypeIconSystemGenerated</key>
 			<true/>
 		</dict>
 	</array>
 	<key>CFBundleExecutable</key>
-	<string>Mixar</string>
+	<string>WebSpider 3D</string>
 	<key>CFBundleGetInfoString</key>
-	<string>${MACOSX_BUNDLE_LONG_VERSION_STRING}, Mixar</string>
+	<string>${MACOSX_BUNDLE_LONG_VERSION_STRING}, WebSpider 3D</string>
 	<key>CFBundleIconFile</key>
-	<string>mixar_icon.icns</string>
+	<string>webspider_icon.icns</string>
 	<key>CFBundleIdentifier</key>
 	<string>${MACOSX_BUNDLE_GUI_IDENTIFIER}</string>
 	<key>CFBundleInfoDictionaryVersion</key>
@@ -66,21 +66,21 @@
 				<string>public.data</string>
 			</array>
 			<key>UTTypeIdentifier</key>
-			<string>com.mixar.mixar.file</string>
+			<string>com.webspiderstudios.webspider3d.file</string>
 			<key>UTTypeDescription</key>
-			<string>Mixar File</string>
+			<string>WebSpider 3D File</string>
 			<key>UTTypeIcons</key>
 			<dict>
 				<key>UTTypeIconName</key>
-				<string>Mixar File</string>
+				<string>WebSpider 3D File</string>
 				<key>UTTypeIconText</key>
-				<string>mixar</string>
+				<string>webspider</string>
 			</dict>
 			<key>UTTypeTagSpecification</key>
 			<dict>
 				<key>public.filename-extension</key>
 				<array>
-					<string>mixar</string>
+					<string>webspider</string>
 				</array>
 			</dict>
 		</dict>

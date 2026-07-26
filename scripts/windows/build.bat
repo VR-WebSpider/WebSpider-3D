@@ -1,16 +1,16 @@
-REM SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+REM SPDX-FileCopyrightText: 2026 WebSpider Studios
 REM
 REM SPDX-License-Identifier: GPL-2.0-or-later
 
 @echo off
 setlocal enabledelayedexpansion
 
-REM Mixar Build Script for Windows
+REM WebSpider 3D Build Script for Windows
 REM All build logic lives here. build_ninja.bat / build_ms.bat are thin wrappers.
 REM BUILD_WITH_NINJA can be pre-set by callers; otherwise auto-detected here.
 
 echo ============================================================
-echo Mixar Build Script
+echo WebSpider 3D Build Script
 echo ============================================================
 
 REM --- [1/8] Generator Selection ---
@@ -55,11 +55,15 @@ setlocal EnableDelayedExpansion
 
 set "BLENDER_BUILD_ENV=Release"
 
-if "%MIXAR_ENV%"=="" (
-    echo Warning: MIXAR_ENV is empty, defaulting to Prod
-    set "MIXAR_ENV=Prod"
+if "%WEBSPIDER_ENV%"=="" (
+    if defined WEBSPIDER_ENV (
+        set "WEBSPIDER_ENV=%WEBSPIDER_ENV%"
+    ) else (
+        echo Warning: WEBSPIDER_ENV is empty, defaulting to Prod
+        set "WEBSPIDER_ENV=Prod"
+    )
 )
-set "BUILD_ENV_DIR=%BUILD_DIR%\%MIXAR_ENV%"
+set "BUILD_ENV_DIR=%BUILD_DIR%\%WEBSPIDER_ENV%"
 
 if defined BUILD_WITH_NINJA (
     echo Generator  : Ninja ^(parallel: %BUILD_CORES% cores^)
@@ -67,14 +71,14 @@ if defined BUILD_WITH_NINJA (
     echo Generator  : Visual Studio MSBuild ^(parallel: %BUILD_CORES% cores^)
 )
 echo Build dir  : %BUILD_ENV_DIR%
-echo Environment: %MIXAR_ENV%
+echo Environment: %WEBSPIDER_ENV%
 echo.
 
 REM --- [2/8] Build Start ---
 echo [2/8] Starting build at %TIME%...
 
 REM --- [3/8] Overlay ---
-echo [3/8] Overlaying Mixar sources onto source...
+echo [3/8] Overlaying WebSpider 3D sources onto source...
 call "%SCRIPT_DIR%overlay.bat"
 if %ERRORLEVEL% neq 0 (
     echo Error: Overlay failed
@@ -94,10 +98,10 @@ if defined BUILD_WITH_NINJA (
 REM --- [4/8] Header Generation ---
 if not exist "%BUILD_ENV_DIR%" mkdir "%BUILD_ENV_DIR%"
 
-echo [4/8] Generating environment config header for: %MIXAR_ENV%...
+echo [4/8] Generating environment config header for: %WEBSPIDER_ENV%...
 if not exist "%SOURCE_DIR%\source\creator" mkdir "%SOURCE_DIR%\source\creator"
 
-set "HEADER_FILE=%SOURCE_DIR%\source\creator\mixar_env_config.h"
+set "HEADER_FILE=%SOURCE_DIR%\source\creator\webspider_env_config.h"
 set "HEADER_TMP=%HEADER_FILE%.tmp"
 
 REM Write to temp file first; only overwrite if content changed (preserves timestamp when unchanged,
@@ -105,25 +109,25 @@ REM preventing unnecessary recompilation of all files that include this header).
 (
 echo #pragma once
 echo // Auto-generated file - DO NOT EDIT
-echo // Generated for environment: %MIXAR_ENV%
+echo // Generated for environment: %WEBSPIDER_ENV%
 echo.
-echo #define MIXAR_BASE_URL "%MIXAR_BACKEND_URL%"
-echo #define MIXAR_FRONTEND_BASE_URL "%MIXAR_FRONTEND_URL%"
-echo #define MIXAR_CURRENT_ENV "%MIXAR_ENV%"
+echo #define WEBSPIDER_BASE_URL "%WEBSPIDER_BACKEND_URL%"
+echo #define WEBSPIDER_FRONTEND_BASE_URL "%WEBSPIDER_FRONTEND_URL%"
+echo #define WEBSPIDER_CURRENT_ENV "%WEBSPIDER_ENV%"
 echo.
 echo // Environment-specific macros for conditional compilation
 ) > "%HEADER_TMP%"
 
-if "%MIXAR_ENV%"=="Prod" (
-    echo #define MIXAR_ENV_PROD>> "%HEADER_TMP%"
-) else if "%MIXAR_ENV%"=="Dev" (
-    echo #define MIXAR_ENV_DEV>> "%HEADER_TMP%"
-) else if "%MIXAR_ENV%"=="UAT" (
-    echo #define MIXAR_ENV_UAT>> "%HEADER_TMP%"
-) else if "%MIXAR_ENV%"=="Uat" (
-    echo #define MIXAR_ENV_UAT>> "%HEADER_TMP%"
+if "%WEBSPIDER_ENV%"=="Prod" (
+    echo #define WEBSPIDER_ENV_PROD>> "%HEADER_TMP%"
+) else if "%WEBSPIDER_ENV%"=="Dev" (
+    echo #define WEBSPIDER_ENV_DEV>> "%HEADER_TMP%"
+) else if "%WEBSPIDER_ENV%"=="UAT" (
+    echo #define WEBSPIDER_ENV_UAT>> "%HEADER_TMP%"
+) else if "%WEBSPIDER_ENV%"=="Uat" (
+    echo #define WEBSPIDER_ENV_UAT>> "%HEADER_TMP%"
 ) else (
-    echo #define MIXAR_ENV_PROD>> "%HEADER_TMP%"
+    echo #define WEBSPIDER_ENV_PROD>> "%HEADER_TMP%"
 )
 
 fc /b "%HEADER_FILE%" "%HEADER_TMP%" >nul 2>&1
@@ -135,22 +139,22 @@ if %ERRORLEVEL% neq 0 (
 )
 del "%HEADER_TMP%"
 
-REM Emit the build-frozen Python env marker (mirrors mixar_env_config.h
-REM on the Python side). Gates mixar.config.config.get_dev_bypass_credentials
-REM behind a value that cannot be flipped by editing the bundled mixar.json.
-if "%MIXAR_ENV%"=="Dev" (
+REM Emit the build-frozen Python env marker (mirrors webspider_env_config.h
+REM on the Python side). Gates webspider.config.config.get_dev_bypass_credentials
+REM behind a value that cannot be flipped by editing the bundled webspider.json.
+if "%WEBSPIDER_ENV%"=="Dev" (
     set "BUILD_ENV_DEV_BYPASS=True"
 ) else (
     set "BUILD_ENV_DEV_BYPASS=False"
 )
-if not exist "%SOURCE_DIR%\scripts\mixar\config" mkdir "%SOURCE_DIR%\scripts\mixar\config"
+if not exist "%SOURCE_DIR%\scripts\webspider\config" mkdir "%SOURCE_DIR%\scripts\webspider\config"
 (
-    echo # SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+    echo # SPDX-FileCopyrightText: 2026 WebSpider Studios
     echo # SPDX-License-Identifier: GPL-2.0-or-later
     echo # Auto-generated by scripts/windows/build.bat - DO NOT EDIT
-    echo BUILD_ENVIRONMENT = "%MIXAR_ENV%"
+    echo BUILD_ENVIRONMENT = "%WEBSPIDER_ENV%"
     echo DEV_BYPASS_ALLOWED = %BUILD_ENV_DEV_BYPASS%
-) > "%SOURCE_DIR%\scripts\mixar\config\_build_env.py"
+) > "%SOURCE_DIR%\scripts\webspider\config\_build_env.py"
 
 REM --- Visual Studio Environment (Ninja only) ---
 REM vcvarsall must be set up before cmake configure and before the build step.
@@ -279,9 +283,9 @@ if defined BUILD_WITH_NINJA (
 
 if "%MUST_CONFIGURE%"=="1" (
     echo Configuring CMake...
-    echo   Blender: %BLENDER_BUILD_ENV%   Mixar: %MIXAR_ENV%   Platform: %PLATFORM%
+    echo   Blender: %BLENDER_BUILD_ENV%   WebSpider: %WEBSPIDER_ENV%   Platform: %PLATFORM%
 
-    cmake -C "%CMAKE_DIR%\mixar_overrides.cmake" ^
+    cmake -C "%CMAKE_DIR%\webspider_overrides.cmake" ^
         %CMAKE_GENERATOR_ARGS% ^
         -S "%SOURCE_DIR%" ^
         -B "%BUILD_ENV_DIR%" ^
@@ -348,14 +352,14 @@ echo Found Python: %PYTHON_BIN%
 REM --- [7/8] Config File ---
 echo [7/8] Generating runtime configuration for bundle...
 set "BUNDLE_CONFIG_DIR=%BUILD_ENV_DIR%\bin\%BLENDER_VERSION%\config"
-"!PYTHON_BIN!" "%ROOT_DIR%\scripts\generate_config.py" --output "%BUNDLE_CONFIG_DIR%\mixar.json"
+"!PYTHON_BIN!" "%ROOT_DIR%\scripts\generate_config.py" --output "%BUNDLE_CONFIG_DIR%\webspider.json"
 if !ERRORLEVEL! neq 0 (
     echo Error: Failed to generate runtime configuration
     exit /b 1
 )
 
 REM --- [8/8] Python Packages ---
-echo [8/8] Installing Python packages for Mixar...
+echo [8/8] Installing Python packages for WebSpider 3D...
 set "SITE_PACKAGES=%PY_BASE%\%BLENDER_VERSION%\python\lib\site-packages"
 set "REQUIREMENTS_FILE=%SCRIPT_DIR%..\python_requirements.txt"
 
@@ -391,6 +395,6 @@ echo.
 echo ============================================================
 echo === Build Complete at %TIME% ===
 echo ============================================================
-echo Run Mixar using: %BUILD_ENV_DIR%\bin\mixar.exe
+echo Run WebSpider 3D using: %BUILD_ENV_DIR%\bin\webspider3d.exe
 echo ============================================================
 exit /b 0

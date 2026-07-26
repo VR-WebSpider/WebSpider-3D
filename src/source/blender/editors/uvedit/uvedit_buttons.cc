@@ -1,5 +1,5 @@
 /* SPDX-FileCopyrightText: 2001-2002 NaN Holding BV. All rights reserved.
- * SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+ * SPDX-FileCopyrightText: 2026 WebSpider Studios
  *
  * SPDX-License-Identifier: GPL-2.0-or-later */
 
@@ -230,7 +230,7 @@ static void do_uvedit_vertex(bContext *C, void * /*arg*/, int event)
 static bool image_panel_uv_poll(const bContext *C, PanelType * /*pt*/)
 {
   SpaceImage *sima = CTX_wm_space_image(C);
-  if (!ELEM(sima->mode, SI_MODE_UV, SI_MODE_MIXAR_UV)) {
+  if (!ELEM(sima->mode, SI_MODE_UV, SI_MODE_WEBSPIDER_UV)) {
     return false;
   }
   Object *obedit = CTX_data_edit_object(C);

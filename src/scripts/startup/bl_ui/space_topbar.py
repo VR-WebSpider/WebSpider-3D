@@ -1,5 +1,5 @@
 # SPDX-FileCopyrightText: 2009-2023 Blender Authors
-# SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+# SPDX-FileCopyrightText: 2026 WebSpider Studios
 #
 # SPDX-License-Identifier: GPL-2.0-or-later
 
@@ -113,9 +113,9 @@ class TOPBAR_MT_editor_menus(Menu):
 
         # Allow calling this menu directly (this might not be a header area).
         if getattr(context.area, "show_menus", False):
-            layout.menu("TOPBAR_MT_blender", text="", icon='MIXAR_ICON')
+            layout.menu("TOPBAR_MT_blender", text="", icon='WEBSPIDER_ICON')
         else:
-            layout.menu("TOPBAR_MT_blender", text="Mixar")
+            layout.menu("TOPBAR_MT_blender", text="WebSpider 3D")
 
         layout.menu("TOPBAR_MT_file")
         layout.menu("TOPBAR_MT_edit")
@@ -128,7 +128,7 @@ class TOPBAR_MT_editor_menus(Menu):
 
 
 class TOPBAR_MT_blender(Menu):
-    bl_label = "Mixar"
+    bl_label = "WebSpider 3D"
 
     def draw(self, _context):
         layout = self.layout
@@ -594,9 +594,9 @@ class TOPBAR_MT_help(Menu):
     def draw(self, _context):
         layout = self.layout
 
-        layout.operator("wm.url_open", text="About Mixar", icon='INFO').url = "https://www.mixar.app/about"
-        layout.operator("wm.url_open", text="Documentation", icon='HELP').url = "https://www.mixar.app/docs"
-        layout.operator("wm.url_open", text="Report a Bug", icon='URL').url = "https://www.mixar.app/bug-report"
+        layout.operator("wm.url_open", text="About WebSpider 3D", icon='INFO').url = "https://www.webspider3d.com/about"
+        layout.operator("wm.url_open", text="Documentation", icon='HELP').url = "https://www.webspider3d.com/docs"
+        layout.operator("wm.url_open", text="Report a Bug", icon='URL').url = "https://www.webspider3d.com/bug-report"
 
 
 class TOPBAR_MT_file_context_menu(Menu):

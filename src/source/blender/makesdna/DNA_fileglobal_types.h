@@ -1,5 +1,5 @@
 /* SPDX-FileCopyrightText: 2001-2002 NaN Holding BV. All rights reserved.
- * SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+ * SPDX-FileCopyrightText: 2026 WebSpider Studios
  *
  * SPDX-License-Identifier: GPL-2.0-or-later */
 
@@ -22,13 +22,13 @@ typedef struct FileGlobal {
   short subversion;
   short minversion, minsubversion;
 
-  /* Mixar file version fields, repurposing the original 6-byte _pad.
+  /* WebSpider 3D file version fields, repurposing the original 6-byte _pad.
    * SDNA handles the field rename: old files (which had char _pad[6]) read as 0,
-   * new files store actual Mixar version values.
+   * new files store actual WebSpider 3D version values.
    * 3 shorts = 6 bytes = same size as the original _pad[6]. */
-  short mixar_version;      /* MIXAR_FILE_VERSION when saved; 0 for pre-versioning files */
-  short mixar_subversion;   /* MIXAR_FILE_SUBVERSION when saved */
-  short mixar_min_version;  /* Minimum Mixar version that can read this file */
+  short webspider_version;      /* WEBSPIDER_FILE_VERSION when saved; 0 for pre-versioning files */
+  short webspider_subversion;   /* WEBSPIDER_FILE_SUBVERSION when saved */
+  short webspider_min_version;  /* Minimum WebSpider 3D version that can read this file */
 
   struct bScreen *curscreen;
   struct Scene *curscene;

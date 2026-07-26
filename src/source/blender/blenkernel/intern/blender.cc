@@ -1,5 +1,5 @@
 /* SPDX-FileCopyrightText: 2001-2002 NaN Holding BV. All rights reserved.
- * SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+ * SPDX-FileCopyrightText: 2026 WebSpider Studios
  *
  * SPDX-License-Identifier: GPL-2.0-or-later */
 
@@ -106,41 +106,41 @@ static void blender_version_init()
 {
   const char *version_cycle = "";
   const char *version_cycle_compact = "";
-  if (STREQ(STRINGIFY(MIXAR_VERSION_CYCLE), "alpha")) {
+  if (STREQ(STRINGIFY(WEBSPIDER_VERSION_CYCLE), "alpha")) {
     version_cycle = " Alpha";
     version_cycle_compact = " a";
   }
-  else if (STREQ(STRINGIFY(MIXAR_VERSION_CYCLE), "beta")) {
+  else if (STREQ(STRINGIFY(WEBSPIDER_VERSION_CYCLE), "beta")) {
     version_cycle = " Beta";
     version_cycle_compact = " b";
   }
-  else if (STREQ(STRINGIFY(MIXAR_VERSION_CYCLE), "rc")) {
+  else if (STREQ(STRINGIFY(WEBSPIDER_VERSION_CYCLE), "rc")) {
     version_cycle = " Release Candidate";
     version_cycle_compact = " RC";
   }
-  else if (STREQ(STRINGIFY(MIXAR_VERSION_CYCLE), "release")) {
+  else if (STREQ(STRINGIFY(WEBSPIDER_VERSION_CYCLE), "release")) {
     version_cycle = "";
     version_cycle_compact = "";
   }
   else {
-    BLI_assert_msg(0, "Invalid Mixar version cycle");
+    BLI_assert_msg(0, "Invalid WebSpider 3D version cycle");
   }
 
   const char *version_suffix = BKE_blender_version_is_lts() ? " LTS" : "";
 
   SNPRINTF_UTF8(blender_version_string,
                 "%d.%01d.%d%s%s",
-                MIXAR_VERSION / 100,
-                MIXAR_VERSION % 100,
-                MIXAR_VERSION_PATCH,
+                WEBSPIDER_VERSION / 100,
+                WEBSPIDER_VERSION % 100,
+                WEBSPIDER_VERSION_PATCH,
                 version_suffix,
                 version_cycle);
 
   SNPRINTF_UTF8(blender_version_string_compact,
                 "%d.%01d.%d%s",
-                MIXAR_VERSION / 100,
-                MIXAR_VERSION % 100,
-                MIXAR_VERSION_PATCH,
+                WEBSPIDER_VERSION / 100,
+                WEBSPIDER_VERSION % 100,
+                WEBSPIDER_VERSION_PATCH,
                 version_cycle_compact);
 }
 
@@ -251,7 +251,7 @@ void BKE_blender_globals_crash_path_get(char filepath[FILE_MAX])
    * de-referencing. */
 
   if (!(G_MAIN && G_MAIN->filepath[0])) {
-    BLI_path_join(filepath, FILE_MAX, BKE_tempdir_base(), "mixar.crash.txt");
+    BLI_path_join(filepath, FILE_MAX, BKE_tempdir_base(), "webspider.crash.txt");
   }
   else {
     BLI_path_join(filepath, FILE_MAX, BKE_tempdir_base(), BLI_path_basename(G_MAIN->filepath));

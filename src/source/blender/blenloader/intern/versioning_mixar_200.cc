@@ -1,12 +1,12 @@
-/* SPDX-FileCopyrightText: 2024 Mixar Authors
- * SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+/* SPDX-FileCopyrightText: 2024 WebSpider 3D Authors
+ * SPDX-FileCopyrightText: 2026 WebSpider Studios
  *
  * SPDX-License-Identifier: GPL-3.0-or-later */
 
 /** \file
  * \ingroup blenloader
  *
- * Mixar-specific versioning code for handling space and region updates.
+ * WebSpider 3D-specific versioning code for handling space and region updates.
  */
 
 #include "BLI_listbase.h"
@@ -21,33 +21,33 @@
 #include "DNA_userdef_types.h"
 
 #include "versioning_common.hh"
-#include "versioning_mixar_200.hh"
+#include "versioning_webspider_200.hh"
 
-void blo_do_versions_mixar(Main *bmain)
+void blo_do_versions_webspider(Main *bmain)
 {
-  /* Pre-versioning files have mixar_versionfile == 0.
+  /* Pre-versioning files have webspider_versionfile == 0.
    * All existing migrations must run on those files. */
-  if (!MAIN_MIXAR_VERSION_FILE_ATLEAST(bmain, 100, 1)) {
+  if (!MAIN_WEBSPIDER_VERSION_FILE_ATLEAST(bmain, 100, 1)) {
     LISTBASE_FOREACH (bScreen *, screen, &bmain->screens) {
       LISTBASE_FOREACH (ScrArea *, area, &screen->areabase) {
         LISTBASE_FOREACH (SpaceLink *, sl, &area->spacedata) {
 
-          /* Remap old Mixar space type values (24-31) to new range (100-107).
+          /* Remap old WebSpider 3D space type values (24-31) to new range (100-107).
            * The enum values were moved to avoid collisions with upstream Blender. */
           switch (sl->spacetype) {
-            case 24: sl->spacetype = SPACE_MIXIE; break;
-            case 25: sl->spacetype = SPACE_MIXAR_LAYERS; break;
-            case 26: sl->spacetype = SPACE_MIXAR_PROPERTIES; break;
-            case 27: sl->spacetype = SPACE_MIXAR_ASSETS; break;
-            case 28: sl->spacetype = SPACE_EMPTY; break;  /* Was SPACE_MIXAR_UV_PROPERTIES */
+            case 24: sl->spacetype = SPACE_WEBSPIDER_AI; break;
+            case 25: sl->spacetype = SPACE_WEBSPIDER_LAYERS; break;
+            case 26: sl->spacetype = SPACE_WEBSPIDER_PROPERTIES; break;
+            case 27: sl->spacetype = SPACE_WEBSPIDER_ASSETS; break;
+            case 28: sl->spacetype = SPACE_EMPTY; break;  /* Was SPACE_WEBSPIDER_UV_PROPERTIES */
             case 29: sl->spacetype = SPACE_BAKING; break;
             case 30: sl->spacetype = SPACE_TEXTURE_SETS; break;
-            case 31: sl->spacetype = SPACE_MIXIE_CHAT; break;
+            case 31: sl->spacetype = SPACE_WEBSPIDER_CHAT; break;
             default: break;
           }
 
-          /* Add TOOLS region to MIXIE spaces (ensures toolbar region exists). */
-          if (sl->spacetype == SPACE_MIXIE) {
+          /* Add TOOLS region to WEBSPIDER_AI spaces (ensures toolbar region exists). */
+          if (sl->spacetype == SPACE_WEBSPIDER_AI) {
             ListBase *regionbase = (sl == area->spacedata.first) ? &area->regionbase :
                                                                    &sl->regionbase;
             if (ARegion *new_tools = do_versions_add_region_if_not_found(
@@ -65,13 +65,13 @@ void blo_do_versions_mixar(Main *bmain)
    * texturing spaces that originally shipped without one. Without this, areas
    * stored in the bundled startup file keep their saved (header-less) regions
    * and the space switcher dropdown stays hidden. */
-  if (!MAIN_MIXAR_VERSION_FILE_ATLEAST(bmain, 100, 2)) {
+  if (!MAIN_WEBSPIDER_VERSION_FILE_ATLEAST(bmain, 100, 2)) {
     LISTBASE_FOREACH (bScreen *, screen, &bmain->screens) {
       LISTBASE_FOREACH (ScrArea *, area, &screen->areabase) {
         LISTBASE_FOREACH (SpaceLink *, sl, &area->spacedata) {
           if (!ELEM(sl->spacetype,
-                    SPACE_MIXAR_PROPERTIES,
-                    SPACE_MIXAR_ASSETS,
+                    SPACE_WEBSPIDER_PROPERTIES,
+                    SPACE_WEBSPIDER_ASSETS,
                     SPACE_BAKING))
           {
             continue;
@@ -100,7 +100,7 @@ void blo_do_versions_mixar(Main *bmain)
    * removed Scene Grid space (spacetype 109) needs no remap here: its type
    * is no longer registered, so `direct_link_area()` already falls those
    * areas back to SPACE_EMPTY on read. */
-  if (!MAIN_MIXAR_VERSION_FILE_ATLEAST(bmain, 100, 3)) {
+  if (!MAIN_WEBSPIDER_VERSION_FILE_ATLEAST(bmain, 100, 3)) {
     LISTBASE_FOREACH (bScreen *, screen, &bmain->screens) {
       LISTBASE_FOREACH (ScrArea *, area, &screen->areabase) {
         LISTBASE_FOREACH (SpaceLink *, sl, &area->spacedata) {
@@ -121,5 +121,5 @@ void blo_do_versions_mixar(Main *bmain)
     }
   }
 
-  /* Future versioning blocks go here, guarded by MAIN_MIXAR_VERSION_FILE_ATLEAST. */
+  /* Future versioning blocks go here, guarded by MAIN_WEBSPIDER_VERSION_FILE_ATLEAST. */
 }

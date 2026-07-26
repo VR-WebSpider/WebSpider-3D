@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+// SPDX-FileCopyrightText: 2026 WebSpider Studios
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -7,10 +7,10 @@
 
 #include "creator_auth.h"
 
-// Function to get base URL based on MIXAR_ENV environment variable
-const char* get_mixar_base_url();
+// Function to get base URL based on WEBSPIDER_ENV environment variable
+const char* get_webspider_base_url();
 
-#define MIXAR_AUTH_ENDPOINT "/api/v1/auth/login"
+#define WEBSPIDER_AUTH_ENDPOINT "/api/v1/auth/login"
 
 extern "C" int GHOST_HACK_getFirstFile(char buf[]);
 

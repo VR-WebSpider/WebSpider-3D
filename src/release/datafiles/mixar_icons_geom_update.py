@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # SPDX-FileCopyrightText: 2018-2022 Blender Authors
-# SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+# SPDX-FileCopyrightText: 2026 WebSpider Studios
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -49,17 +49,17 @@ def edit_text_file(filename: str, marker_begin: str, marker_end: str, content: s
 
 
 def main() -> int:
-    blender_bin = os.environ.get("BLENDER_BIN", "mixar")
+    blender_bin = os.environ.get("BLENDER_BIN", "webspider3d")
     if not os.path.exists(blender_bin):
-        blender_bin = os.path.join(ROOTDIR, "mixar.bin")
+        blender_bin = os.path.join(ROOTDIR, "webspider.bin")
 
     if not os.path.exists(blender_bin):
         if sys.platform == 'darwin':
-            blender_app_path = '/Applications/Mixar.app/Contents/MacOS/Mixar'
+            blender_app_path = '/Applications/WebSpider 3D.app/Contents/MacOS/WebSpider 3D'
             if os.path.exists(blender_app_path):
                 blender_bin = blender_app_path
         elif sys.platform == 'win32':
-            blender_app_path = os.path.join(ROOTDIR, "mixar.exe")
+            blender_app_path = os.path.join(ROOTDIR, "webspider.exe")
             if os.path.exists(blender_app_path):
                 blender_bin = blender_app_path
 

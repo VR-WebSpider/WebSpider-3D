@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+# SPDX-FileCopyrightText: 2026 WebSpider Studios
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -16,7 +16,7 @@ clean_build:
 install:
 	./scripts/unix/install.sh
 
-# Run the built Mixar app.
+# Run the built WebSpider 3D app.
 #   make run           -> uses ./build/Dev
 #   make run Prod      -> uses ./build/Prod
 #   make run Dev_uat_6 -> uses ./build/Dev_uat_6

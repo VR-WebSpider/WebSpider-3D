@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # SPDX-FileCopyrightText: 2023 Blender Authors
-# SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+# SPDX-FileCopyrightText: 2026 WebSpider Studios
 #
 # SPDX-License-Identifier: GPL-2.0-or-later
 
@@ -72,7 +72,7 @@ ALLOWED_LIBS = [
     'libxcb.so',
 ]
 
-IGNORE_FILES = ("mixar-launcher", "mixar-softwaregl", )
+IGNORE_FILES = ("webspider3d-launcher", "webspider3d-softwaregl", )
 IGNORE_EXTENSION = (".sh", ".py", )
 
 

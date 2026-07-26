@@ -1,5 +1,5 @@
 /* SPDX-FileCopyrightText: 2009 Blender Authors
- * SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+ * SPDX-FileCopyrightText: 2026 WebSpider Studios
  *
  * SPDX-License-Identifier: GPL-2.0-or-later */
 
@@ -40,7 +40,7 @@
 #include "UI_view2d.hh"
 
 #include "interface_intern.hh"
-#include "interface_mixar_section.hh"
+#include "interface_webspider_section.hh"
 
 #include "GPU_batch.hh"
 #include "GPU_batch_presets.hh"
@@ -53,11 +53,11 @@
 
 #include "IMB_colormanagement.hh"
 
-/* Mixar: forward declaration for the toolbar-icon scaling helper defined
+/* WebSpider 3D: forward declaration for the toolbar-icon scaling helper defined
  * in UI_interface_icons. MSVC `/permissive-` rejects `extern "C"` linkage
  * specifications inside function bodies (C2598), so the prototype lives
  * at file scope. */
-extern "C" void UI_mixar_set_drawing_tool_icon(bool);
+extern "C" void UI_webspider_set_drawing_tool_icon(bool);
 
 #ifdef WITH_INPUT_IME
 #  include "WM_types.hh"
@@ -123,12 +123,12 @@ enum uiWidgetTypeEnum {
   UI_WTYPE_NODESOCKET,
   UI_WTYPE_VIEW_ITEM,
 
-  /* Mixar custom widgets */
-  UI_WTYPE_MIXAR_SECTION,
-  UI_WTYPE_MIXAR_DROPDOWN,
-  UI_WTYPE_MIXAR_ACTION,
-  UI_WTYPE_MIXAR_TOGGLE,
-  UI_WTYPE_MIXAR_INPUT,
+  /* WebSpider 3D custom widgets */
+  UI_WTYPE_WEBSPIDER_SECTION,
+  UI_WTYPE_WEBSPIDER_DROPDOWN,
+  UI_WTYPE_WEBSPIDER_ACTION,
+  UI_WTYPE_WEBSPIDER_TOGGLE,
+  UI_WTYPE_WEBSPIDER_INPUT,
 };
 
 /**
@@ -1432,14 +1432,14 @@ static void widget_draw_icon(
     const bool has_theme = !but->col[3] && UI_icon_get_theme_color(int(icon), color);
     const bool outline = btheme->tui.icon_border_intensity > 0.0f && has_theme;
 
-    /* Mixar: tell `icon_draw_size` to apply toolbar scaling to SVG icons
+    /* WebSpider 3D: tell `icon_draw_size` to apply toolbar scaling to SVG icons
      * (UI-enum fallbacks like `TOOL_SETTINGS` used as toolbar glyphs).
      * `.dat` GEOM icons already self-scale via `USE_UI_TOOLBAR_HACK`.
      * The `extern "C"` prototype lives at file scope (above) — MSVC
      * `/permissive-` rejects in-function linkage specifications. */
-    const bool mixar_is_tool_icon = (but->icon != ICON_NONE) && UI_but_is_tool(but);
-    if (mixar_is_tool_icon) {
-      UI_mixar_set_drawing_tool_icon(true);
+    const bool webspider_is_tool_icon = (but->icon != ICON_NONE) && UI_but_is_tool(but);
+    if (webspider_is_tool_icon) {
+      UI_webspider_set_drawing_tool_icon(true);
     }
 
     /* to indicate draggable */
@@ -1470,8 +1470,8 @@ static void widget_draw_icon(
           xs, ys, icon, aspect, alpha, desaturate, color, outline, &but->icon_overlay_text);
     }
 
-    if (mixar_is_tool_icon) {
-      UI_mixar_set_drawing_tool_icon(false);
+    if (webspider_is_tool_icon) {
+      UI_webspider_set_drawing_tool_icon(false);
     }
   }
 
@@ -4954,11 +4954,11 @@ static void widget_optionbut(uiWidgetColors *wcol,
 }
 
 /* -------------------------------------------------------------------- */
-/* Mixar design-system palette (--mx-* tokens).
+/* WebSpider 3D design-system palette (--mx-* tokens).
  *
- * Shared by every widget_mixar_* draw function so the whole app speaks one
+ * Shared by every widget_webspider_* draw function so the whole app speaks one
  * visual language (global design system). Values are the exact hex tokens
- * from the Mixar design spec — keep them here as the single source of truth
+ * from the WebSpider 3D design spec — keep them here as the single source of truth
  * rather than re-hardcoding per widget. */
 /* [[maybe_unused]]: the full palette is defined up front as the single
  * source of truth; individual tokens land as each widget phase uses them. */
@@ -4989,8 +4989,8 @@ static void widget_optionbut(uiWidgetColors *wcol,
 [[maybe_unused]] static constexpr float MX_R_SM = 4.0f; /* --mx-r-sm: inputs / selects */
 [[maybe_unused]] static constexpr float MX_R_MD = 8.0f; /* --mx-r-md: grouped cards    */
 
-/* Mixar pill-shaped toggle switch. */
-static void widget_mixar_toggle(uiWidgetColors *wcol,
+/* WebSpider 3D pill-shaped toggle switch. */
+static void widget_webspider_toggle(uiWidgetColors *wcol,
                                 rcti *rect,
                                 const uiWidgetStateInfo *state,
                                 int /*roundboxalign*/,
@@ -5086,9 +5086,9 @@ static void widget_mixar_toggle(uiWidgetColors *wcol,
   }
 }
 
-/* -- Mixar Input Widget -------------------------------------------------- */
+/* -- WebSpider 3D Input Widget -------------------------------------------------- */
 
-static void widget_mixar_input(uiWidgetColors *wcol,
+static void widget_webspider_input(uiWidgetColors *wcol,
                                rcti *rect,
                                const uiWidgetStateInfo *state,
                                int roundboxalign,
@@ -5224,9 +5224,9 @@ static void widget_box(uiBut *but,
   GPU_blend(GPU_BLEND_NONE);
 }
 
-/* -- Mixar Section Widget ------------------------------------------------ */
+/* -- WebSpider 3D Section Widget ------------------------------------------------ */
 
-static void widget_mixar_section(uiBut *but,
+static void widget_webspider_section(uiBut *but,
                                  uiWidgetColors *wcol,
                                  rcti *rect,
                                  const uiWidgetStateInfo * /*state*/,
@@ -5266,9 +5266,9 @@ static void widget_mixar_section(uiBut *but,
   GPU_blend(GPU_BLEND_NONE);
 }
 
-/* -- Mixar Dropdown Widget ----------------------------------------------- */
+/* -- WebSpider 3D Dropdown Widget ----------------------------------------------- */
 
-static void widget_mixar_dropdown(uiWidgetColors *wcol,
+static void widget_webspider_dropdown(uiWidgetColors *wcol,
                                   rcti *rect,
                                   const uiWidgetStateInfo *state,
                                   int roundboxalign,
@@ -5340,7 +5340,7 @@ static void widget_mixar_dropdown(uiWidgetColors *wcol,
 /* -------------------------------------------------------------------- */
 
 /* Sample the 4-stop --mx-gradient at t in [0,1] -> float RGBA. */
-static void mixar_gradient_sample(float t, float out[4])
+static void webspider_gradient_sample(float t, float out[4])
 {
   const int n = 4;
   t = std::clamp(t, 0.0f, 1.0f);
@@ -5366,7 +5366,7 @@ static void mixar_gradient_sample(float t, float out[4])
  * rounded-rect outline (circle equation in the corner zones), so no
  * stencil/scissor is needed — the roundbox shader only shades vertically,
  * which is why this is drawn by hand. */
-static void mixar_draw_gradient_hbar(const rctf *rect, float rad)
+static void webspider_draw_gradient_hbar(const rctf *rect, float rad)
 {
   const float w = rect->xmax - rect->xmin;
   const float h = rect->ymax - rect->ymin;
@@ -5401,7 +5401,7 @@ static void mixar_draw_gradient_hbar(const rctf *rect, float rad)
       bot = rect->ymin + rad - dy;
     }
     float c[4];
-    mixar_gradient_sample(t, c);
+    webspider_gradient_sample(t, c);
     immAttr4fv(col, c);
     immVertex2f(pos, x, bot);
     immAttr4fv(col, c);
@@ -5412,7 +5412,7 @@ static void mixar_draw_gradient_hbar(const rctf *rect, float rad)
   GPU_blend(GPU_BLEND_NONE);
 }
 
-static void widget_mixar_action_button(uiBut * /*but*/,
+static void widget_webspider_action_button(uiBut * /*but*/,
                                        uiWidgetColors *wcol,
                                        rcti *rect,
                                        const uiWidgetStateInfo *state,
@@ -5442,7 +5442,7 @@ static void widget_mixar_action_button(uiBut * /*but*/,
   }
 
   /* The one gradient. */
-  mixar_draw_gradient_hbar(&rectf, rad);
+  webspider_draw_gradient_hbar(&rectf, rad);
 
   /* 1px inset top highlight for a subtle glass edge. */
   {
@@ -5783,29 +5783,29 @@ static uiWidgetType *widget_type(uiWidgetTypeEnum type)
       wt.wcol_theme = &btheme->tui.wcol_box;
       break;
 
-    case UI_WTYPE_MIXAR_SECTION:
-      wt.custom = widget_mixar_section;
+    case UI_WTYPE_WEBSPIDER_SECTION:
+      wt.custom = widget_webspider_section;
       wt.wcol_theme = &btheme->tui.wcol_box;
       break;
 
-    case UI_WTYPE_MIXAR_DROPDOWN:
+    case UI_WTYPE_WEBSPIDER_DROPDOWN:
       wt.wcol_theme = &btheme->tui.wcol_menu;
-      wt.draw = widget_mixar_dropdown;
+      wt.draw = widget_webspider_dropdown;
       break;
 
-    case UI_WTYPE_MIXAR_ACTION:
+    case UI_WTYPE_WEBSPIDER_ACTION:
       wt.wcol_theme = &btheme->tui.wcol_tool;
-      wt.custom = widget_mixar_action_button;
+      wt.custom = widget_webspider_action_button;
       break;
 
-    case UI_WTYPE_MIXAR_TOGGLE:
+    case UI_WTYPE_WEBSPIDER_TOGGLE:
       wt.wcol_theme = &btheme->tui.wcol_option;
-      wt.draw = widget_mixar_toggle;
+      wt.draw = widget_webspider_toggle;
       break;
 
-    case UI_WTYPE_MIXAR_INPUT:
+    case UI_WTYPE_WEBSPIDER_INPUT:
       wt.wcol_theme = &btheme->tui.wcol_text;
-      wt.draw = widget_mixar_input;
+      wt.draw = widget_webspider_input;
       break;
 
     case UI_WTYPE_RGB_PICKER:
@@ -6026,8 +6026,8 @@ void ui_draw_but(const bContext *C, ARegion *region, uiStyle *style, uiBut *but,
 
       case ButType::But:
       case ButType::Decorator:
-        if (but->flag2 & UI_BUT2_MIXAR_ACTION) {
-          wt = widget_type(UI_WTYPE_MIXAR_ACTION);
+        if (but->flag2 & UI_BUT2_WEBSPIDER_ACTION) {
+          wt = widget_type(UI_WTYPE_WEBSPIDER_ACTION);
         }
 #ifdef USE_UI_TOOLBAR_HACK
         else if ((but->icon != ICON_NONE) && UI_but_is_tool(but)) {
@@ -6056,8 +6056,8 @@ void ui_draw_but(const bContext *C, ARegion *region, uiStyle *style, uiBut *but,
         break;
 
       case ButType::Text:
-        if (but->flag2 & UI_BUT2_MIXAR_INPUT) {
-          wt = widget_type(UI_WTYPE_MIXAR_INPUT);
+        if (but->flag2 & UI_BUT2_WEBSPIDER_INPUT) {
+          wt = widget_type(UI_WTYPE_WEBSPIDER_INPUT);
         }
         else {
           wt = widget_type(UI_WTYPE_NAME);
@@ -6080,8 +6080,8 @@ void ui_draw_but(const bContext *C, ARegion *region, uiStyle *style, uiBut *but,
 
       case ButType::Checkbox:
       case ButType::CheckboxN:
-        if (but->flag2 & UI_BUT2_MIXAR_TOGGLE) {
-          wt = widget_type(UI_WTYPE_MIXAR_TOGGLE);
+        if (but->flag2 & UI_BUT2_WEBSPIDER_TOGGLE) {
+          wt = widget_type(UI_WTYPE_WEBSPIDER_TOGGLE);
           if ((but->drawflag & (UI_BUT_TEXT_LEFT | UI_BUT_TEXT_RIGHT)) == 0) {
             but->drawflag |= UI_BUT_TEXT_LEFT;
           }
@@ -6111,8 +6111,8 @@ void ui_draw_but(const bContext *C, ARegion *region, uiStyle *style, uiBut *but,
       case ButType::Menu:
       case ButType::Block:
       case ButType::Popover:
-        if (but->flag2 & UI_BUT2_MIXAR_DROPDOWN) {
-          wt = widget_type(UI_WTYPE_MIXAR_DROPDOWN);
+        if (but->flag2 & UI_BUT2_WEBSPIDER_DROPDOWN) {
+          wt = widget_type(UI_WTYPE_WEBSPIDER_DROPDOWN);
         }
         else if (but->flag & UI_BUT_NODE_LINK) {
           /* new node-link button, not active yet XXX */
@@ -6138,8 +6138,8 @@ void ui_draw_but(const bContext *C, ARegion *region, uiStyle *style, uiBut *but,
 
       case ButType::Roundbox:
       case ButType::ListBox:
-        if (but->flag2 & UI_BUT2_MIXAR_SECTION) {
-          wt = widget_type(UI_WTYPE_MIXAR_SECTION);
+        if (but->flag2 & UI_BUT2_WEBSPIDER_SECTION) {
+          wt = widget_type(UI_WTYPE_WEBSPIDER_SECTION);
         }
         else {
           wt = widget_type(UI_WTYPE_BOX);

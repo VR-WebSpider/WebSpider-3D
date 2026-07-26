@@ -1,8 +1,8 @@
-// SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+// SPDX-FileCopyrightText: 2026 WebSpider Studios
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-#define MIXARFILE 1
+#define WEBSPIDERFILE 1
 #define IDR_VERSION1 1
 
 #ifdef WINDRES
@@ -13,8 +13,8 @@
 	#define BLEN_VER_RC_STR STRINGIFY(BLEN_VER_RC_STR_M)
 #endif
 
-APPICON ICON DISCARDABLE "winmixar.ico"
-MIXARFILE ICON DISCARDABLE "winmixarfile.ico"
+APPICON ICON DISCARDABLE "winwebspider.ico"
+WEBSPIDERFILE ICON DISCARDABLE "winwebspiderfile.ico"
 
 IDR_VERSION1 VERSIONINFO
 FILEVERSION BLEN_VER_RC_1, BLEN_VER_RC_2, BLEN_VER_RC_3, BLEN_VER_RC_4
@@ -28,11 +28,11 @@ BEGIN
     BEGIN
       VALUE "FileVersion", BLEN_VER_RC_STR
       VALUE "ProductVersion", BLEN_VER_RC_STR
-      VALUE "CompanyName", "Mixar"
-      VALUE "FileDescription", "Mixar"
-      VALUE "LegalCopyright", "GPLv3 (Mixar)"
-      VALUE "OriginalFilename", "mixar.exe"
-      VALUE "ProductName", "Mixar"
+      VALUE "CompanyName", "WebSpider 3D"
+      VALUE "FileDescription", "WebSpider 3D"
+      VALUE "LegalCopyright", "GPLv3 (WebSpider 3D)"
+      VALUE "OriginalFilename", "webspider3d.exe"
+      VALUE "ProductName", "WebSpider 3D"
     END
   END
   BLOCK "VarFileInfo"

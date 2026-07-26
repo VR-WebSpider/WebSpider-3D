@@ -1,23 +1,23 @@
 #!/bin/bash
-# SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+# SPDX-FileCopyrightText: 2026 WebSpider Studios
 #
 # SPDX-License-Identifier: GPL-2.0-or-later
 
 set -euo pipefail
 
-# Mixar Build Script
-# Builds Blender (Release) + Mixar (configurable environment)
+# WebSpider 3D Build Script
+# Builds Blender (Release) + WebSpider 3D (configurable environment)
 
 # Load all settings from settings.sh
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/settings.sh"
 
 # Define build directory for this environment
-BUILD_ENV_DIR="${BUILD_DIR}/${MIXAR_ENV}"
+BUILD_ENV_DIR="${BUILD_DIR}/${WEBSPIDER_ENV}"
 
 # Determine base path for embedded Python based on platform
 if [[ "$PLATFORM" == "macOS" ]]; then
-    PY_BASE="$BUILD_ENV_DIR/bin/${MIXAR_APP_NAME}.app/Contents/Resources"
+    PY_BASE="$BUILD_ENV_DIR/bin/${WEBSPIDER_APP_NAME}.app/Contents/Resources"
 elif [[ "$PLATFORM" == "Linux" ]]; then
     PY_BASE="$BUILD_ENV_DIR/bin"
 else
@@ -43,9 +43,9 @@ if [[ -n "$PYTHON_BIN" ]]; then
 
     # Determine platform-specific user preferences path
     if [[ "$PLATFORM" == "macOS" ]]; then
-        USERPREF_PATH="$HOME/Library/Application Support/Mixar/5.0/config/mixar_userpref.blend"
+        USERPREF_PATH="$HOME/Library/Application Support/WebSpider 3D/5.0/config/webspider3d_userpref.blend"
     elif [[ "$PLATFORM" == "Linux" ]]; then
-        USERPREF_PATH="${XDG_CONFIG_HOME:-$HOME/.config}/mixar/5.0/config/mixar_userpref.blend"
+        USERPREF_PATH="${XDG_CONFIG_HOME:-$HOME/.config}/webspider3d/5.0/config/webspider3d_userpref.blend"
     else
         echo "Error: Unsupported platform '$PLATFORM' for theme generation"
         exit 1

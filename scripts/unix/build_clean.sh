@@ -1,11 +1,11 @@
 #!/bin/bash
-# SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+# SPDX-FileCopyrightText: 2026 WebSpider Studios
 #
 # SPDX-License-Identifier: GPL-2.0-or-later
 
 set -euo pipefail
 
-# Mixar Clean Build Script
+# WebSpider 3D Clean Build Script
 # Deletes environment-specific build directory and source directory, then runs a fresh build
 #
 # Usage:
@@ -17,7 +17,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/settings.sh"
 
 # Environment-specific build directory (e.g., build/Prod, build/Dev)
-BUILD_ENV_DIR="${BUILD_DIR}/${MIXAR_ENV}"
+BUILD_ENV_DIR="${BUILD_DIR}/${WEBSPIDER_ENV}"
 
 # Parse --yes flag for non-interactive mode
 AUTO_CONFIRM=false
@@ -27,7 +27,7 @@ fi
 
 echo "=== Clean Build Starting ==="
 echo "This will delete the following directories:"
-echo "  - Build (${MIXAR_ENV}): $BUILD_ENV_DIR"
+echo "  - Build (${WEBSPIDER_ENV}): $BUILD_ENV_DIR"
 echo "  - Source: $SOURCE_DIR"
 echo ""
 

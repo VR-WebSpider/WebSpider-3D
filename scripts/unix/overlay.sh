@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+# SPDX-FileCopyrightText: 2026 WebSpider Studios
 #
 # SPDX-License-Identifier: GPL-2.0-or-later
 
@@ -37,7 +37,7 @@ if [ -f "$ROOT_DIR/.overlay_manifest" ]; then
     fi
 fi
 
-echo "Overlaying Mixar sources onto source..."
+echo "Overlaying WebSpider 3D sources onto source..."
 rsync -av "$SRC_DIR/" "$SOURCE_DIR/"
 
 echo "Overlay complete."

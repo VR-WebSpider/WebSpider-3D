@@ -1,4 +1,4 @@
-REM SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+REM SPDX-FileCopyrightText: 2026 WebSpider Studios
 REM
 REM SPDX-License-Identifier: GPL-2.0-or-later
 
@@ -9,19 +9,19 @@ if EXIST "%BLENDER_BIN%" (
 
 REM Check the build folder next, if ninja was used there will be no
 REM debug/release folder
-set BLENDER_BIN=%BUILD_DIR%\bin\mixar.exe
+set BLENDER_BIN=%BUILD_DIR%\bin\webspider3d.exe
 if EXIST "%BLENDER_BIN%" (
     goto detect_blender_done
 )
 
 REM Check the release folder next
-set BLENDER_BIN=%BUILD_DIR%\bin\release\mixar.exe
+set BLENDER_BIN=%BUILD_DIR%\bin\release\webspider3d.exe
 if EXIST "%BLENDER_BIN%" (
     goto detect_blender_done
 )
 
 REM Check the debug folder next
-set BLENDER_BIN=%BUILD_DIR%\bin\debug\mixar.exe
+set BLENDER_BIN=%BUILD_DIR%\bin\debug\webspider3d.exe
 if EXIST "%BLENDER_BIN%" (
     goto detect_blender_done
 )

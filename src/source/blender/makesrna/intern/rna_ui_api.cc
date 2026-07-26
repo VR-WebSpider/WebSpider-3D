@@ -1,5 +1,5 @@
 /* SPDX-FileCopyrightText: 2009 Blender Authors
- * SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+ * SPDX-FileCopyrightText: 2026 WebSpider Studios
  *
  * SPDX-License-Identifier: GPL-2.0-or-later */
 
@@ -44,8 +44,8 @@ const EnumPropertyItem rna_enum_icon_items[] = {
 
 #  include "WM_api.hh"
 
-/* Mixar custom section widget. */
-#  include "../../editors/interface/interface_mixar_section.hh"
+/* WebSpider 3D custom section widget. */
+#  include "../../editors/interface/interface_webspider_section.hh"
 
 
 using blender::StringRefNull;
@@ -409,7 +409,7 @@ static PointerRNA rna_uiItemO(uiLayout *layout,
 
   layout->search_weight_set(prev_weight);
 
-  /* Per-button tooltip suppression. Mixar uses this on tiny floating
+  /* Per-button tooltip suppression. WebSpider 3D uses this on tiny floating
    * windows (the agent bubble's pill / header) where Blender's
    * tooltip popup gets visually clipped to the host NSWindow's
    * bounds and shows only a leading fragment of the label, looking
@@ -843,12 +843,12 @@ static uiLayout *rna_uiLayoutBox(uiLayout *layout)
   return &layout->box();
 }
 
-static uiLayout *rna_uiLayoutMixarSection(uiLayout *layout)
+static uiLayout *rna_uiLayoutWebSpider 3DSection(uiLayout *layout)
 {
-  return UI_layout_mixar_section(layout);
+  return UI_layout_webspider_section(layout);
 }
 
-static void rna_uiItemR_mixar_dropdown(uiLayout *layout,
+static void rna_uiItemR_webspider_dropdown(uiLayout *layout,
                                        PointerRNA *ptr,
                                        const char *propname,
                                        const char *name,
@@ -878,10 +878,10 @@ static void rna_uiItemR_mixar_dropdown(uiLayout *layout,
               false);    /* invert_checkbox */
 
   /* Mark the just-created Menu button for custom drawing. */
-  UI_layout_mixar_mark_last_dropdown(layout);
+  UI_layout_webspider_mark_last_dropdown(layout);
 }
 
-static PointerRNA rna_uiItemO_mixar_action(uiLayout *layout,
+static PointerRNA rna_uiItemO_webspider_action(uiLayout *layout,
                                            const char *opname,
                                            const char *name,
                                            const char *text_ctxt,
@@ -903,11 +903,11 @@ static PointerRNA rna_uiItemO_mixar_action(uiLayout *layout,
                                  false); /* no_tooltip */
 
   /* Mark the just-created operator button for accent styling. */
-  UI_layout_mixar_mark_last_action(layout);
+  UI_layout_webspider_mark_last_action(layout);
   return opptr;
 }
 
-static void rna_uiItemR_mixar_toggle(uiLayout *layout,
+static void rna_uiItemR_webspider_toggle(uiLayout *layout,
                                      PointerRNA *ptr,
                                      const char *propname,
                                      const char *name,
@@ -935,10 +935,10 @@ static void rna_uiItemR_mixar_toggle(uiLayout *layout,
               icon_value,
               false);    /* invert_checkbox */
 
-  UI_layout_mixar_mark_last_toggle(layout);
+  UI_layout_webspider_mark_last_toggle(layout);
 }
 
-static void rna_uiItemR_mixar_input(uiLayout *layout,
+static void rna_uiItemR_webspider_input(uiLayout *layout,
                                     PointerRNA *ptr,
                                     const char *propname,
                                     const char *name,
@@ -966,7 +966,7 @@ static void rna_uiItemR_mixar_input(uiLayout *layout,
               icon_value,
               false);    /* invert_checkbox */
 
-  UI_layout_mixar_mark_last_input(layout);
+  UI_layout_webspider_mark_last_input(layout);
 }
 
 static uiLayout *rna_uiLayoutSplit(uiLayout *layout, float factor, bool align)
@@ -1485,39 +1485,39 @@ void RNA_api_ui_layout(StructRNA *srna)
                                   "Sublayout (items placed in this sublayout are placed "
                                   "under each other in a column and are surrounded by a box)");
 
-  /* Mixar section layout */
-  func = RNA_def_function(srna, "mixar_section", "rna_uiLayoutMixarSection");
+  /* WebSpider 3D section layout */
+  func = RNA_def_function(srna, "webspider_section", "rna_uiLayoutWebSpider 3DSection");
   parm = RNA_def_pointer(func, "layout", "UILayout", "", "Sub-layout to put items in");
   RNA_def_function_return(func, parm);
   RNA_def_function_ui_description(func,
                                   "Styled section box with accent border and refined background "
-                                  "(Mixar custom widget)");
+                                  "(WebSpider 3D custom widget)");
 
-  /* Mixar styled dropdown (enum property) */
-  func = RNA_def_function(srna, "mixar_dropdown", "rna_uiItemR_mixar_dropdown");
+  /* WebSpider 3D styled dropdown (enum property) */
+  func = RNA_def_function(srna, "webspider_dropdown", "rna_uiItemR_webspider_dropdown");
   RNA_def_function_ui_description(
       func,
-      "Styled enum dropdown with accent bar and refined appearance (Mixar custom widget)");
+      "Styled enum dropdown with accent bar and refined appearance (WebSpider 3D custom widget)");
   api_ui_item_rna_common(func);
   api_ui_item_common(func);
   parm = RNA_def_property(func, "icon_value", PROP_INT, PROP_UNSIGNED);
   RNA_def_property_ui_text(parm, "Icon Value", "Override automatic icon of the item");
 
-  /* Mixar styled toggle switch (pill-shaped boolean toggle) */
-  func = RNA_def_function(srna, "mixar_toggle", "rna_uiItemR_mixar_toggle");
+  /* WebSpider 3D styled toggle switch (pill-shaped boolean toggle) */
+  func = RNA_def_function(srna, "webspider_toggle", "rna_uiItemR_webspider_toggle");
   RNA_def_function_ui_description(
       func,
-      "Pill-shaped toggle switch for boolean properties (Mixar custom widget)");
+      "Pill-shaped toggle switch for boolean properties (WebSpider 3D custom widget)");
   api_ui_item_rna_common(func);
   api_ui_item_common(func);
   parm = RNA_def_property(func, "icon_value", PROP_INT, PROP_UNSIGNED);
   RNA_def_property_ui_text(parm, "Icon Value", "Override automatic icon of the item");
 
-  /* Mixar styled action button (accent CTA operator button) */
-  func = RNA_def_function(srna, "mixar_operator", "rna_uiItemO_mixar_action");
+  /* WebSpider 3D styled action button (accent CTA operator button) */
+  func = RNA_def_function(srna, "webspider_operator", "rna_uiItemO_webspider_action");
   RNA_def_function_ui_description(
       func,
-      "Styled operator button with accent color background (Mixar custom widget)");
+      "Styled operator button with accent color background (WebSpider 3D custom widget)");
   api_ui_item_op_common(func);
   RNA_def_boolean(func, "depress", false, "", "Draw pressed in");
   parm = RNA_def_property(func, "icon_value", PROP_INT, PROP_UNSIGNED);
@@ -1527,11 +1527,11 @@ void RNA_api_ui_layout(StructRNA *srna)
   RNA_def_parameter_flags(parm, PropertyFlag(0), PARM_REQUIRED | PARM_RNAPTR);
   RNA_def_function_return(func, parm);
 
-  /* Mixar styled input field (visible border + focus glow) */
-  func = RNA_def_function(srna, "mixar_input", "rna_uiItemR_mixar_input");
+  /* WebSpider 3D styled input field (visible border + focus glow) */
+  func = RNA_def_function(srna, "webspider_input", "rna_uiItemR_webspider_input");
   RNA_def_function_ui_description(
       func,
-      "Styled text input with visible border and focus glow (Mixar custom widget)");
+      "Styled text input with visible border and focus glow (WebSpider 3D custom widget)");
   api_ui_item_rna_common(func);
   api_ui_item_common(func);
   parm = RNA_def_property(func, "icon_value", PROP_INT, PROP_UNSIGNED);
@@ -1738,7 +1738,7 @@ void RNA_api_ui_layout(StructRNA *srna)
                     "Influences the sorting when using menu-seach",
                     -FLT_MAX,
                     FLT_MAX);
-      /* Mixar-only: per-call hover-tooltip suppression. Used by the
+      /* WebSpider 3D-only: per-call hover-tooltip suppression. Used by the
        * agent bubble's traffic-light + pill buttons whose host
        * NSWindow is too small to render the tooltip popup without
        * clipping. Only added to the regular "operator" RNA call

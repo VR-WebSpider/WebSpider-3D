@@ -1,5 +1,5 @@
 /* SPDX-FileCopyrightText: 2025 Blender Authors
- * SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+ * SPDX-FileCopyrightText: 2026 WebSpider Studios
  *
  * SPDX-License-Identifier: GPL-3.0-or-later */
 
@@ -68,11 +68,11 @@
 
 bool view3d_agent_strip_scene_busy(Scene *scene)
 {
-  /* Same graceful-degradation pattern as the Mixie Chat footer: when the
+  /* Same graceful-degradation pattern as the WebSpider Chat footer: when the
    * Python property isn't registered, `find_property` returns null and we
    * default to "not busy" instead of asserting. */
   PointerRNA scene_ptr = RNA_id_pointer_create(&scene->id);
-  PropertyRNA *busy_prop = RNA_struct_find_property(&scene_ptr, "mixie_chat_is_busy");
+  PropertyRNA *busy_prop = RNA_struct_find_property(&scene_ptr, "webspider_ai_chat_is_busy");
   return busy_prop ? RNA_property_boolean_get(&scene_ptr, busy_prop) : false;
 }
 
@@ -524,7 +524,7 @@ void view3d_agent_strip_region_register(SpaceType *st)
 {
   /* Agent strip: fully custom GPU drawing — no ED_KEYMAP_UI, its
    * ui_region_handler could consume LEFTMOUSE before our keymap (same
-   * reasoning as the Mixie Chat main region). */
+   * reasoning as the WebSpider Chat main region). */
   ARegionType *art = MEM_callocN<ARegionType>("spacetype view3d agent strip region");
   art->regionid = RGN_TYPE_EXECUTE;
   art->prefsizey = AGENT_STRIP_PREFSIZEY;

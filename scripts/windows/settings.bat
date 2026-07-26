@@ -1,9 +1,9 @@
-REM SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+REM SPDX-FileCopyrightText: 2026 WebSpider Studios
 REM
 REM SPDX-License-Identifier: GPL-2.0-or-later
 
 @echo off
-REM Mixar Application Settings for Windows
+REM WebSpider 3D Application Settings for Windows
 REM Source this file in batch scripts that need these settings
 REM
 REM Configuration priority:
@@ -25,30 +25,38 @@ if exist "%ROOT_DIR%\.env" (
 )
 
 REM Version always comes from VERSION file (canonical source)
-if not defined MIXAR_VERSION (
-    if exist "%ROOT_DIR%\VERSION" (
-        set /p MIXAR_VERSION=<"%ROOT_DIR%\VERSION"
+if not defined WEBSPIDER_VERSION (
+    if defined WEBSPIDER_VERSION (
+        set "WEBSPIDER_VERSION=%WEBSPIDER_VERSION%"
+    ) else if exist "%ROOT_DIR%\VERSION" (
+        set /p WEBSPIDER_VERSION=<"%ROOT_DIR%\VERSION"
     ) else (
-        set "MIXAR_VERSION=0.0.0"
+        set "WEBSPIDER_VERSION=0.0.0"
     )
 )
 
 REM Core environment settings (env var > .env > default)
-if not defined MIXAR_ENV set "MIXAR_ENV=Prod"
-if not defined MIXAR_BACKEND_URL set "MIXAR_BACKEND_URL=https://api.mixar.app"
-if not defined MIXAR_FRONTEND_URL set "MIXAR_FRONTEND_URL=https://www.mixar.app"
+if not defined WEBSPIDER_ENV (
+    if defined WEBSPIDER_ENV (
+        set "WEBSPIDER_ENV=%WEBSPIDER_ENV%"
+    ) else (
+        set "WEBSPIDER_ENV=Prod"
+    )
+)
+if not defined WEBSPIDER_BACKEND_URL set "WEBSPIDER_BACKEND_URL=https://api.webspider3d.com"
+if not defined WEBSPIDER_FRONTEND_URL set "WEBSPIDER_FRONTEND_URL=https://www.webspider3d.com"
 
 REM App info (constants)
-if not defined MIXAR_VERSION_PATCH set "MIXAR_VERSION_PATCH=0"
-if not defined MIXAR_APP_NAME set "MIXAR_APP_NAME=Mixar"
-if not defined MIXAR_EXECUTABLE_NAME set "MIXAR_EXECUTABLE_NAME=mixar"
-if not defined MIXAR_DESCRIPTION set "MIXAR_DESCRIPTION=AI Native 3D Content Creation Software"
-if not defined MIXAR_VENDOR set "MIXAR_VENDOR=Mixar"
-if not defined MIXAR_WEBSITE set "MIXAR_WEBSITE=https://mixar.app"
+if not defined WEBSPIDER_VERSION_PATCH set "WEBSPIDER_VERSION_PATCH=0"
+if not defined WEBSPIDER_APP_NAME set "WEBSPIDER_APP_NAME=WebSpider 3D"
+if not defined WEBSPIDER_EXECUTABLE_NAME set "WEBSPIDER_EXECUTABLE_NAME=webspider3d"
+if not defined WEBSPIDER_DESCRIPTION set "WEBSPIDER_DESCRIPTION=WebSpider 3D Content Creation Software"
+if not defined WEBSPIDER_VENDOR set "WEBSPIDER_VENDOR=WebSpider Studios"
+if not defined WEBSPIDER_WEBSITE set "WEBSPIDER_WEBSITE=https://webspider3d.com"
 
 REM Bundle settings (constants)
-if not defined MIXAR_BUNDLE_IDENTIFIER set "MIXAR_BUNDLE_IDENTIFIER=com.mixar.mixar"
-if not defined MIXAR_BUNDLE_COPYRIGHT set "MIXAR_BUNDLE_COPYRIGHT=© 2025 Mixar"
+if not defined WEBSPIDER_BUNDLE_IDENTIFIER set "WEBSPIDER_BUNDLE_IDENTIFIER=com.webspiderstudios.webspider3d"
+if not defined WEBSPIDER_BUNDLE_COPYRIGHT set "WEBSPIDER_BUNDLE_COPYRIGHT=© 2026 WebSpider Studios"
 
 REM Build settings (constants)
 if not defined BLENDER_VERSION set "BLENDER_VERSION=5.0"
@@ -67,8 +75,10 @@ set "CMAKE_DIR=%ROOT_DIR%\cmake"
 REM Upstream Blender tree (multi-GB, gitignored). Linked git worktrees don't
 REM carry ignored files, so fall back to the main checkout's upstream\ (the
 REM overlay only reads from it). Mirrors scripts/unix/settings.sh.
-if defined MIXAR_UPSTREAM_DIR (
-    set "UPSTREAM_DIR=%MIXAR_UPSTREAM_DIR%"
+if defined WEBSPIDER_UPSTREAM_DIR (
+    set "UPSTREAM_DIR=%WEBSPIDER_UPSTREAM_DIR%"
+) else if defined WEBSPIDER_UPSTREAM_DIR (
+    set "UPSTREAM_DIR=%WEBSPIDER_UPSTREAM_DIR%"
 ) else (
     set "UPSTREAM_DIR=%ROOT_DIR%\upstream"
     if not exist "%ROOT_DIR%\upstream\CMakeLists.txt" (

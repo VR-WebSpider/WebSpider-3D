@@ -1,5 +1,5 @@
 /* SPDX-FileCopyrightText: 2023 Blender Authors
- * SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+ * SPDX-FileCopyrightText: 2026 WebSpider Studios
  *
  * SPDX-License-Identifier: GPL-2.0-or-later */
 
@@ -193,7 +193,7 @@ wmKeyMap *WM_keymap_guess_from_context(const bContext *C)
         km_id = "Mask Editing";
         break;
       case SI_MODE_UV:
-      case SI_MODE_MIXAR_UV:
+      case SI_MODE_WEBSPIDER_UV:
         km_id = "UV Editor";
         break;
     }

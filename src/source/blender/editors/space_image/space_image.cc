@@ -1,5 +1,5 @@
 /* SPDX-FileCopyrightText: 2008 Blender Authors
- * SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+ * SPDX-FileCopyrightText: 2026 WebSpider Studios
  *
  * SPDX-License-Identifier: GPL-2.0-or-later */
 
@@ -57,7 +57,7 @@
 #include "DRW_engine.hh"
 
 #include "image_intern.hh"
-#include "image_mixar_uv_panels.hh"
+#include "image_webspider_uv_panels.hh"
 
 /**************************** common state *****************************/
 
@@ -165,7 +165,7 @@ static SpaceLink *image_create(const ScrArea * /*area*/, const Scene * /*scene*/
   region->alignment = RGN_ALIGN_RIGHT;
   region->flag = RGN_FLAG_HIDDEN;
 
-  /* Mixar UV properties region (dedicated, right-aligned) */
+  /* WebSpider 3D UV properties region (dedicated, right-aligned) */
   region = BKE_area_region_new();
 
   BLI_addtail(&simage->regionbase, region);
@@ -206,7 +206,7 @@ static void image_init(wmWindowManager * /*wm*/, ScrArea *area)
   /* add drop boxes */
   WM_event_add_dropbox_handler(&area->handlers, lb);
 
-  /* Ensure Mixar UV properties region exists (for pre-existing Image Editor areas) */
+  /* Ensure WebSpider 3D UV properties region exists (for pre-existing Image Editor areas) */
   bool has_channels = false;
   LISTBASE_FOREACH (ARegion *, region, &area->regionbase) {
     if (region->regiontype == RGN_TYPE_CHANNELS) {
@@ -448,17 +448,17 @@ static void image_listener(const wmSpaceTypeListenerParams *params)
           /* \note With a geometry nodes modifier, the UVs on `ob` can change in response to
            * any change on `wmn->reference`. If we could track the upstream dependencies,
            * unnecessary redraws could be reduced. Until then, just redraw. See #98594. */
-          /* MIXAR: Added SI_MODE_MIXAR_UV check */
-          if (ob && (ob->mode & OB_MODE_EDIT) && ELEM(sima->mode, SI_MODE_UV, SI_MODE_MIXAR_UV)) {
+          /* WEBSPIDER: Added SI_MODE_WEBSPIDER_UV check */
+          if (ob && (ob->mode & OB_MODE_EDIT) && ELEM(sima->mode, SI_MODE_UV, SI_MODE_WEBSPIDER_UV)) {
             if (sima->lock && (sima->flag & SI_DRAWSHADOW)) {
               ED_area_tag_refresh(area);
               ED_area_tag_redraw(area);
             }
           }
           else if (ob) {
-            /* MIXAR: Added SI_MODE_MIXAR_UV check */
+            /* WEBSPIDER: Added SI_MODE_WEBSPIDER_UV check */
             if (sima->lock && !(sima->flag & SI_NO_DRAW_UV_GUIDE) &&
-                ELEM(sima->mode, SI_MODE_PAINT, SI_MODE_UV, SI_MODE_MIXAR_UV))
+                ELEM(sima->mode, SI_MODE_PAINT, SI_MODE_UV, SI_MODE_WEBSPIDER_UV))
             {
               ED_area_tag_refresh(area);
               ED_area_tag_redraw(area);
@@ -883,20 +883,20 @@ static void image_main_region_listener(const wmRegionListenerParams *params)
 
 /* *********************** buttons region ************************ */
 
-/* MIXAR: Hide the N panel (RGN_TYPE_UI) in Mixar UV mode – replaced by CHANNELS sidebar. */
+/* WEBSPIDER: Hide the N panel (RGN_TYPE_UI) in WebSpider 3D UV mode – replaced by CHANNELS sidebar. */
 static bool image_buttons_region_poll(const RegionPollParams *params)
 {
   BLI_assert(params->area->spacetype == SPACE_IMAGE);
   const SpaceImage *sima = static_cast<const SpaceImage *>(params->area->spacedata.first);
-  return sima->mode != SI_MODE_MIXAR_UV;
+  return sima->mode != SI_MODE_WEBSPIDER_UV;
 }
 
-/* MIXAR: Only show the CHANNELS sidebar in Mixar UV mode. */
-static bool mixar_uv_channels_region_poll(const RegionPollParams *params)
+/* WEBSPIDER: Only show the CHANNELS sidebar in WebSpider 3D UV mode. */
+static bool webspider_uv_channels_region_poll(const RegionPollParams *params)
 {
   BLI_assert(params->area->spacetype == SPACE_IMAGE);
   const SpaceImage *sima = static_cast<const SpaceImage *>(params->area->spacedata.first);
-  return sima->mode == SI_MODE_MIXAR_UV;
+  return sima->mode == SI_MODE_WEBSPIDER_UV;
 }
 
 /* add handlers, stuff you only do once or on area/region changes */
@@ -929,7 +929,7 @@ static void image_buttons_region_layout(const bContext *C, ARegion *region)
     case SI_MODE_MASK:
       break;
     case SI_MODE_UV:
-    case SI_MODE_MIXAR_UV:
+    case SI_MODE_WEBSPIDER_UV:
       if (mode == CTX_MODE_EDIT_MESH) {
         ARRAY_SET_ITEMS(contexts, ".uv_sculpt");
       }
@@ -1018,9 +1018,9 @@ static void image_buttons_region_listener(const wmRegionListenerParams *params)
   }
 }
 
-/* ***************** Mixar UV properties region ***************** */
+/* ***************** WebSpider 3D UV properties region ***************** */
 
-static void mixar_uv_props_region_init(wmWindowManager *wm, ARegion *region)
+static void webspider_uv_props_region_init(wmWindowManager *wm, ARegion *region)
 {
   region->v2d.scroll = V2D_SCROLL_RIGHT | V2D_SCROLL_VERTICAL_HIDE;
   ED_region_panels_init(wm, region);
@@ -1030,12 +1030,12 @@ static void mixar_uv_props_region_init(wmWindowManager *wm, ARegion *region)
   WM_event_add_keymap_handler(&region->runtime->handlers, keymap);
 }
 
-static void mixar_uv_props_region_draw(const bContext *C, ARegion *region)
+static void webspider_uv_props_region_draw(const bContext *C, ARegion *region)
 {
   ED_region_panels(C, region);
 }
 
-static void mixar_uv_props_region_listener(const wmRegionListenerParams *params)
+static void webspider_uv_props_region_listener(const wmRegionListenerParams *params)
 {
   ARegion *region = params->region;
   const wmNotifier *wmn = params->notifier;
@@ -1250,12 +1250,12 @@ static void image_foreach_id(SpaceLink *space_link, LibraryForeachIDData *data)
 static int image_space_subtype_get(ScrArea *area)
 {
   SpaceImage *sima = static_cast<SpaceImage *>(area->spacedata.first);
-  /* MIXAR: Return appropriate subtype for both UV modes */
+  /* WEBSPIDER: Return appropriate subtype for both UV modes */
   if (sima->mode == SI_MODE_UV) {
     return SI_MODE_UV;
   }
-  if (sima->mode == SI_MODE_MIXAR_UV) {
-    return SI_MODE_MIXAR_UV;
+  if (sima->mode == SI_MODE_WEBSPIDER_UV) {
+    return SI_MODE_WEBSPIDER_UV;
   }
   return SI_MODE_VIEW;
 }
@@ -1263,9 +1263,9 @@ static int image_space_subtype_get(ScrArea *area)
 static void image_space_subtype_set(ScrArea *area, int value)
 {
   SpaceImage *sima = static_cast<SpaceImage *>(area->spacedata.first);
-  /* MIXAR: Handle both UV mode types */
-  if (ELEM(value, SI_MODE_UV, SI_MODE_MIXAR_UV)) {
-    if (!ELEM(sima->mode, SI_MODE_UV, SI_MODE_MIXAR_UV)) {
+  /* WEBSPIDER: Handle both UV mode types */
+  if (ELEM(value, SI_MODE_UV, SI_MODE_WEBSPIDER_UV)) {
+    if (!ELEM(sima->mode, SI_MODE_UV, SI_MODE_WEBSPIDER_UV)) {
       sima->mode_prev = sima->mode;
     }
     sima->mode = value;
@@ -1392,22 +1392,22 @@ void ED_spacetype_image()
   ED_uvedit_buttons_register(art);
   image_buttons_register(art);
 
-  /* regions: Mixar UV properties (dedicated sidebar) */
-  art = MEM_callocN<ARegionType>("spacetype image mixar uv region");
+  /* regions: WebSpider 3D UV properties (dedicated sidebar) */
+  art = MEM_callocN<ARegionType>("spacetype image webspider uv region");
   art->regionid = RGN_TYPE_CHANNELS;
   art->prefsizex = UI_SIDEBAR_PANEL_WIDTH;
   art->keymapflag = ED_KEYMAP_UI | ED_KEYMAP_FRAMES;
-  art->poll = mixar_uv_channels_region_poll;
-  art->init = mixar_uv_props_region_init;
+  art->poll = webspider_uv_channels_region_poll;
+  art->init = webspider_uv_props_region_init;
   art->layout = ED_region_panels_layout;
-  art->draw = mixar_uv_props_region_draw;
-  art->listener = mixar_uv_props_region_listener;
+  art->draw = webspider_uv_props_region_draw;
+  art->listener = webspider_uv_props_region_listener;
   art->snap_size = ED_region_generic_panel_region_snap_size;
   BLI_addhead(&st->regiontypes, art);
-  mixar_uv_transform_panel_register(art);
+  webspider_uv_transform_panel_register(art);
   /* Tool panel (Snapping / Round to Pixels / Align / Align Rotation) moved
-   * to the Python panel `MIXAR_UV_PT_uv_tool` — no longer registered here. */
-  mixar_uv_redo_panel_register(art);
+   * to the Python panel `WEBSPIDER_UV_PT_uv_tool` — no longer registered here. */
+  webspider_uv_redo_panel_register(art);
 
   /* regions: tool(bar) */
   art = MEM_callocN<ARegionType>("spacetype image region");

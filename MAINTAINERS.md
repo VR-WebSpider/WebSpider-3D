@@ -1,9 +1,9 @@
-<!-- SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited -->
+<!-- SPDX-FileCopyrightText: 2026 WebSpider Studios -->
 <!-- SPDX-License-Identifier: GPL-3.0-or-later -->
 
 # Maintainers
 
-This file lists the current maintainers of the Mixar App public client repository and the areas they own. For project-wide contribution rules, see [CONTRIBUTING.md](CONTRIBUTING.md).
+This file lists the current maintainers of the WebSpider 3D App public client repository and the areas they own. For project-wide contribution rules, see [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## Owners
 
@@ -11,7 +11,7 @@ This file lists the current maintainers of the Mixar App public client repositor
 |------|------------|--------|
 | Legal / compliance / licensing | Naman | `@nbhargava18` |
 | Security / vulnerability reports | Rahul | `@rahul237` |
-| Build / release / packaging | Raj | `@Raj-Mixar` |
+| Build / release / packaging | Raj | `@Raj-WebSpider 3D` |
 | Docs / community / Code of Conduct | Ajay | `@Ajayag285` |
 
 ## Contact
@@ -23,4 +23,4 @@ This file lists the current maintainers of the Mixar App public client repositor
 
 ## Adding Or Removing Maintainers
 
-Maintainer changes are made by Adeveda Enterprises Private Limited. External contributors cannot self-nominate; the contribution and CLA process is still being finalized (see [CONTRIBUTING.md](CONTRIBUTING.md)).
+Maintainer changes are made by WebSpider Studios. External contributors cannot self-nominate; the contribution and CLA process is still being finalized (see [CONTRIBUTING.md](CONTRIBUTING.md)).

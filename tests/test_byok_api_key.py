@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+# SPDX-FileCopyrightText: 2026 WebSpider Studios
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -12,7 +12,7 @@ SCRIPTS = ROOT / "src" / "scripts"
 if str(SCRIPTS) not in sys.path:
     sys.path.insert(0, str(SCRIPTS))
 
-from mixar.modules.testing.mock_bpy import install_bpy_mock
+from webspider.modules.testing.mock_bpy import install_bpy_mock
 
 install_bpy_mock()
 
@@ -33,10 +33,10 @@ if "urllib3.util.retry" not in sys.modules:
 
 import bpy
 
-from mixar.modules.byok.constants import BYOK_API_KEY_MAX_LENGTH
-from mixar.modules.byok.core import model_suggestions
-from mixar.modules.byok.ui.operators import byok_ops
-from mixar.modules.byok.ui.properties import byok_props
+from webspider.modules.byok.constants import BYOK_API_KEY_MAX_LENGTH
+from webspider.modules.byok.core import model_suggestions
+from webspider.modules.byok.ui.operators import byok_ops
+from webspider.modules.byok.ui.properties import byok_props
 
 
 def test_byok_api_key_property_allows_long_provider_keys():
@@ -72,14 +72,14 @@ def test_byok_save_passes_long_api_key_without_truncation(monkeypatch):
         saved.update(kwargs)
 
     monkeypatch.setattr(byok_ops.byok_client, "save_credentials", fake_save_credentials)
-    monkeypatch.setattr(byok_ops, "_redraw_mixie_chat_areas", lambda: None)
+    monkeypatch.setattr(byok_ops, "_redraw_webspider_chat_areas", lambda: None)
     model_suggestions.populate(
         providers=[("openai", "OpenAI", "OpenAI")],
         models={"openai": [("gpt-5", "GPT-5", "GPT-5")]},
     )
 
     try:
-        result = byok_ops.MIXAR_BYOK_OT_save().execute(context)
+        result = byok_ops.WEBSPIDER_BYOK_OT_save().execute(context)
     finally:
         model_suggestions.clear()
 

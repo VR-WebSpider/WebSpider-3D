@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+# SPDX-FileCopyrightText: 2026 WebSpider Studios
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -16,7 +16,7 @@ from pathlib import Path
 from unittest.mock import MagicMock
 
 ROOT = Path(__file__).resolve().parents[1]
-P = ROOT / "src/scripts/mixar/modules/paint/layered_build/procedural_layer.py"
+P = ROOT / "src/scripts/webspider/modules/paint/layered_build/procedural_layer.py"
 
 
 def _inject_parent_stubs():

@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+# SPDX-FileCopyrightText: 2026 WebSpider Studios
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -13,7 +13,7 @@ SCRIPTS = ROOT / "src" / "scripts"
 if str(SCRIPTS) not in sys.path:
     sys.path.insert(0, str(SCRIPTS))
 
-from mixar.modules.testing.mock_bpy import install_bpy_mock
+from webspider.modules.testing.mock_bpy import install_bpy_mock
 
 install_bpy_mock()
 
@@ -21,7 +21,7 @@ install_bpy_mock()
 for _name in ("blf", "gpu", "gpu.state", "gpu.shader", "gpu_extras", "gpu_extras.batch"):
     sys.modules.setdefault(_name, MagicMock(name=_name))
 
-from mixar.modules.common.notifications import toast_renderer as tr
+from webspider.modules.common.notifications import toast_renderer as tr
 
 
 REGION = 12345
@@ -36,8 +36,8 @@ def _setup_bounds():
         "close": [("n1", 480, 260, 30, 30)],
         # (nid, operator, url, x, y, w, h)
         "action": [
-            ("n1", "mixar.dismiss_update", None, 300, 100, 80, 38),
-            ("n1", "mixar.install_update", None, 390, 100, 120, 38),
+            ("n1", "webspider.dismiss_update", None, 300, 100, 80, 38),
+            ("n1", "webspider.install_update", None, 390, 100, 120, 38),
         ],
         # (nid, url, x, y, w, h)
         "url": [("n1", "https://example.com", 60, 180, 400, 20)],
@@ -48,14 +48,14 @@ def test_hover_action_button_sets_key_and_reports_change():
     _setup_bounds()
     changed = tr.update_hover_state(REGION, 400, 110)
     assert changed is True
-    assert tr.toast_hover_state["key"] == ("action", "n1", "mixar.install_update")
+    assert tr.toast_hover_state["key"] == ("action", "n1", "webspider.install_update")
 
 
 def test_hover_same_target_reports_no_change():
     _setup_bounds()
     assert tr.update_hover_state(REGION, 400, 110) is True
     assert tr.update_hover_state(REGION, 410, 120) is False
-    assert tr.toast_hover_state["key"] == ("action", "n1", "mixar.install_update")
+    assert tr.toast_hover_state["key"] == ("action", "n1", "webspider.install_update")
 
 
 def test_hover_off_clears_key():
@@ -88,9 +88,9 @@ def test_hover_unknown_region_clears_key():
 def test_adjacent_buttons_resolve_distinctly():
     _setup_bounds()
     tr.update_hover_state(REGION, 310, 110)
-    assert tr.toast_hover_state["key"] == ("action", "n1", "mixar.dismiss_update")
+    assert tr.toast_hover_state["key"] == ("action", "n1", "webspider.dismiss_update")
     tr.update_hover_state(REGION, 395, 110)
-    assert tr.toast_hover_state["key"] == ("action", "n1", "mixar.install_update")
+    assert tr.toast_hover_state["key"] == ("action", "n1", "webspider.install_update")
 
 
 def test_point_in_rect_edges_inclusive():

@@ -1,5 +1,5 @@
 /* SPDX-FileCopyrightText: 2001-2002 NaN Holding BV. All rights reserved.
- * SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited
+ * SPDX-FileCopyrightText: 2026 WebSpider Studios
  *
  * SPDX-License-Identifier: GPL-2.0-or-later */
 
@@ -193,12 +193,12 @@ struct Main : blender::NonCopyable, blender::NonMovable {
    * could try to use more refined detection on load. */
   bool has_forward_compatibility_issues = false;
 
-  /* See MIXAR_FILE_VERSION, MIXAR_FILE_SUBVERSION in BKE_blender_version.h. */
-  short mixar_versionfile = 0;
-  short mixar_subversionfile = 0;
-  short mixar_minversionfile = 0;
-  /** File was saved by a newer Mixar version than the current build. */
-  bool has_mixar_forward_compatibility_issues = false;
+  /* See WEBSPIDER_FILE_VERSION, WEBSPIDER_FILE_SUBVERSION in BKE_blender_version.h. */
+  short webspider_versionfile = 0;
+  short webspider_subversionfile = 0;
+  short webspider_minversionfile = 0;
+  /** File was saved by a newer WebSpider 3D version than the current build. */
+  bool has_webspider_forward_compatibility_issues = false;
 
   /**
    * This file was written by the asset system with the #G_FILE_ASSET_EDIT_FILE flag (now cleared).
@@ -676,9 +676,9 @@ MainListsArray BKE_main_lists_get(Main &bmain);
   ((main)->versionfile < (ver) || \
    ((main)->versionfile == (ver) && (main)->subversionfile <= (subver)))
 
-#define MAIN_MIXAR_VERSION_FILE_ATLEAST(main, ver, subver) \
-  ((main)->mixar_versionfile > (ver) || \
-   ((main)->mixar_versionfile == (ver) && (main)->mixar_subversionfile >= (subver)))
+#define MAIN_WEBSPIDER_VERSION_FILE_ATLEAST(main, ver, subver) \
+  ((main)->webspider_versionfile > (ver) || \
+   ((main)->webspider_versionfile == (ver) && (main)->webspider_subversionfile >= (subver)))
 
 /* NOTE: in case versionfile is 0, this check is invalid, always return false then. This happens
  * typically when a library is missing, by definition its data (placeholder IDs) does not need

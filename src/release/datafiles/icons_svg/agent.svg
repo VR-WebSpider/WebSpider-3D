@@ -1,14 +1,14 @@
-<!-- SPDX-FileCopyrightText: 2026 Adeveda Enterprises Private Limited -->
+<!-- SPDX-FileCopyrightText: 2026 WebSpider Studios -->
 <!-- SPDX-License-Identifier: GPL-3.0-or-later -->
 
 <svg width="1600" height="1600" viewBox="0 0 1600 1600" fill="none" xmlns="http://www.w3.org/2000/svg">
   <defs>
     <!-- Same theme-integrated gradient as sparkle.svg / the chat send icon:
          the blender_ stop ids are rewritten at draw time from
-         ThemeMixieChat.chat_send_icon_gradient_start/_end
+         ThemeWebSpider AIChat.chat_send_icon_gradient_start/_end
          (interface_icons.cc icon_source_edit_cb), so the agent infinity
-         always matches the "Open Mixie" sparkle. Stop colors below are the
-         Mixar default theme values, kept as a sane offline fallback. -->
+         always matches the "Open WebSpider AI" sparkle. Stop colors below are the
+         WebSpider 3D default theme values, kept as a sane offline fallback. -->
     <linearGradient
        id="agent_gradient"
        x1="0"
