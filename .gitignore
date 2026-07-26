@@ -2,6 +2,9 @@
 .worktrees/
 worktree-*/
 
+# Private local notes
+MD Files/
+
 # Build directories
 build/
 install/
