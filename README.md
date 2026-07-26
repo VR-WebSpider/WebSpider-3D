@@ -1,86 +1,47 @@
 <!-- SPDX-FileCopyrightText: 2026 WebSpider Studios -->
 <!-- SPDX-License-Identifier: GPL-3.0-or-later -->
 
-# WebSpider 3D
+<div align="center">
 
-WebSpider 3D is an AI-powered 3D content creation tool built as a custom fork of [Blender](https://www.blender.org) 5.0. It adds an AI chat agent that can drive Blender, a layered texture-painting system, AI-assisted 3D generation, and a set of WebSpider 3D-native editor spaces — while keeping everything you already use from Blender.
+  <img src="https://github.com/VR-WebSpider/webspider-assets/raw/main/branding/WebSpider%20Studios%20Official%20Logo%20Color.png" alt="WebSpider Studios Logo" width="480" />
 
-This repository is the source for the **WebSpider 3D desktop app** (the Blender-side client). WebSpider 3D's hosted AI backend remains a separate, closed-source service; the app talks to it over the network.
+  # WebSpider 3D Suite
 
-> **Project status:** v2.0.0 — first public source release. Built on Blender 5.0.
+  **AI-Powered 3D Content Creation Software by WebSpider Studios (Built on Blender 5.0)**
 
----
+  [![Studio: WebSpider Studios](https://img.shields.io/badge/Studio-WebSpider_Studios-00b894.svg?style=for-the-badge)](https://github.com/VR-WebSpider)
+  [![Engine: Blender 5.0](https://img.shields.io/badge/Engine-Blender_5.0-E87D0D.svg?style=for-the-badge)](https://www.blender.org)
+  [![License: GPL v3](https://img.shields.io/badge/License-GPL_v3-emerald.svg?style=for-the-badge)](https://www.gnu.org/licenses/gpl-3.0)
+  [![Release: v3.1.49](https://img.shields.io/badge/Release-v3.1.49-723EC3.svg?style=for-the-badge)](https://github.com/VR-WebSpider/WebSpider-3D/releases)
 
-## What you can do with WebSpider 3D
-
-The app ships everything Blender already does. On top of that:
-
-- **AI agent chat** — WebSpider AI, an in-app chat agent that can plan and execute multi-step tasks against your scene: model from prompts, paint textures, set up materials, fix UVs, suggest fixes, etc.
-- **Layer-based texture painting** — Photoshop-style stacked layers with node-driven materials, masks, modifiers, baking, UDIM support, procedural materials, decals, and asset export.
-- **AI 3D generation** — text-to-3D and image-to-3D mesh generation via integrated providers (Hunyuan models and others), with retopology and auto-UV-unwrap.
-- **Moodboards and scene generation** — drop reference images, generate scenes from boards, do 360° lookdev, image-to-3D.
-- **Asset search** — neural embedding search across your asset library.
-- **Bring-your-own-key (BYOK)** — plug in your own OpenAI / Anthropic / other provider API keys instead of using WebSpider 3D's hosted LLM credits.
-- **WebSpider 3D-native editor spaces** — dedicated Layers, Properties, Assets, and Chat editors integrated into the Blender workspace.
-
-The Blender features you already know (sculpting, animation, simulation, rendering, scripting) are unchanged and available alongside WebSpider 3D's additions.
-
-## What you need to actually use AI features
-
-WebSpider 3D's AI features (the chat agent, image-to-3D, hosted generation) call **WebSpider 3D's hosted backend**. To use those:
-
-- You need a WebSpider 3D account at [webspider3d.com](https://www.webspider3d.com).
-- The desktop app authenticates via browser SSO and talks to the backend over HTTPS/WebSocket.
-- With **bring-your-own-key**, you can route the chat agent through your own provider account (OpenAI, Anthropic, etc.) without consuming WebSpider 3D credits.
-
-The non-AI parts of the app (Blender features, the layered paint module, file IO, etc.) work without a WebSpider 3D account.
+</div>
 
 ---
 
-## Building from source
+## 🚀 Download & Quick Links
 
-WebSpider 3D is a Blender fork with a custom overlay, so building it = building Blender + applying the WebSpider 3D overlay + linking a few extra C++ targets.
+- 💻 **Windows Setup (.exe)**: [<kbd>⬇️ Download WebSpider 3D Setup Installer</kbd>](https://github.com/VR-WebSpider/webspider-assets/raw/main/WebSpider3D_Setup_3.1.49.exe)
+- 🌐 **WebSpider Studios Official Website**: [webspiderstudios.com](https://github.com/VR-WebSpider/WebSpider-Studios)
+- 🏢 **Central Asset Hub**: [github.com/VR-WebSpider/webspider-assets](https://github.com/VR-WebSpider/webspider-assets)
 
-### Prerequisites
+---
 
-You need everything required to build Blender 5.0 itself. Follow Blender's official build instructions for your platform first, and confirm a clean Blender build works before adding WebSpider 3D:
+## ✨ Key Features of WebSpider 3D
 
-- macOS / Linux / Windows — see <https://developer.blender.org/docs/handbook/building_blender/>
+WebSpider 3D retains 100% of Blender's core engine (sculpting, animation, rendering, simulation, Python API) while integrating WebSpider Studios' AI creation tools:
 
-WebSpider 3D additionally needs **Python 3.11+** and **rsync** on the build host (macOS and Linux ship these; on Windows, install via WSL or Cygwin if missing).
+* 🤖 **In-Viewport AI Agent Chat**: Meet **WebSpider AI**—an interactive assistant inside Blender viewports that autonomously executes scene modeling, UV unwrapping, material node setup, texture generation, and lookdev.
+* 🎨 **Layered Texture Painting System**: A stacked, Photoshop-style node-driven texture painter featuring procedural materials, masks, modifiers, baking, UDIM support, and direct asset export.
+* 🧊 **AI 3D Mesh Generation**: Neural text-to-3D and image-to-3D generation powered by advanced AI models, with automatic retopology and UV unwrapping.
+* 🦴 **Automated Auto-Rig & Retopology**: Convert high-poly sculpted models into clean, game-ready quad meshes with automatic skeletal rigging for instant game engine integration.
+* 🔑 **Bring Your Own Key (BYOK)**: Connect your own OpenAI, Anthropic, or local model API keys for total privacy and zero credit limits.
+* 🎛️ **WebSpider 3D Native Spaces**: Custom-engineered editor spaces (**Layers**, **Properties**, **Assets**, **WebSpider AI Chat**) built directly into the Blender interface.
 
-### Quickstart
+---
 
-```bash
-# 1. Clone with the upstream Blender submodule
-git clone --recursive https://github.com/WebSpider 3D-AI/webspider3d-app.git
-cd webspider3d-app
+## 🏗️ Architecture & Overlay Flow
 
-# 2. Initialise submodules and LFS-tracked assets (if your clone skipped recursive)
-make init
-
-# 3. Configure runtime environment (copy template, fill in any backend URLs you want to target)
-cp .env.example .env
-$EDITOR .env
-
-# 4. Full build: overlay + CMake + compile + bundle
-make build
-```
-
-Built binaries land under `build/<WEBSPIDER_ENV>/bin/`. The default `WEBSPIDER_ENV=Prod` produces a release-mode WebSpider 3D app pointed at `https://api.webspider3d.com`. Set `WEBSPIDER_ENV=Dev` in `.env` for a dev build pointed at a development backend.
-
-### Common build targets
-
-```bash
-make clean_build    # wipe the generated source/ tree and rebuild from scratch
-make install        # install embedded Python packages into the built app
-```
-
-**Do not run `cmake` or `make` directly inside `source/`** — that directory is generated by the overlay step. Always go through `make build`.
-
-### Build flow
-
-WebSpider 3D uses an overlay pattern so version upgrades from upstream Blender stay clean:
+WebSpider 3D uses a clean overlay architecture built on Blender 5.0:
 
 ```text
 upstream/               Blender 5.0 source (git submodule)
@@ -89,72 +50,44 @@ source/                 Generated working tree: upstream/ copied here, then src/
 build/<env>/            CMake build directory
 ```
 
-1. `make init` pulls the `upstream/` submodule.
-2. `make build` invokes `scripts/unix/build.sh` (or `build.bat` on Windows), which:
-   - rsyncs `upstream/` → `source/`
-   - rsyncs `src/` over `source/`
-   - generates `source/source/creator/webspider_env_config.h` from `.env`
-   - configures and builds via CMake
-   - installs Python packages into the embedded Blender Python
-
 ---
 
-## Repository layout
+## 🛠️ Building WebSpider 3D from Source
 
-```text
-upstream/               Blender source submodule (huge — pulled with --recursive or `make init`)
-src/                    WebSpider 3D overlay — what gets layered on top of Blender
-  scripts/webspider3d/        WebSpider 3D's Blender Python addon (chat UI, paint, BYOK, etc.)
-  source/blender/       C++ additions to Blender (WebSpider 3D editor spaces, paint kernel)
-  source/creator/       WebSpider 3D startup / auth / native dialog code
-cmake/webspider_overrides.cmake  WebSpider 3D-specific CMake configuration
-scripts/unix/           macOS / Linux build scripts
-scripts/windows/        Windows build scripts
-tests/                  Pure-pytest tests (run from repo root with bpy stubbed)
+### Prerequisites
+
+1. **System Build Tools**: Everything required to build Blender 5.0 (C++20 compiler, CMake 3.22+, Ninja / Visual Studio, Python 3.11+).
+2. **Platform Setup**: Follow Blender's developer documentation: <https://developer.blender.org/docs/handbook/building_blender/>.
+
+### Build Commands
+
+```bash
+# 1. Clone repo recursively with submodules
+git clone --recursive https://github.com/VR-WebSpider/WebSpider-3D.git
+cd WebSpider-3D
+
+# 2. Initialize submodules
+make init
+
+# 3. Configure runtime settings
+cp .env.example .env
+
+# 4. Build executable
+make build
 ```
 
-## What's in this repository — and what isn't
-
-**Included:**
-
-- All WebSpider 3D desktop-app source (Python addon + C++ overlay)
-- Build scripts for macOS, Linux, and Windows
-- License documentation, SPDX metadata, asset provenance records
-- Public contribution, security, and support documentation
-
-**Not included (and won't be):**
-
-- WebSpider 3D's hosted AI backend source code
-- Production secrets, signing certificates, deployment configuration
-- Internal release pipelines, CI infrastructure, and code-signing tooling
-- Internal planning documents, roadmaps, or design RFCs
+Built executables land in `build/<WEBSPIDER_ENV>/bin/`.
 
 ---
 
-## License
+## ⚖️ Licensing & Trademarks
 
-WebSpider 3D source is published under **GPL-3.0-or-later**, the same license family as Blender. Per-file licensing is recorded via [SPDX headers](https://spdx.dev/) and [REUSE.toml](REUSE.toml):
-
-- **WebSpider 3D-original code:** GPL-3.0-or-later
-- **Blender-derived files** (modifications of upstream Blender source): GPL-2.0-or-later (inherited from upstream)
-- **Files derived from [ucupaint](https://github.com/ucupumar/ucupaint)** (parts of the paint module): GPL-3.0-or-later, with attribution to ucupumar — see [NOTICE.md](NOTICE.md)
-- **WebSpider 3D brand assets** (logos, icons, wordmarks): a separate non-GPL brand license — see [LICENSES/LicenseRef-WebSpider-Brand.txt](LICENSES/LicenseRef-WebSpider-Brand.txt) and [TRADEMARKS.md](TRADEMARKS.md)
-
-For the canonical license map: file-level SPDX headers, [REUSE.toml](REUSE.toml), [LICENSE](LICENSE), and the texts in [LICENSES/](LICENSES/).
+- **Source Code**: Published under the **GNU General Public License v3.0 or later (GPL-3.0-or-later)**.
+- **Trademarks & Branding**: The WebSpider 3D name, WebSpider Studios name, logos, and brand assets are trademarks of **WebSpider Studios** governed under [`LICENSES/LicenseRef-WebSpider-Brand.txt`](LICENSES/LicenseRef-WebSpider-Brand.txt).
+- **Upstream Attribution**: WebSpider 3D is derived from Blender (GNU GPL) and incorporates ucupaint (GNU GPL-3.0). See [NOTICE.md](NOTICE.md).
 
 ---
 
-## Contributing
-
-External pull requests are **not** open yet — see [CONTRIBUTING.md](CONTRIBUTING.md) for the current contribution status and what to expect when the CLA process launches. Bug reports and source-availability questions are welcome; security issues must be reported privately per [SECURITY.md](SECURITY.md).
-
-## Community and support
-
-- **Discord:** https://discord.gg/YVqvkQx8rX — fastest channel for build help, questions, and discussion with maintainers and other WebSpider 3D users.
-- **GitHub issues:** for reproducible bugs from the public source, build problems, and license / documentation questions. See [SUPPORT.md](SUPPORT.md) for full scope.
-- **Security:** report privately per [SECURITY.md](SECURITY.md).
-- **Hosted WebSpider 3D service:** sign in at [webspider3d.com](https://www.webspider3d.com) for customer-account support.
-
-## Acknowledgements
-
-WebSpider 3D stands on shoulders. The Blender community built the renderer, sculpting, animation, modeling, and scripting foundations the entire app is layered on top of. The [ucupaint](https://github.com/ucupumar/ucupaint) project by ucupumar inspired and seeded large parts of the layer-based paint system. Open-source 3D-generation models from the Hunyuan and Stable Diffusion ecosystems power image and mesh generation. Thank you.
+<div align="center">
+  <sub>Developed by <strong>WebSpider Studios</strong>. All Rights Reserved.</sub>
+</div>
