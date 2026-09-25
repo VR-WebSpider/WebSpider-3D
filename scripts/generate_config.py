@@ -72,8 +72,8 @@ def generate_config(version_file: str) -> dict:
     config = {
         "environment": environment,
         "log_level": _env("WEBSPIDER_LOG_LEVEL", "INFO"),
-        "backend_url": _env("WEBSPIDER_BACKEND_URL", "https://api.webspider3d.com"),
-        "frontend_url": _env("WEBSPIDER_FRONTEND_URL", "https://www.webspider3d.com"),
+        "backend_url": _env("WEBSPIDER_BACKEND_URL", "https://webspiderstudios.com"),
+        "frontend_url": _env("WEBSPIDER_FRONTEND_URL", "https://webspiderstudios.com"),
         "app_info": {
             "version": version,
         },

@@ -82,7 +82,7 @@ def get_environment():
 def get_server_url():
     """Get the API server URL (resolved at build time via env vars)."""
     config = get_config()
-    return config.get('backend_url', 'https://api.webspider3d.com')
+    return config.get('backend_url', 'https://webspiderstudios.com')
 
 
 def get_dev_bypass_credentials() -> tuple:
