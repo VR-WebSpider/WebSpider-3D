@@ -623,8 +623,18 @@ static bool exchange_desktop_code(const char* code, const char* code_verifier) {
 #endif
 }
 
-// Helper to open URL in default browser
+// Helper to open URL in default browser (hardened against shell injection)
 static void open_browser_url(const char* url) {
+    if (!url || strncmp(url, "https://", 8) != 0) {
+        return;
+    }
+    // Block shell metacharacters to prevent command injection via system()
+    for (const char* p = url; *p; p++) {
+        if (*p == '"' || *p == '\'' || *p == ';' || *p == '&' ||
+            *p == '|' || *p == '`' || *p == '$' || *p == '\n' || *p == '\r') {
+            return;
+        }
+    }
 #ifdef _WIN32
     ShellExecuteA(NULL, "open", url, NULL, NULL, SW_SHOWNORMAL);
 #elif defined(__APPLE__)
@@ -880,102 +890,9 @@ LRESULT CALLBACK LoginWindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM 
 }
 
 bool show_startup_dialog(void) {
-#ifdef WEBSPIDER_ENV_DEV
-    // Dev bypass: skip the startup SSO gate entirely.
-    // The WebSpider 3D panel login button handles auth via username/password.
+    // Direct launch: allow instant startup without blocking the user.
+    // Optional login is available inside the WebSpider 3D AI panel.
     return true;
-#endif
-
-    // Check if token already exists
-    char* existingToken = get_token_from_keyring();
-    if (existingToken) {
-        free(existingToken);
-        return true; // Already authenticated
-    }
-
-    LoginData loginData = {0};
-    loginData.result = false;
-    loginData.dialogClosed = false;
-
-    // Load custom icon if available
-    char* iconPathStr = get_app_icon_path();
-    if (iconPathStr && strlen(iconPathStr) > 0) {
-        // Convert to wide string for LoadImage
-        wchar_t iconPathW[MAX_PATH];
-        MultiByteToWideChar(CP_UTF8, 0, iconPathStr, -1, iconPathW, MAX_PATH);
-
-        loginData.hIcon = (HICON)LoadImageW(
-            NULL, iconPathW, IMAGE_ICON, 
-            32, 32, LR_LOADFROMFILE
-        );
-    }
-
-    // Register window class
-    const char* className = "WebSpider 3DLoginDialog";
-    WNDCLASSEX wc = {0};
-    wc.cbSize = sizeof(WNDCLASSEX);
-    wc.style = CS_HREDRAW | CS_VREDRAW;
-    wc.lpfnWndProc = LoginWindowProc;
-    wc.hInstance = GetModuleHandle(NULL);
-    wc.hCursor = LoadCursor(NULL, IDC_ARROW);
-    wc.hbrBackground = (HBRUSH)(COLOR_BTNFACE + 1);
-    wc.lpszClassName = className;
-    wc.hIcon = loginData.hIcon;
-    wc.hIconSm = loginData.hIcon;
-
-    RegisterClassEx(&wc);
-
-    // Calculate dialog size
-    const int margin = 32;
-    const int labelWidth = 90;
-    const int editWidth = 240;
-    const int editHeight = 32;
-    const int buttonHeight = 36;
-    const int spacing = 20;
-
-    int dialogWidth = margin + labelWidth + 12 + editWidth + margin;
-    int dialogHeight = margin + 24 + 40 + editHeight + spacing + buttonHeight + margin;
-
-    // Center position
-    int x = (GetSystemMetrics(SM_CXSCREEN) - dialogWidth) / 2;
-    int y = (GetSystemMetrics(SM_CYSCREEN) - dialogHeight) / 2;
-
-    // Create the dialog window
-    HWND hDlg = CreateWindowEx(
-        WS_EX_DLGMODALFRAME,
-        className,
-        "WebSpider 3D Login",
-        WS_POPUP | WS_CAPTION | WS_SYSMENU,
-        x, y, dialogWidth, dialogHeight,
-        NULL, NULL, GetModuleHandle(NULL), &loginData
-    );
-
-    if (!hDlg) {
-        if (loginData.hIcon) DestroyIcon(loginData.hIcon);
-        UnregisterClass(className, GetModuleHandle(NULL));
-        return false;
-    }
-
-    ShowWindow(hDlg, SW_SHOW);
-    UpdateWindow(hDlg);
-
-    // Message loop
-    MSG msg;
-    while (!loginData.dialogClosed) {
-        BOOL ret = GetMessage(&msg, NULL, 0, 0);
-        if (ret == 0 || ret == -1) break; // WM_QUIT or error
-
-        TranslateMessage(&msg);
-        DispatchMessage(&msg);
-    }
-
-    // Cleanup
-    if (loginData.hIcon) {
-        DestroyIcon(loginData.hIcon);
-    }
-    UnregisterClass(className, GetModuleHandle(NULL));
-
-    return loginData.result;
 }
 #elif defined(__APPLE__)
 #include <CoreFoundation/CoreFoundation.h>

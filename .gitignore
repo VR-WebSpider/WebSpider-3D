@@ -52,8 +52,14 @@ CMakeUserPresets.json
 # Logs
 *.log
 
-# Env
+# Env and secrets
 .env
+.env.*
+*.env
+*.local
+*.pem
+client_secret*.json
+credentials*.json
 
 # Runtime config (generated at build time by scripts/generate_config.py)
 config/webspider.json
